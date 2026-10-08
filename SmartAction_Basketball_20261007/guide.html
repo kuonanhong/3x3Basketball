@@ -1,0 +1,239 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>聰動街籃：操作與部署教學</title><style>body{font:16px/1.8 system-ui,sans-serif;color:#243c40;background:#f1f5ec;max-width:1040px;margin:30px auto;padding:0 24px 60px}nav{position:sticky;top:0;background:#f1f5ecee;padding:12px 0;display:flex;gap:18px;flex-wrap:wrap}a{color:#296e65}h1{font-size:30px}h2{margin-top:30px}section{padding:20px 0;border-top:1px solid #afc1b1}pre{background:#192f38;color:#eaf3dc;padding:20px;overflow:auto;border-radius:8px;font-size:13px;line-height:1.6}code{font-family:monospace;overflow-wrap:anywhere}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:10px;border:1px solid #b7c8b9;text-align:left}th{background:#d6e6ce}p{overflow-wrap:anywhere}</style><nav><a href="./">← 回到遊戲</a><a href="#GAME_IDEAS">20 個遊戲構想</a><a href="#DEPLOY_GITHUB">部署教學</a><a href="#SCALE_AND_MAPS">容量與地圖</a></nav><section id="GAME_IDEAS"><h1>聰動「動手動腦」20 個原創小遊戲構想</h1>
+<p>以下是可自行開發的原創題材與規則；參考遊戲橘子作品的「類型與節奏」，並非複製其角色、美術、音樂、遊戲名稱或程式。遊戲橘子官方事業介紹列有《新楓之谷》《天堂 Remastered》《艾爾之光》《召喚圖板》等；《新瑪奇》的官方教學介紹生活技能與音樂，《跑跑卡丁車》則有橘子官方歷史刊物的營運記錄。這裡提及的歷史遊戲不代表現在仍在營運。</p>
+<p>本附件已實作第 1 項「聰動 3×3 籃球」。第 2–20 項為後續開發提案，未宣稱已附上 20 款可玩的程式。表中的負載是採取 2D／簡單幾何場景後的相對設計目標，需在目標裝置實測，並非最低硬體保證。</p>
+<div class="table-wrap"><table>
+<tr><th>#</th><th>原創遊戲名稱</th><th>核心玩法與雙手控制</th><th>可參考的類型</th><th>預計負載／建議模式</th></tr>
+<tr><td>1</td><td>聰動 3×3 籃球</td><td>左手移動、起跳與蹲守；右手持球方向、傳球與投籃；比賽後看慢動作</td><td>團隊體育與角色分工</td><td>低～中；本附件有 AI 對手版本</td></tr>
+<tr><td>2</td><td>港灣滑板計時賽</td><td>左手轉向與煞車，右手平衡與蓄力；穿越碼頭檢查點</td><td>《跑跑卡丁車》的競速類型，採原創路線與滑板</td><td>低；2D／低幾何場景、個人成績</td></tr>
+<tr><td>3</td><td>星空雙翼飛行</td><td>左手升降轉彎，右手控制視角與精準降落；穿越安全圓環</td><td>任務闖關</td><td>低～中；簡單幾何飛行，不需真實衛星圖</td></tr>
+<tr><td>4</td><td>小小節奏鼓手</td><td>左手低音、右手高音，跟著原創節奏敲擊；可先練單手再雙手</td><td>《新瑪奇》的演奏與生活玩法</td><td>極低；原創聲音、節奏可放慢</td></tr>
+<tr><td>5</td><td>森林郵差</td><td>左手走跳，右手對準郵筒投遞；將信件送到正確住戶</td><td>《新楓之谷》的橫向冒險類型</td><td>低；2D 小關卡、無敵練習模式</td></tr>
+<tr><td>6</td><td>雙手採果園</td><td>左手移動籃子，右手選擇成熟水果；避開未成熟果實</td><td>生活與收集</td><td>極低；無倒數、顏色配合圖案</td></tr>
+<tr><td>7</td><td>妙手料理工作室</td><td>左手選配料，右手攪拌、翻面與盛盤；按步驟完成訂單</td><td>《新瑪奇》的生活技能類型</td><td>極低；逐步提示、可取消時間壓力</td></tr>
+<tr><td>8</td><td>棋盤守護隊</td><td>左手選棋子，右手選路徑；推算兩步後的安全位置</td><td>《召喚圖板》的棋盤策略類型</td><td>極低；回合制、可悔棋</td></tr>
+<tr><td>9</td><td>光球防守者</td><td>左手避讓，右手把光球引導至對應出口；連續成功形成連段</td><td>《艾爾之光》的動作與連段類型</td><td>低；非寫實暴力、慢速版本</td></tr>
+<tr><td>10</td><td>風帆尋寶</td><td>左手控制舵向，右手調帆；利用風向尋找寶箱與安全港</td><td>探索與資源規劃</td><td>低；2D 地圖、不使用真實海圖</td></tr>
+<tr><td>11</td><td>小隊救援任務</td><td>左手選路線，右手使用繩索、照明與補給；三個角色互相配合</td><td>《天堂》的角色分工與組隊類型</td><td>低；回合制 AI 同伴</td></tr>
+<tr><td>12</td><td>合作迷宮</td><td>左手操控角色 A，右手角色 B；輪流踩開關使另一位通過</td><td>合作解謎</td><td>極低；同一裝置雙人或雙手練習</td></tr>
+<tr><td>13</td><td>雙拍桌球</td><td>左手調整步伐，右手控制拍面方向與擊球時機</td><td>球類反應與預判</td><td>低；慢球、落點提示</td></tr>
+<tr><td>14</td><td>輕風羽球</td><td>左手走位與起跳，右手切球、高遠球與扣球</td><td>球類與節奏</td><td>低；簡單拋物線、可延長反應時間</td></tr>
+<tr><td>15</td><td>足球門前決策</td><td>左手助跑方向，右手瞄準與射門；也可切換門將模式</td><td>體育與風險選擇</td><td>低；短回合、無真人連線也能玩</td></tr>
+<tr><td>16</td><td>積木造橋師</td><td>左手選積木，右手旋轉放置；讓小車安全過河</td><td>建造與物理謎題</td><td>低；固定少量剛體、逐步關卡</td></tr>
+<tr><td>17</td><td>城市找物大使</td><td>左手移動放大鏡，右手分類並確認；尋找照片中的指定物品</td><td>搜尋與收集</td><td>極低；人工標註熱點，不需付費 AI</td></tr>
+<tr><td>18</td><td>四季小花園</td><td>左手安排花盆，右手澆水、修枝與採種；觀察季節變化</td><td>生活與經營</td><td>極低；離線存檔、短時段遊玩</td></tr>
+<tr><td>19</td><td>旋律記憶列車</td><td>先聽／看一串左右燈號，再用兩手依序重現；難度逐級增加</td><td>音樂與記憶</td><td>極低；視覺與聲音可單獨開關</td></tr>
+<tr><td>20</td><td>太空物流站</td><td>左手選輸送路線，右手按形狀整理貨箱；規劃順序避免堵塞</td><td>策略與資源管理</td><td>低；無倒數模式、逐步加量</td></tr>
+</table></div>
+<h2>建議開發順序</h2>
+<p>先推出 3×3 籃球、合作迷宮、小小節奏鼓手、棋盤守護隊、四季小花園。它們分別提供運動、雙手協作、節奏、策略與輕鬆經營，遊玩動機不同，較適合測試訪客偏好。確認每款在手機可順利操作後，再逐步增加內容。</p>
+<p>所有遊戲建議提供大按鈕、可調速度、練習模式、暫停，以及聲音／動畫減量；適度區分年輕玩家的挑戰模式與入門者的慢速模式。這些是休閒互動設計，不宣稱具備經臨床驗證的治療效果。</p>
+<h2>如何吸引實際訪客</h2>
+<p>1. 每款有自己的可直接開啟網址、玩法文字、操作說明及示範影片，主頁以遊戲卡片入口串起。</p>
+<p>2. 頁面標題可用「免費 3×3 籃球網頁遊戲｜鍵盤與手機雙搖桿｜聰動成長協會」，並在頁面正文說明功能。關鍵字堆疊不等於搜尋排名。</p>
+<p>3. 為完整翻譯的語言建立可索引內容與正確 <code>lang</code>／<code>hreflang</code>，不要把只顯示英文的頁面標示成已翻譯語言。內容、截圖及示範影片需跟版本一致。</p>
+<p>4. 示範影片可展示操作與精彩重播，提供使用者自行點擊的 YouTube 連結。自然觀看與好用內容比隱藏點擊或強迫播放更可靠。</p>
+<p>5. 以頁面載入成功率、實際遊玩完成率、回訪與回饋來選擇下一款；流量提升需要內容與推廣，不能承諾排名或點擊數。</p>
+<h2>官方參考來源</h2>
+<p>查核日期：2026-10-07。未使用第三方遊戲素材。</p>
+<p>- 橘子官方事業介紹：<a href="https://ir.gamania.com/business" rel="noopener noreferrer">https://ir.gamania.com/business</a></p>
+<p>- 遊戲橘子線上遊戲平台：<a href="https://tw.beanfun.com/game_zone/" rel="noopener noreferrer">https://tw.beanfun.com/game_zone/</a></p>
+<p>- 新瑪奇官方教學：<a href="https://mabinogi.beanfun.com/Introduction?page=gameTeach" rel="noopener noreferrer">https://mabinogi.beanfun.com/Introduction?page=gameTeach</a></p>
+<p>- 新瑪奇官方音樂教學（歷史頁面）：<a href="https://tw.beanfun.com/mabinogi/2_new6.htm" rel="noopener noreferrer">https://tw.beanfun.com/mabinogi/2_new6.htm</a></p>
+<p>- 召喚圖板官網：<a href="https://sb.beanfun.com/" rel="noopener noreferrer">https://sb.beanfun.com/</a></p>
+<p>- 橘子官方歷史刊物 G!VOICE Vol.74（含跑跑卡丁車記錄）：<a href="https://brand.gamania.com/gvoice/wp-content/uploads/PDF/Vol.74_tw.pdf" rel="noopener noreferrer">https://brand.gamania.com/gvoice/wp-content/uploads/PDF/Vol.74_tw.pdf</a></p></section><section id="DEPLOY_GITHUB"><h1>將聰動 3×3 籃球放到現有 SmartAction GitHub Pages</h1>
+<p><code>git pull</code> 是把 GitHub 上的更新下載到電腦；把電腦中的檔案上傳到 GitHub，使用 <code>git add</code>、<code>git commit</code>、<code>git push</code>。本遊戲是靜態 HTML／CSS／JavaScript，無需 npm、付費設計工具、GPU 伺服器或遊戲安裝程式。</p>
+<p>本版是「每位訪客各自在自己的瀏覽器玩 3 對 3，其他球員由 AI 控制」。它可以被很多訪客同時開啟，但不包含六位真人共用同一場比賽的網路房間服務。</p>
+<h2>1. 先在電腦試玩</h2>
+<p>解壓完整附件包。雙擊獨立版 <code>SmartAction_3x3.html</code> 可直接試玩；獨立 HTML 已包含遊戲程式與介面，地圖仍需要網路及瀏覽器定位權限。</p>
+<p>要測試完整資料夾版本，在含 <code>index.html</code> 的資料夾開終端機：</p>
+<pre><code>python3 -m http.server 8080</code></pre>
+<p>Windows 若 <code>python3</code> 不存在，使用：</p>
+<pre><code>py -m http.server 8080</code></pre>
+<p>瀏覽器開啟 <a href="http://localhost:8080/" rel="noopener noreferrer">http://localhost:8080/</a>。<code>localhost</code> 通常可測試定位權限；手機開電腦的區網 HTTP 網址時，定位可能因非安全連線而被瀏覽器停用。手機定位請以發布後的 GitHub Pages HTTPS 網址測試。按 <code>Ctrl+C</code> 可結束本機伺服器。</p>
+<h2>2. 準備 Git 與帳號</h2>
+<p>- macOS：安裝 Git，若尚未有開發工具，可執行 <code>xcode-select --install</code>；也可從 <a href="https://git-scm.com/downloads" rel="noopener noreferrer">https://git-scm.com/downloads</a> 安裝。</p>
+<p>- Windows：安裝 Git for Windows，以下 Bash 命令可在 Git Bash 執行；後面另外提供 PowerShell 複製命令。</p>
+<p>- Linux：用發行版的套件管理器安裝 Git。</p>
+<p>驗證：</p>
+<pre><code>git --version</code></pre>
+<p>首次提交前設定自己的公開提交名稱與信箱。若不想公開私人信箱，可使用 GitHub Settings → Emails 提供的 <code>noreply</code> 信箱：</p>
+<pre><code>git config --global user.name &quot;你的 GitHub 名稱&quot;
+git config --global user.email &quot;你的 GitHub noreply 信箱&quot;</code></pre>
+<p>透過 Git Credential Manager／系統瀏覽器登入 GitHub，或使用 SSH。GitHub Git 操作不要使用帳號密碼當作驗證密碼，也不要把 token 放到 HTML、網址或提交檔案。</p>
+<h2>3. 取得現有網站，保留原主頁</h2>
+<p>還沒有本機 SmartAction 專案時：</p>
+<pre><code>git clone https://github.com/kuonanhong/SmartAction.git
+cd SmartAction
+git status
+git branch --show-current</code></pre>
+<p>已經有本機專案時，不需要再 clone；進入既有專案，先看狀態：</p>
+<pre><code>cd SmartAction
+git status
+git branch --show-current
+git pull --ff-only</code></pre>
+<p><code>git status</code> 若有你尚未提交的修改，先保存／提交自己的變更再拉取。若 <code>pull --ff-only</code> 顯示不能快轉，表示本機與遠端各有新提交；先檢視並合併差異，勿使用 <code>reset --hard</code> 或 <code>push --force</code> 覆蓋網站。</p>
+<p>下文假設發布分支為 <code>main</code>。若你的 Pages 使用 <code>master</code> 或其他分支，後面的 <code>main</code> 應改成實際分支；以 Settings → Pages 的設定為準。</p>
+<h2>4. 新增遊戲資料夾，只複製網站必要檔</h2>
+<p>目標位置：</p>
+<pre><code>SmartAction/
+└── 動手動腦/
+    └── 3x3-basketball/
+        ├── index.html
+        ├── styles.css
+        ├── app.js
+        ├── game-core.js
+        ├── renderer.js
+        ├── locales.js
+        ├── sw.js
+        ├── manifest.webmanifest
+        ├── icon.svg
+        └── guide.html</code></pre>
+<p>不要用附件包的 <code>index.html</code> 覆寫 SmartAction 主頁。ZIP、測試檔、開發工具、Markdown 文件與獨立 HTML 不需要放到這個公開遊戲目錄；教學用的 guide.html 請一同複製；最小 runtime 已足夠。</p>
+<p>macOS／Linux／Windows Git Bash，在 SmartAction repository 內執行，將來源路徑改成你解壓後的實際位置：</p>
+<pre><code>game_source=&quot;/你的解壓位置/SmartAction_Basketball_20261007&quot;
+game_target=&quot;動手動腦/3x3-basketball&quot;
+mkdir -p &quot;$game_target&quot;
+for game_file in index.html styles.css app.js game-core.js renderer.js locales.js sw.js manifest.webmanifest icon.svg guide.html; do
+  cp &quot;$game_source/$game_file&quot; &quot;$game_target/$game_file&quot;
+done</code></pre>
+<p>Windows PowerShell，亦在 SmartAction repository 內執行：</p>
+<pre><code>$gameSource = &quot;C:\Users\你的帳號\Downloads\SmartAction_Basketball_20261007&quot;
+$gameTarget = &quot;動手動腦/3x3-basketball&quot;
+New-Item -ItemType Directory -Force -Path $gameTarget | Out-Null
+$gameFiles = @(&quot;index.html&quot;, &quot;styles.css&quot;, &quot;app.js&quot;, &quot;game-core.js&quot;, &quot;renderer.js&quot;, &quot;locales.js&quot;, &quot;sw.js&quot;, &quot;manifest.webmanifest&quot;, &quot;icon.svg&quot;, &quot;guide.html&quot;)
+foreach ($gameFile in $gameFiles) {
+  Copy-Item -LiteralPath (Join-Path $gameSource $gameFile) -Destination (Join-Path $gameTarget $gameFile)
+}</code></pre>
+<p>本版使用相對資源路徑，因此可放在 <code>/SmartAction/動手動腦/3x3-basketball/</code> 的子目錄。不要將 CSS／JS 引用改成 <code>/app.js</code> 等站點根路徑，否則專案型 Pages 會去錯誤位置取檔。</p>
+<p>若你原本的發布來源是 <code>/docs</code>，則目標改成 <code>docs/動手動腦/3x3-basketball/</code>，且對主頁的修改也應在 <code>docs/index.html</code>。若目前使用 GitHub Actions，請確認這個資料夾會被包含在既有發布 artifact 中。</p>
+<h2>5. 在既有聰動主頁加入入口</h2>
+<p>在現有主頁的「動手動腦」區塊加入，保留原來其他內容：</p>
+<pre><code>&lt;a href=&quot;./動手動腦/3x3-basketball/&quot;&gt;聰動 3×3 籃球：免費網頁遊戲&lt;/a&gt;</code></pre>
+<p>如果入口位於較深層的語言頁或文章頁，可使用包含 repository 名稱的完整站內路徑：</p>
+<pre><code>&lt;a href=&quot;/SmartAction/動手動腦/3x3-basketball/&quot;&gt;聰動 3×3 籃球&lt;/a&gt;</code></pre>
+<p>本包已有 22 種實際翻譯的 HTML 搜尋入口與 hreflang。若要發布這些入口，再複製 <code>lang/</code>：Bash 用 <code>cp -R &quot;$game_source/lang&quot; &quot;$game_target/&quot;</code>；PowerShell 用 <code>Copy-Item -LiteralPath (Join-Path $gameSource &quot;lang&quot;) -Destination $gameTarget -Recurse -Force</code>。將附件 sitemap.xml 的遊戲網址條目合併到聰動既有 sitemap，保留原條目；不要覆蓋整站 sitemap。翻譯頁與 sitemap 不保證收錄或排名。</p>
+<h2>6. 提交與上傳</h2>
+<p>確認只包含你的新增內容：</p>
+<pre><code>git status
+git diff -- index.html
+git add -- &quot;動手動腦/3x3-basketball&quot;</code></pre>
+<p>若也修改了根目錄主頁／sitemap，可逐一加入，未修改的檔案不要加入：</p>
+<pre><code>git add -- index.html sitemap.xml
+git diff --cached --stat
+git commit -m &quot;Add SmartAction original 3x3 basketball browser game&quot;
+git push origin main</code></pre>
+<p>若網站從 <code>docs</code> 發布，將上述 add 路徑相應改為 <code>docs/...</code>。若 <code>push</code> 被拒絕，先 <code>git fetch origin</code>、查看分支差異並正常合併，勿用強制推送。</p>
+<h2>7. GitHub Pages 設定與驗證</h2>
+<p>現有 SmartAction 已在運作，通常沿用它的 Pages 發布設定即可。新設網站才需要 Settings → Pages → Build and deployment → Deploy from a branch → 選 <code>main</code> 與 <code>/ (root)</code>，再 Save。若已使用 Actions，沿用現有 workflow。</p>
+<p>純靜態網站若希望略過 Jekyll，可在「發布來源根目錄」建立空白 <code>.nojekyll</code>；若現有網站依賴 Jekyll 模板，應保留原設定。</p>
+<p>發布後開啟：</p>
+<p><a href="https://kuonanhong.github.io/SmartAction/動手動腦/3x3-basketball/" rel="noopener noreferrer">https://kuonanhong.github.io/SmartAction/動手動腦/3x3-basketball/</a></p>
+<p>首次部署可能需要數分鐘；到 repository 的 Actions 確認 Pages 部署成功。逐項檢查：主頁入口、遊戲開始、鍵盤／觸控、語言選擇、畫質調整、精彩重播、定位被拒絕後仍能玩、Google Maps 連結。遇到 404，先確認發布分支、folder 位置、檔名大小寫及 <code>index.html</code>。</p>
+<p>遊戲更新若仍看到舊畫面，請重新整理並檢查離線快取；開發者可在 DevTools → Application → Service Workers／Storage 清除該遊戲快取。修改程式後先執行 <code>python3 tools/build_standalone.py</code>，它會自動依內容更新 <code>sw.js</code> 快取版本；再複製新 runtime 發布。</p>
+<h2>8. 檔案很大時怎麼辦</h2>
+<p>本遊戲採用程式生成圖形，沒有大型人物模型、貼圖、影片或付費素材。上傳 runtime 小檔即可，沒有必要上傳整個 ZIP 或安裝程式；完整附件包用於備份、閱讀和本機開發。</p>
+<p>GitHub 官方限制（查核 2026-10-07）：</p>
+<div class="table-wrap"><table>
+<tr><th>情境</th><th>限制／用途</th></tr>
+<tr><td>網頁介面 Upload files</td><td>單檔最大 25 MiB</td></tr>
+<tr><td>一般 Git 推送</td><td>單檔超過 50 MiB 會警告；超過 100 MiB 會被拒絕</td></tr>
+<tr><td>GitHub Pages</td><td>發布站點最大 1 GB；來源 repository 建議不超過 1 GB</td></tr>
+<tr><td>Pages 流量</td><td>每月 100 GB 軟限制，可能限流或要求移轉</td></tr>
+<tr><td>Git LFS</td><td>可管理大型版本檔，但官方明示不能用於 GitHub Pages 網站</td></tr>
+<tr><td>GitHub Releases</td><td>適合安裝包、下載 ZIP，不是讓大型遊戲資源自動變快的 Pages CDN</td></tr>
+</table></div>
+<p>若日後加入大型音樂、模型或影片，先壓縮、拆分、按需載入；對訪客直接播放的影片可以在使用者選擇後開啟 YouTube 或其他合適平台。大型靜態資源可另選物件儲存/CDN，並評估費用、CORS 與快取設定。Git LFS 不能替 Pages 解決讀取大型網站資源的問題。</p>
+<h3>尚未提交的大檔</h3>
+<p>把它移到 repository 外部備份；不要 <code>git add</code>。可在 <code>.gitignore</code> 加入本機附件檔名：</p>
+<pre><code>SmartAction_Basketball_FullPackage.zip
+node_modules/
+*.exe</code></pre>
+<p>如果已暫存但尚未提交，用 <code>git restore --staged -- &quot;大檔案的實際路徑&quot;</code> 移出暫存，不會刪除磁碟檔。</p>
+<h3>只在最後一個「未推送」提交加入大檔</h3>
+<p>先確認該提交尚未上傳或與他人共享，並在 repository 外備份大檔。下面只修正這個自己的未推送提交：</p>
+<pre><code>git rm --cached -- &quot;大檔案的實際路徑&quot;
+git commit --amend --no-edit
+git push origin main</code></pre>
+<p>只新增一個「刪除大檔」提交，無法移除更早提交中的大檔。如果大檔已在較早歷史或已分享出去，請先與協作者討論再清理歷史，不要直接執行全庫清理或強制推送。</p>
+<h3>只想提供下載附件</h3>
+<p>可在 GitHub Releases → Draft a new release，選版本 tag，將下載附件放進 release assets，於網頁加入下載連結。這不需要將 ZIP 提交到網站的 Git 歷史。若有安裝 GitHub CLI，可在 repository 內使用：</p>
+<pre><code>gh release create basketball-v1 --title &quot;聰動 3×3 籃球 v1&quot; --notes &quot;原創網頁遊戲與完整來源附件。&quot;
+gh release upload basketball-v1 &quot;/你的附件位置/SmartAction_Basketball_FullPackage.zip&quot;</code></pre>
+<p>上面命令會建立公開版本，只在你準備好發布下載包時執行；本附件沒有替你執行任何 GitHub 上傳。</p>
+<h2>官方操作與限制文件</h2>
+<p>- <code>git pull</code>：<a href="https://git-scm.com/docs/git-pull" rel="noopener noreferrer">https://git-scm.com/docs/git-pull</a></p>
+<p>- <code>git push</code>：<a href="https://git-scm.com/docs/git-push" rel="noopener noreferrer">https://git-scm.com/docs/git-push</a></p>
+<p>- GitHub Pages 建站：<a href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site" rel="noopener noreferrer">https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site</a></p>
+<p>- GitHub Pages 限制：<a href="https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits" rel="noopener noreferrer">https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits</a></p>
+<p>- GitHub 大檔限制：<a href="https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github" rel="noopener noreferrer">https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github</a></p>
+<p>- Git LFS 與 Pages 不相容：<a href="https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-git-large-file-storage" rel="noopener noreferrer">https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-git-large-file-storage</a></p></section><section id="SCALE_AND_MAPS"><h1>效能、十萬訪客與附近球場的實作範圍</h1>
+<h2>本附件實際提供什麼</h2>
+<div class="table-wrap"><table>
+<tr><th>需求</th><th>本版做法</th><th>實際界線</th></tr>
+<tr><td>很多人開網頁玩</td><td>靜態檔交給網站，球員、AI、物理與重播在各訪客瀏覽器運算</td><td>一位訪客的比賽不會建立伺服器遊戲程序；訪客之間也沒有共用一場真人比賽</td></tr>
+<tr><td>依裝置自動簡化</td><td>啟動時短時效能測試，參考可取得的記憶體／CPU資訊，選擇低、中、高畫質</td><td>瀏覽器不能精確查到所有手機 RAM 或目前剩餘算力；使用者可自行調整</td></tr>
+<tr><td>雙手控制</td><td>鍵盤雙區與手機／平板兩組觸控控制</td><td>手機使用畫面搖桿與動作按鈕，不必升起遮住畫面的文字鍵盤</td></tr>
+<tr><td>精彩球慢動作</td><td>儲存短時遊戲狀態，在重播時轉動虛擬攝影機</td><td>是原創幾何球員的即時重播，並非生成真人影片或真實球場拍攝</td></tr>
+<tr><td>目前位置</td><td>使用者按定位並同意後，顯示經緯度與定位精度，提供 Maps 連結</td><td>不自動要求定位，不將座標上傳至遊戲伺服器</td></tr>
+<tr><td>附近籃球場</td><td>使用者自行點擊 Google Maps 搜尋附近球場</td><td>地點結果由 Google Maps 提供；本版未包含計費 Places 地點查詢與頁內球場列表</td></tr>
+<tr><td>頁內 Google 地圖</td><td>可選填限制過的 Maps Embed API key 顯示定位地圖</td><td>零 key 狀態仍可玩與開 Maps；正式 Embed 需要 Google Cloud 設定</td></tr>
+</table></div>
+<h2>為什麼不能承諾十萬同時、不 delay、不當機</h2>
+<p>將比賽計算分散到訪客裝置，能顯著減少中央伺服器運算需求，但網站首次下載、各人裝置、瀏覽器、網路及外部地圖服務仍有容量限制。網站可做到減少等待與失敗，不能保證每種手機、每個網路與十萬同時連線都不延遲。</p>
+<p>GitHub Pages 官方公開限制是：發布站點最大 1 GB、每月 100 GB 軟流量限制，且可能遇到速率限制與 HTTP 429。這是靜態網站平台，不是即時遊戲房間伺服器。官方沒有保證「十萬同時」的服務能力。</p>
+<p>粗略估算的公式：</p>
+<pre><code>首次傳輸量 ≈ 首次訪客數 × 每人實際下載量
+流量尖峰 ≈ 首次傳輸量 ÷ 訪客進入時間</code></pre>
+<p>例子只為說明容量，非本包實測：如果每人首次下載 1 MB（十進位），十萬人首次下載約 100 GB，已相當於 Pages 每月軟限制。若這些下载集中在 10 秒，平均對外傳輸速率約 80 Gbit/s，還未計協定開銷或其他網頁。實際應以瀏覽器 Network 面板的 transferred bytes 加總，而非 ZIP 檔案大小計算。</p>
+<p>首次成功下載後，瀏覽器／離線快取可以減少重複傳輸；首頁仍應保持精簡，地圖與影片待使用者選擇後載入。跨語言不必下載數十套大圖，重播只保留固定時間窗口，避免遊玩越久記憶體越大。</p>
+<h2>若目標真的有十萬同時訪客</h2>
+<p>1. 保留本遊戲的本機 AI 模式，讓每位訪客獨立運算；靜態資源移到能明確承接目標流量的 CDN／物件儲存或主機平台。確認流量費、每秒請求配額、快取與故障回退。</p>
+<p>2. 測量首次下載量、95 百分位載入時間、錯誤率、代表性手機 FPS 與長時間記憶體變化。根據觀察調整畫質與檔案量。</p>
+<p>3. 負載測試須針對自己有權測試的測試站，取得供應商允許並逐級提高。不要對公共 GitHub Pages 或 Google Maps 人為發送十萬請求。</p>
+<p>4. 正式發布前，明確設定容量與錯誤告警，準備流量突增時的靜態備援及簡化版入口。</p>
+<p>目前測試能驗證功能與本機裝置表現；沒有以十萬真實連線做生產容量測試，也沒有任何免費服務因此提供容量保證。</p>
+<h2>六位真人同場需要另外開發與部署</h2>
+<p>若將來要六人實時組隊，不是把 HTML 放到 GitHub 就完成。通常需要：玩家／房間分配、WebSocket 或 WebRTC 信令、可信遊戲狀態、斷線重連、伺服器節拍、限流與作弊處理。對公開競技遊戲，伺服器裁定得分和狀態較可靠；客戶端做輸入預測與狀態插值以隱藏部分網路延遲。這些是後續架構建議，並未包含在本版程式。</p>
+<p>十萬真人同時、每房六人約是 16,667 個滿房等級的容量（最後一房可能未滿）。若每人每秒收到 10 個、每個 1 KiB 的快照，光這項示例輸出就約 1.024 GB/s；實際數字取決於協定、壓縮、更新頻率與玩家行為。應用分區伺服器、房間分片與地區就近部署，而非建立十萬人同一場。雲端免費額度通常不等於能承擔這個規模。</p>
+<h2>硬體偵測的可信度</h2>
+<p><code>navigator.deviceMemory</code> 只返回為保護隱私而粗化的記憶體估計，不代表可供本網頁使用的剩餘 RAM，部分瀏覽器不支援。<code>navigator.hardwareConcurrency</code> 是瀏覽器願意提供的邏輯處理器數，不是 CPU 跑分或完整的物理核心數。把「手機」一律視為弱機、「桌機」一律視為強機也不準確。</p>
+<p>較務實的流程是：先採保守設定，跑短時場景／幾何測試，綜合實際 frame time 決定畫質；持續觀察掉幀時降低像素密度、特效與場景裝飾；並保留手動畫質選項。偵測應保持簡短，避免為了測試效能先把裝置弄得很忙。此類測試是調整依據，不是對將來絕不耗盡資源的保證。</p>
+<h2>定位與 Google Maps：預設免費路徑</h2>
+<p>使用者選擇定位後，瀏覽器 Geolocation API 要求權限，回傳座標與 accuracy。高精度請求也不保證位置完全正確；室內、弱訊號及定位來源都可能造成誤差。定位失敗、拒絕或超時時，遊戲仍繼續，訪客可自行以城市名稱找球場。</p>
+<p>正式部署使用 GitHub Pages 的 HTTPS；網頁不應偷偷蒐集位置。使用者點開 Google Maps 連結時，會將查詢文字／位置參數交給 Google，這與本機遊戲的計算分開。</p>
+<p>Google 官方 Maps URLs 不需要 API key，且可跨 Android、iOS 及桌機。兩種用途分開：</p>
+<pre><code>// 目前定位點：Google 地圖顯示座標 pin，不宣稱是某球場。
+const currentLocation = new URL(&#x27;https://www.google.com/maps/search/&#x27;);
+currentLocation.searchParams.set(&#x27;api&#x27;, &#x27;1&#x27;);
+currentLocation.searchParams.set(&#x27;query&#x27;, `${latitude},${longitude}`);
+
+// 類別搜尋：座標作為查詢位置提示，實際結果由 Google Maps 決定。
+const nearbyCourts = new URL(&#x27;https://www.google.com/maps/search/&#x27;);
+nearbyCourts.searchParams.set(&#x27;api&#x27;, &#x27;1&#x27;);
+nearbyCourts.searchParams.set(&#x27;query&#x27;, `basketball courts near ${latitude},${longitude}`);</code></pre>
+<p>不要將搜尋結果當作完備、即時或核實可使用的球場名單，也不要因為座標 pin 靠近某球場就宣稱使用者「現在在該球場」。一個精確球場的詳細連結最好使用經核實的名稱與地址，或 Google Place ID。</p>
+<h2>可選：在頁內顯示官方 Google Maps Embed</h2>
+<p>本版可配置 <code>mapsEmbedApiKey</code>；具體設定位置見根目錄 README。預設留空，不影響遊戲與免費外開 Maps 連結。</p>
+<p>1. 建立 Google Cloud 專案與計費帳戶，啟用 Maps Embed API。</p>
+<p>2. 建立只用於該站 Embed 的 API key，限制 API 為 **Maps Embed API**。</p>
+<p>3. 應用程式限制設為 Websites，允許正式網站，例如 <code>https://kuonanhong.github.io/*</code>。如果測試本機，再額外設定自己的 localhost 測試來源。</p>
+<p>4. 將此受限的瀏覽器 key 填入 <code>mapsEmbedApiKey</code>；瀏覽器 key 本來就能被看見，安全性依賴網站／API限制。勿在 HTML 填入其他未受限密鑰或伺服器私密憑證。</p>
+<p>5. 正式測試定位地圖；地圖失敗時保留一般 Maps 連結，不阻擋遊戲。</p>
+<p>官方說明 Maps Embed API 的使用不收費、沒有每日或短期請求上限，但仍需要 API key／Cloud 計費設定並遵守服務條款。其他 Google Maps API 不應一併宣稱免費。</p>
+<h2>未來若要「頁內附近球場列表」</h2>
+<p>需要另外接 Places API，例如 Text Search (New) 用「籃球場／basketball court」與定位偏向條件，再顯示球場名稱、距離與 Google Maps 詳細連結。官方目前的 Place Types 表未列 <code>basketball_court</code>，不可憑空寫這個類型給 Nearby Search。</p>
+<p>Places 查詢屬獨立計費功能，應設定最少所需欄位、API限制、配額與費用監控，並遵守地點資料顯示及保存規則。不要把需伺服器限制的 REST 私鑰直接放在靜態網頁，也不要從 Google 搜尋結果或 Google 地圖頁面抓取資料來冒充正式 API。</p>
+<p>本版不把 Google 航照、Street View 或地圖瓦片拿來重建場景；遊戲球場是原創模型。若未來希望整合真實地圖為遊戲材質，需要另外核對產品許可與技術範圍。</p>
+<h2>官方參考文件</h2>
+<p>查核日期：2026-10-07。</p>
+<p>- GitHub Pages 靜態網站說明：<a href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages" rel="noopener noreferrer">https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages</a></p>
+<p>- GitHub Pages 限制：<a href="https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits" rel="noopener noreferrer">https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits</a></p>
+<p>- Google Maps URLs：<a href="https://developers.google.com/maps/documentation/urls/get-started" rel="noopener noreferrer">https://developers.google.com/maps/documentation/urls/get-started</a></p>
+<p>- Maps Embed 使用與計費：<a href="https://developers.google.com/maps/documentation/embed/usage-and-billing" rel="noopener noreferrer">https://developers.google.com/maps/documentation/embed/usage-and-billing</a></p>
+<p>- Maps Embed 建立設定：<a href="https://developers.google.com/maps/documentation/embed/get-api-key" rel="noopener noreferrer">https://developers.google.com/maps/documentation/embed/get-api-key</a></p>
+<p>- Google Maps key 安全設定：<a href="https://developers.google.com/maps/api-security-best-practices" rel="noopener noreferrer">https://developers.google.com/maps/api-security-best-practices</a></p>
+<p>- Places 使用與計費：<a href="https://developers.google.com/maps/documentation/places/web-service/usage-and-billing" rel="noopener noreferrer">https://developers.google.com/maps/documentation/places/web-service/usage-and-billing</a></p>
+<p>- Places 地點類型：<a href="https://developers.google.com/maps/documentation/places/web-service/place-types" rel="noopener noreferrer">https://developers.google.com/maps/documentation/places/web-service/place-types</a></p>
+<p>- Geolocation：<a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/getCurrentPosition" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/getCurrentPosition</a></p>
+<p>- deviceMemory：<a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/deviceMemory" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/Navigator/deviceMemory</a></p>
+<p>- hardwareConcurrency：<a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/hardwareConcurrency" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/Navigator/hardwareConcurrency</a></p></section></html>

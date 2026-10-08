@@ -1,0 +1,7 @@
+node_modules/
+qa-output/
+__pycache__/
+*.zip
+.DS_Store
+config.js
+*.log

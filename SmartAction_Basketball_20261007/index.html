@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101e27">
+  <meta name="description" content="聰動原創免費 3×3 籃球網頁遊戲：雙手鍵盤與觸控操作、電腦隊友與對手、裝置效能分級、360 度慢動作重播、22 種語言。">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://kuonanhong.github.io/SmartAction/動手動腦/3x3-basketball/">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+  <title>聰動街籃 3×3 · SmartAction Court</title>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"SmartAction Court 3×3","description":"An original free browser basketball game with local AI opponents, keyboard and touch controls, adaptive graphics and highlight replays.","url":"https://kuonanhong.github.io/SmartAction/動手動腦/3x3-basketball/","gamePlatform":["Web browser"],"playMode":"SinglePlayer","isAccessibleForFree":true,"genre":["Sports","Casual"],"author":{"@type":"Organization","name":"SmartAction"}}</script>
+</head>
+<body>
+  <nav class="site-nav" aria-label="SmartAction">
+    <a class="brand" href="https://kuonanhong.github.io/SmartAction/"><span class="brand-mark" aria-hidden="true">S<span>↗</span></span><span>SMARTACTION<small>PLAY · MOVE · CONNECT</small></span></a>
+    <div class="nav-links"><a data-i18n="home" href="https://kuonanhong.github.io/SmartAction/">聰動首頁</a><a data-i18n="youtube" href="https://www.youtube.com/@%E8%81%B0%E5%8B%95%E6%88%90%E9%95%B7%E5%8D%94%E6%9C%83" target="_blank" rel="noopener noreferrer">YouTube</a><label class="language-label"><span aria-hidden="true">◎</span><select id="language" aria-label="Language"></select></label></div>
+  </nav>
+  <main>
+    <header class="page-header"><div><p class="eyebrow">SMARTACTION / COURT 03</p><h1 data-i18n="title">聰動街籃 3×3</h1><p class="subtitle" data-i18n="subtitle">雙手合作，把每一次出手變成精彩時刻。</p></div><div class="game-type"><span class="online-dot"></span><span data-i18n="localMode">本機 3 對 3・電腦對戰</span></div></header>
+    <div class="play-layout">
+      <section class="arena-panel" aria-label="Basketball game">
+        <div class="scoreboard"><div class="team blue"><span class="team-dot"></span><span>BLUE</span><strong id="blueScore">00</strong></div><div class="clock"><span id="gameClock">03:00</span><small><span data-i18n="shotClock">進攻時間</span> <b id="shotClock">14</b></small></div><div class="team orange"><strong id="orangeScore">00</strong><span>ORANGE</span><span class="team-dot"></span></div></div>
+        <div class="court-wrap">
+          <canvas id="court" tabindex="0" aria-label="3×3 basketball court"></canvas>
+          <div class="court-badge"><span>3×3</span> COURT <i></i> <span id="qualityBadge">AUTO</span></div>
+          <div id="highlightBanner" class="highlight-banner" hidden><span class="replay-live">REPLAY · 0.45×</span><strong id="highlightTitle"></strong><span data-i18n="replayHint">360° 環繞重播 · 可略過</span><button id="skipReplay" data-i18n="skipReplay">略過重播</button></div>
+          <div class="charge-hud" id="chargeHud" hidden><span data-i18n="shootCharge">投籃蓄力</span><div class="charge-track"><div id="chargeFill"></div><i></i></div><small data-i18n="releaseToShoot">放開按鍵出手</small></div>
+          <div id="startOverlay" class="start-overlay"><div class="start-card"><span class="ball-icon" aria-hidden="true">◉</span><p class="eyebrow">YOUR COURT. YOUR MOMENT.</p><h2 data-i18n="title">聰動街籃 3×3</h2><p data-i18n="subtitle">雙手合作，把每一次出手變成精彩時刻。</p><button id="start" class="primary" data-i18n="start">開始比賽</button><small id="benchmarkStatus" data-i18n="benchmark">正在估測裝置效能…</small><p class="fine-print" data-i18n="localMode">本機 3 對 3・電腦對戰</p></div></div>
+          <div id="pauseOverlay" class="pause-overlay" hidden><button id="resume" class="primary" data-i18n="resume">繼續比賽</button></div>
+          <div id="endOverlay" class="pause-overlay" hidden><div class="end-card"><h2 data-i18n="endGame">比賽結束</h2><p id="result"></p><button id="playAgain" class="primary" data-i18n="restart">重新開始</button></div></div>
+        </div>
+        <div class="court-toolbar"><div class="toolbar-buttons"><button id="pause" data-i18n="pause">暫停</button><button id="replay" data-i18n="replay">精彩重播</button><button id="switchPlayer" data-i18n="switchPlayer">切換球員</button></div><div class="toolbar-buttons"><button id="sound" data-i18n="sound">開啟音效</button><button id="fullscreen" data-i18n="fullscreen">全螢幕</button><button id="help" data-i18n="help">操作說明</button></div></div>
+        <div class="touch-controls" id="touchControls"><div class="stick-area"><div class="stick-caption"><span>01</span> <span data-i18n="move">移動雙腿</span></div><div id="movePad" class="stick-pad" aria-label="Movement joystick"><span class="pad-arrows" aria-hidden="true">↑<br>←　→<br>↓</span><span class="stick-knob"></span></div></div><div class="touch-actions"><button data-action="jump"><b>Q</b><span data-i18n="jump">跳躍</span></button><button data-action="crouch"><b>E</b><span data-i18n="crouch">蹲下</span></button><button data-action="pass"><b>J</b><span data-i18n="pass">傳球</span></button><button data-action="shoot" class="shoot-button"><b>K</b><span data-i18n="shoot">投籃</span></button></div><div class="stick-area"><div class="stick-caption"><span>02</span> <span data-i18n="aim">手部瞄準</span></div><div id="aimPad" class="stick-pad" aria-label="Aiming joystick"><span class="pad-arrows" aria-hidden="true">↑<br>←　→<br>↓</span><span class="stick-knob"></span></div></div></div>
+      </section>
+      <aside class="settings-panel">
+        <div class="section-top"><span class="eyebrow">MATCH SETUP</span><span class="setup-icon" aria-hidden="true">☷</span></div>
+        <label class="field"><span data-i18n="difficulty">難度</span><select id="difficulty"><option value="easy" data-i18n="easy">輕鬆</option><option value="normal" data-i18n="normal">一般</option><option value="hard" data-i18n="hard">挑戰</option></select></label>
+        <label class="field"><span data-i18n="quality">畫面品質</span><select id="quality"><option value="auto" data-i18n="auto">自動</option><option value="lite" data-i18n="lite">輕量</option><option value="balanced" data-i18n="balanced">均衡</option><option value="full" data-i18n="full">完整</option></select></label>
+        <div class="device-status"><span id="deviceQuality">AUTO</span><strong id="fps">— FPS</strong><p data-i18n="deviceNote">依實測效能估測；瀏覽器無法在所有裝置讀取完整記憶體資訊。</p></div>
+        <div class="control-summary"><h3 data-i18n="controls">雙手操作</h3><div class="control-row"><div class="keys move-keys"><kbd>W</kbd><div><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></div></div><p data-i18n="keyboardMove">左手 W/A/S/D：移動雙腿</p></div><div class="control-row"><div class="keys"><kbd>↑</kbd><div><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></div></div><p data-i18n="keyboardAim">右手方向鍵：手部瞄準</p></div><p class="action-guide" data-i18n="keyboardActions">Q 跳躍・E 蹲下・J 傳球・K 按住後放開投籃・Tab 切換</p><p class="action-guide" data-i18n="chargeHelp">接近蓄力條標記時放開，投籃更準。</p></div>
+        <button id="courts" class="map-button"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 21s7-7.3 7-12a7 7 0 0 0-14 0c0 4.7 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg><span data-i18n="nearbyCourts">附近籃球場</span><span aria-hidden="true">↗</span></button>
+        <p class="practice-note" data-i18n="practiceNotice">娛樂版採兩分／三分計分，非正式 FIBA 3×3 規則。</p>
+      </aside>
+    </div>
+    <footer><p><span class="status-dot"></span><span data-i18n="offlineNote">遊戲在裝置上運算；首次下載後可離線遊玩，地圖需要網路。</span></p><a href="guide.html" id="guideLink" data-i18n="downloadGuide">部署與操作教學</a></footer>
+  </main>
+  <dialog id="helpDialog"><button class="dialog-close" data-close data-i18n="close">關閉</button><h2 data-i18n="controls">雙手操作</h2><p data-i18n="keyboardHelp">W/A/S/D 移動、方向鍵瞄準；Q 跳、E 蹲、J 傳、K 蓄力投籃，Tab 切換。</p><p data-i18n="touchHelp">左側搖桿移動，右側搖桿瞄準；點選四個動作鍵，按住投籃後放開。</p><p data-i18n="chargeHelp">接近蓄力條標記時放開，投籃更準。</p><p data-i18n="practiceNotice">娛樂版採兩分／三分計分，非正式 FIBA 3×3 規則。</p></dialog>
+  <dialog id="mapDialog"><button class="dialog-close" data-close data-i18n="close">關閉</button><h2 data-i18n="nearbyCourts">附近籃球場</h2><p data-i18n="mapPrivacy">按下定位才會要求位置權限；開啟 Google Maps 後，座標會傳送給 Google。</p><button id="locate" class="primary" data-i18n="locate">定位目前位置</button><p id="mapStatus" role="status"></p><p id="coordinates"></p><div id="mapActions" hidden><a id="currentMap" class="button" target="_blank" rel="noopener noreferrer" data-i18n="latLon">目前位置</a><a id="nearbyMap" class="button primary" target="_blank" rel="noopener noreferrer" data-i18n="openMaps">在 Google Maps 尋找附近球場</a></div><iframe id="embeddedMap" title="Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" hidden></iframe></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <noscript><p>請啟用 JavaScript 以執行本機籃球遊戲。Enable JavaScript to play.</p></noscript>
+  <script src="locales.js"></script><script src="game-core.js"></script><script src="renderer.js"></script><script src="app.js"></script>
+</body>
+</html>

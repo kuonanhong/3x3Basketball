@@ -1,0 +1,593 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "name": "Browser language chooses Traditional Chinese",
+      "status": "pass"
+    },
+    {
+      "name": "All 22 language choices update title and direction",
+      "status": "pass",
+      "detail": [
+        "zh-Hant",
+        "zh-Hans",
+        "en",
+        "ja",
+        "ko",
+        "ar",
+        "ms",
+        "th",
+        "vi",
+        "id",
+        "fil",
+        "de",
+        "pl",
+        "cs",
+        "pt",
+        "fi",
+        "sv",
+        "ru",
+        "fr",
+        "es",
+        "it",
+        "hi"
+      ]
+    },
+    {
+      "name": "Lite/full render pixel budgets apply",
+      "status": "pass",
+      "detail": {
+        "lite": 670292,
+        "full": 2399040
+      }
+    },
+    {
+      "name": "Benchmark completes and real start button starts match",
+      "status": "pass"
+    },
+    {
+      "name": "Keyboard leg movement and arm aim operate independently",
+      "status": "pass",
+      "detail": {
+        "dx": 1.3937257708107762,
+        "aimX": -1
+      }
+    },
+    {
+      "name": "Q triggers jump",
+      "status": "pass"
+    },
+    {
+      "name": "E crouch is held and releases",
+      "status": "pass"
+    },
+    {
+      "name": "J begins an actual pass flight",
+      "status": "pass"
+    },
+    {
+      "name": "K charges and release launches shot",
+      "status": "pass",
+      "detail": {
+        "charge": 0.5370370370370366
+      }
+    },
+    {
+      "name": "Pause freezes live simulation",
+      "status": "pass"
+    },
+    {
+      "name": "Resume advances live clock",
+      "status": "pass"
+    },
+    {
+      "name": "Actual scored-play recording replays in slow motion, orbits camera and freezes live state",
+      "status": "pass",
+      "detail": {
+        "event": "three",
+        "frames": 74
+      }
+    },
+    {
+      "name": "Pointer drag additionally rotates highlight camera",
+      "status": "pass"
+    },
+    {
+      "name": "Skip replay restores and continues live match",
+      "status": "pass"
+    },
+    {
+      "name": "Replay rolling history is bounded at 180 frames",
+      "status": "pass"
+    },
+    {
+      "name": "Manual replay button replays the latest actual clip",
+      "status": "pass"
+    },
+    {
+      "name": "Match end displays result and restart",
+      "status": "pass",
+      "detail": {
+        "fixture": "remaining clock set to 0.03 seconds"
+      }
+    },
+    {
+      "name": "Restart after game over resets state",
+      "status": "pass"
+    },
+    {
+      "name": "Explicit geolocation builds current/nearby Google Maps links",
+      "status": "pass",
+      "detail": {
+        "fixture": "emulated Kaohsiung coordinates",
+        "href": "https://www.google.com/maps/search/?api=1&query=basketball+courts+near+22.627300%2C120.301400"
+      }
+    },
+    {
+      "name": "390 px mobile viewport has no horizontal overflow across all 22 languages",
+      "status": "pass"
+    },
+    {
+      "name": "Mobile touch joystick moves player and pointer capture releases",
+      "status": "pass",
+      "detail": {
+        "dx": 1.0440660937026813,
+        "captures": [
+          "gotpointercapture",
+          "lostpointercapture"
+        ]
+      }
+    },
+    {
+      "name": "Two simultaneous touch pointers independently move legs and aim arms",
+      "status": "pass",
+      "detail": {
+        "dx": 0.9946687371409262,
+        "aimX": -0.9032261488648317
+      }
+    },
+    {
+      "name": "Mobile touch shoot button charges and releases an actual shot",
+      "status": "pass"
+    },
+    {
+      "name": "Denied geolocation shows localized status without map links",
+      "status": "pass"
+    },
+    {
+      "name": "Static English language page starts correctly under nested GitHub Pages-style path",
+      "status": "pass"
+    },
+    {
+      "name": "Emulated weak-device hints select automatic lite quality before play",
+      "status": "pass",
+      "detail": {
+        "fixture": "deviceMemory 2 GiB, hardwareConcurrency 2; browser hints overridden for test",
+        "recommended": "lite",
+        "quality": "lite",
+        "pixels": 95676
+      }
+    },
+    {
+      "name": "Hosted service worker enables actual offline reload and play",
+      "status": "pass"
+    },
+    {
+      "name": "Standalone HTML opens and starts directly using file://",
+      "status": "pass"
+    },
+    {
+      "name": "No page JavaScript errors or HTTP asset failures",
+      "status": "pass"
+    }
+  ],
+  "errors": [],
+  "badResponses": [],
+  "diagnostics": {
+    "desktop": {
+      "language": "zh-Hant",
+      "playing": true,
+      "paused": false,
+      "replay": false,
+      "quality": "full",
+      "recommended": "full",
+      "benchmarkCost": 0.5,
+      "historyFrames": 30,
+      "clipFrames": 0,
+      "liveClock": 1.016666666666668,
+      "canvasPixels": 2399040,
+      "localAI": true,
+      "networkMultiplayer": false,
+      "snapshot": {
+        "version": 1,
+        "difficulty": "easy",
+        "seed": 971031,
+        "duration": 180,
+        "players": [
+          {
+            "id": 0,
+            "team": 0,
+            "number": 1,
+            "x": 0,
+            "z": 2.2,
+            "y": 0,
+            "vx": 0,
+            "vz": 0,
+            "angle": 3.141592653589793,
+            "armAngle": 3.141592653589793,
+            "aimX": 0,
+            "aimZ": 0,
+            "stamina": 1,
+            "jumpTime": 0,
+            "crouching": false,
+            "action": "idle",
+            "cooldown": 0,
+            "aiTimer": 1.0102487546857446,
+            "actionTime": 0
+          },
+          {
+            "id": 1,
+            "team": 0,
+            "number": 2,
+            "x": -4.787836321798986,
+            "z": -0.5791373615593534,
+            "y": 0,
+            "vx": -0.003768896978367781,
+            "vz": -0.004180395180498498,
+            "angle": -2.4079137157452157,
+            "armAngle": -2.4079137157452157,
+            "aimX": 0,
+            "aimZ": 0,
+            "stamina": 1,
+            "jumpTime": 0,
+            "crouching": false,
+            "action": "idle",
+            "cooldown": 0,
+            "aiTimer": 1.3156363852322102,
+            "actionTime": 0
+          },
+          {
+            "id": 2,
+            "team": 0,
+            "number": 3,
+            "x": 4.837910508128218,
+            "z": -0.8765964874612836,
+            "y": 0,
+            "vx": 0.17858620563351532,
+            "vz": -0.5897959000858949,
+            "angle": 2.84757523692582,
+            "armAngle": 2.84757523692582,
+            "aimX": 0,
+            "aimZ": 0,
+            "stamina": 1,
+            "jumpTime": 0,
+            "crouching": false,
+            "action": "run",
+            "cooldown": 0,
+            "aiTimer": 1.251620626449585,
+            "actionTime": 0
+          },
+          {
+            "id": 3,
+            "team": 1,
+            "number": 1,
+            "x": -0.14538711353871756,
+            "z": 1.0457103710510338,
+            "y": 0,
+            "vx": 0.0001330460603199442,
+            "vz": 0.00008079524390338446,
+            "angle": 1.0250463866054125,
+            "armAngle": 1.0250463866054125,
+            "aimX": 0,
+            "aimZ": 0,
+            "stamina": 1,
+            "jumpTime": 0,
+            "crouching": false,
+            "action": "idle",
+            "cooldown": 0,
+            "aiTimer": 1.315911597025115,
+            "actionTime": 0
+          },
+          {
+            "id": 4,
+            "team": 1,
+            "number": 2,
+            "x": -4.145261229291048,
+            "z": -1.184711284551599,
+            "y": 0,
+            "vx": -0.40940618435057385,
+            "vz": -0.35967983287594674,
+            "angle": -2.2916279387840084,
+            "armAngle": -2.2916279387840084,
+            "aimX": 0,
+            "aimZ": 0,
+            "stamina": 1,
+            "jumpTime": 0,
+            "crouching": false,
+            "action": "run",
+            "cooldown": 0,
+            "aiTimer": 0.9442988068214617,
+            "actionTime": 0
+          },
+          {
+            "id": 5,
+            "team": 1,
+            "number": 3,
+            "x": 4.153134318853252,
+            "z": -1.303219858454375,
+            "y": 0,
+            "vx": 0.4776998522496354,
+            "vz": -0.7216975788832967,
+            "angle": 2.5568893894425795,
+            "armAngle": 2.5568893894425795,
+            "aimX": 0,
+            "aimZ": 0,
+            "stamina": 1,
+            "jumpTime": 0,
+            "crouching": false,
+            "action": "run",
+            "cooldown": 0,
+            "aiTimer": 0.8201582048088312,
+            "actionTime": 0
+          }
+        ],
+        "ball": {
+          "x": -0.15223793693893056,
+          "y": 1,
+          "z": 1.8848435141765632,
+          "vx": 0,
+          "vy": 0,
+          "vz": 0,
+          "holder": 0,
+          "ownerId": 0,
+          "state": "held"
+        },
+        "hoop": {
+          "x": 0,
+          "z": -6,
+          "y": 3.05
+        },
+        "bounds": {
+          "minX": -7.5,
+          "maxX": 7.5,
+          "minZ": -6.75,
+          "maxZ": 6.75
+        },
+        "clock": 1.016666666666668,
+        "timeRemaining": 178.98333333333252,
+        "shotClock": 12.983333333333283,
+        "score": [
+          0,
+          0
+        ],
+        "selectedId": 0,
+        "possessionTeam": 0,
+        "shotCharge": 0,
+        "ended": false,
+        "internals": {
+          "rng": 793962400,
+          "flight": null,
+          "resetDelay": 0,
+          "nextPossession": 0,
+          "lastInput": {
+            "jump": false,
+            "pass": false,
+            "switchPlayer": false,
+            "shootHeld": false
+          }
+        }
+      }
+    },
+    "mobile": {
+      "language": "zh-Hant",
+      "playing": true,
+      "paused": true,
+      "replay": false,
+      "quality": "full",
+      "recommended": "full",
+      "benchmarkCost": 0.7000000011175871,
+      "historyFrames": 31,
+      "clipFrames": 0,
+      "liveClock": 1.0500000000000012,
+      "canvasPixels": 382704,
+      "localAI": true,
+      "networkMultiplayer": false,
+      "snapshot": {
+        "version": 1,
+        "difficulty": "easy",
+        "seed": 971031,
+        "duration": 180,
+        "players": [
+          {
+            "id": 0,
+            "team": 0,
+            "number": 1,
+            "x": 0,
+            "z": 2.2,
+            "y": 0,
+            "vx": 0,
+            "vz": 0,
+            "angle": 3.141592653589793,
+            "armAngle": 3.141592653589793,
+            "aimX": 0,
+            "aimZ": 0,
+            "stamina": 1,
+            "jumpTime": 0,
+            "crouching": false,
+            "action": "three",
+            "cooldown": 0.3999999999999992,
+            "aiTimer": 1.0102487546857446,
+            "actionTime": 0.24999999999999967
+          },
+          {
+            "id": 1,
+            "team": 0,
+            "number": 2,
+            "x": -4.0739256777973605,
+            "z": -1.0055169119959606,
+            "y": 0,
+            "vx": 1.9353905842758778,
+            "vz": -1.3286367644212673,
+            "angle": 2.1724011951807762,
+            "armAngle": 2.1724011951807762,
+            "aimX": 0,
+            "aimZ": 0,
+            "stamina": 1,
+            "jumpTime": 0,
+            "crouching": false,
+            "action": "run",
+            "cooldown": 0,
+            "aiTimer": 1.3156363852322102,
+            "actionTime": 0
+          },
+          {
+            "id": 2,
+            "team": 0,
+            "number": 3,
+            "x": 4.351693090237508,
+            "z": -1.3803851263602014,
+            "y": 0,
+            "vx": -1.1442122968366333,
+            "vz": -2.0505655849816744,
+            "angle": -2.6326293902882,
+            "armAngle": -2.6326293902882,
+            "aimX": 0,
+            "aimZ": 0,
+            "stamina": 1,
+            "jumpTime": 0,
+            "crouching": false,
+            "action": "run",
+            "cooldown": 0,
+            "aiTimer": 1.251620626449585,
+            "actionTime": 0
+          },
+          {
+            "id": 3,
+            "team": 1,
+            "number": 1,
+            "x": -0.5013783796621223,
+            "z": 0.30411363090822846,
+            "y": 0,
+            "vx": -1.0160305286487101,
+            "vz": -2.11630825311997,
+            "angle": -2.693994887754978,
+            "armAngle": -2.693994887754978,
+            "aimX": 0,
+            "aimZ": 0,
+            "stamina": 1,
+            "jumpTime": 0,
+            "crouching": false,
+            "action": "run",
+            "cooldown": 0,
+            "aiTimer": 1.315911597025115,
+            "actionTime": 0
+          },
+          {
+            "id": 4,
+            "team": 1,
+            "number": 2,
+            "x": -3.3802617246384825,
+            "z": -1.6088312676828511,
+            "y": 0,
+            "vx": 1.6812098209167572,
+            "vz": -1.6383655478129837,
+            "angle": 2.3432886544766145,
+            "armAngle": 2.3432886544766145,
+            "aimX": 0,
+            "aimZ": 0,
+            "stamina": 1,
+            "jumpTime": 0,
+            "crouching": false,
+            "action": "run",
+            "cooldown": 0,
+            "aiTimer": 0.9442988068214617,
+            "actionTime": 0
+          },
+          {
+            "id": 5,
+            "team": 1,
+            "number": 3,
+            "x": 3.768101023224737,
+            "z": -1.8662439805716757,
+            "y": 0,
+            "vx": -0.5752496284326802,
+            "vz": -2.2765710875294496,
+            "angle": -2.8940909012065634,
+            "armAngle": -2.8940909012065634,
+            "aimX": 0,
+            "aimZ": 0,
+            "stamina": 1,
+            "jumpTime": 0,
+            "crouching": false,
+            "action": "run",
+            "cooldown": 0,
+            "aiTimer": 0.8201582048088312,
+            "actionTime": 0
+          }
+        ],
+        "ball": {
+          "x": 0.042308247800686,
+          "y": 3.8267570357686447,
+          "z": -0.5746613243821321,
+          "vx": 0.1015397947216464,
+          "vy": 3.0124668858447485,
+          "vz": -6.659187178517119,
+          "holder": null,
+          "ownerId": null,
+          "state": "shot"
+        },
+        "hoop": {
+          "x": 0,
+          "z": -6,
+          "y": 3.05
+        },
+        "bounds": {
+          "minX": -7.5,
+          "maxX": 7.5,
+          "minZ": -6.75,
+          "maxZ": 6.75
+        },
+        "clock": 1.0500000000000012,
+        "timeRemaining": 178.94999999999916,
+        "shotClock": 13.366666666666635,
+        "score": [
+          0,
+          0
+        ],
+        "selectedId": 0,
+        "possessionTeam": 0,
+        "shotCharge": 0,
+        "ended": false,
+        "internals": {
+          "rng": 3953551219,
+          "flight": {
+            "type": "shot",
+            "elapsed": 0.41666666666666663,
+            "duration": 1.2264,
+            "fromX": 0,
+            "fromY": 1.72,
+            "fromZ": 2.2,
+            "initialVX": 0.1015397947216464,
+            "initialVY": 7.099966885844748,
+            "initialVZ": -6.659187178517119,
+            "shooterId": 0,
+            "team": 0,
+            "style": "three",
+            "points": 3,
+            "willScore": true,
+            "resolved": false
+          },
+          "resetDelay": 0,
+          "nextPossession": 0,
+          "lastInput": {
+            "jump": false,
+            "pass": false,
+            "switchPlayer": false,
+            "shootHeld": false
+          }
+        }
+      }
+    }
+  },
+  "tested": "Chromium on Linux with desktop and mobile emulation; no physical Safari or 100k load test"
+}
