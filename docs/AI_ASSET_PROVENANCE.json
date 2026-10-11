@@ -1,0 +1,174 @@
+{
+  "model_source": "https://huggingface.co/onnx-community/Qwen2.5-0.5B-Instruct/tree/22942cb7d7ba4cc81bb4673549ca4d4614469b5e",
+  "original_model": "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct",
+  "runtime_tarball": "https://registry.npmjs.org/@huggingface/transformers/-/transformers-3.8.1.tgz",
+  "runtime_tarball_sha256": "207714c36765b87accfd9b7b0672c3505805af97140990e0d9f8ac6e3cd5471e",
+  "total_bytes": 546143152,
+  "files": [
+    {
+      "path": "models/qwen2.5-0.5b/LICENSE",
+      "bytes": 11343,
+      "sha256": "832dd9e00a68dd83b3c3fb9f5588dad7dcf337a0db50f7d9483f310cd292e92e"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/README.md",
+      "bytes": 545,
+      "sha256": "d7312dfc364cad2634eefaaf3aefd9cfda3cc27cda03332e18d09e600394ed75"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/added_tokens.json",
+      "bytes": 605,
+      "sha256": "58b54bbe36fc752f79a24a271ef66a0a0830054b4dfad94bde757d851968060b"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/config.json",
+      "bytes": 678,
+      "sha256": "777e01f0fbb3346eb229cb6fb278ed6533c1e4dcb9ebf4bed0f6e94ef17fa1b5"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/generation_config.json",
+      "bytes": 242,
+      "sha256": "f7e7ce458658b2d40d9eb213b91b77a8bf698845ab89360976722d7ac46928a3"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/merges.txt",
+      "bytes": 1671853,
+      "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part000",
+      "bytes": 33554432,
+      "sha256": "53eee8c13212903fde3db8534a9ce6e158f15ae43fa39a1b7a08bb88487c76b8"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part001",
+      "bytes": 33554432,
+      "sha256": "6b3db85d394ca1de874f8a61efb2000ee557fb3ffa8eeb8d728ac2039f45ba4a"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part002",
+      "bytes": 33554432,
+      "sha256": "fa1f888dab763fed28295e99b5e551d40d683d39f2932399885fa897e8bc0ca1"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part003",
+      "bytes": 33554432,
+      "sha256": "fe77b8d733f812735b7fb31601b4785458093794322512948aef7b936a884304"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part004",
+      "bytes": 33554432,
+      "sha256": "6d9f50d215936028b9fa6766f5b7aed2acbf11bdc6691c16172ffa4a5265e823"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part005",
+      "bytes": 33554432,
+      "sha256": "e141cf3f57f29e0a609856cc217601282fbd49d1da8cc551e30ac60d56edc569"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part006",
+      "bytes": 33554432,
+      "sha256": "9f058d4d22a19453659c247dd642f5119bcc02c8468b2ec2c69efac007d6f057"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part007",
+      "bytes": 33554432,
+      "sha256": "d161f347f2e437238bfe79e0729a89dd45912e8e714e5101e1d296e413f4a4aa"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part008",
+      "bytes": 33554432,
+      "sha256": "84fa0023ccfdb5e40665256be355d33eb739a5cc55c15711bb18d14a05d1b28e"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part009",
+      "bytes": 33554432,
+      "sha256": "e541fc67038c6de437ce81257ffa69132436ee4c7fe1e8a3aa30f0dad09f6472"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part010",
+      "bytes": 33554432,
+      "sha256": "5af771c6e6fb404d90bf1c3ddb006eafe137189bc9950cf10d9130605a2aab13"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part011",
+      "bytes": 33554432,
+      "sha256": "027bd440b14aae378fadb38f989646276a322b3ba9c00f9302552eda8130cb6d"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part012",
+      "bytes": 33554432,
+      "sha256": "f5bc0403a29464b374616220f528fa6c6a99cea325b1446c09698b14004f0dd2"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part013",
+      "bytes": 33554432,
+      "sha256": "b34201febd5e46000de0701e1f16a09efd6750eb7473da8d855bdc7115329a84"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part014",
+      "bytes": 33554432,
+      "sha256": "7016518d3bb7fd072372f0865bff22c85b7c7ae915ddc66b649cc7b9558da9d1"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part015",
+      "bytes": 8780077,
+      "sha256": "e83de026d524dc5680655849f280953c8af47c3ed04093351f5ff8a1edf3b780"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.parts.json",
+      "bytes": 2969,
+      "sha256": "f22e021e256900d92423ed2b078e549a326084cae17c9f3ac3d8d7c26525271d"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/quantize_config.json",
+      "bytes": 285,
+      "sha256": "8da6e4e50ef7c210ba66a98a4256e6d60e38cef8a9a9c74d327251aaf4e78767"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/special_tokens_map.json",
+      "bytes": 613,
+      "sha256": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/tokenizer.json",
+      "bytes": 7031673,
+      "sha256": "a8506e7111b80c6d8635951a02eab0f4e1a8e4e5772da83846579e97b16f61bf"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/tokenizer_config.json",
+      "bytes": 7849,
+      "sha256": "6a14243f0ae04884e597b3f032c05e15de9f417318fdcac24ab4e2680e691430"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/vocab.json",
+      "bytes": 2776833,
+      "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+    },
+    {
+      "path": "vendor/transformers/LICENSE",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "vendor/transformers/ONNXRUNTIME_LICENSE",
+      "bytes": 1073,
+      "sha256": "2f07c72751aed99790b8a4869cf2311df85a860b22ded05fa22803587a48922c"
+    },
+    {
+      "path": "vendor/transformers/ort-wasm-simd-threaded.jsep.mjs",
+      "bytes": 44484,
+      "sha256": "08fb86ec433c78bfb032c5d84a68b8e8e5a8d81268fa39e24314179a5767a5b9"
+    },
+    {
+      "path": "vendor/transformers/ort-wasm-simd-threaded.jsep.wasm",
+      "bytes": 21596019,
+      "sha256": "c46655e8a94afc45338d4cb2b840475f88e5012d524509916e505079c00bfa39"
+    },
+    {
+      "path": "vendor/transformers/transformers.min.js",
+      "bytes": 888173,
+      "sha256": "aa5002b70e789798da263f5f99c62bd3e8fcd0c119258a493c40c180648365fa"
+    }
+  ]
+}

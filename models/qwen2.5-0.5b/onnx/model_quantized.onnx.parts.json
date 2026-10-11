@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "repo": "onnx-community/Qwen2.5-0.5B-Instruct",
+  "revision": "22942cb7d7ba4cc81bb4673549ca4d4614469b5e",
+  "dtype": "q8",
+  "file": "model_quantized.onnx",
+  "bytes": 512096557,
+  "sha256": "41834041ab1b29eff9fc592f1a29a1844133aea35832ea9fa91682be13016100",
+  "pieces": [
+    {
+      "name": "model_quantized.onnx.part000",
+      "bytes": 33554432,
+      "sha256": "53eee8c13212903fde3db8534a9ce6e158f15ae43fa39a1b7a08bb88487c76b8"
+    },
+    {
+      "name": "model_quantized.onnx.part001",
+      "bytes": 33554432,
+      "sha256": "6b3db85d394ca1de874f8a61efb2000ee557fb3ffa8eeb8d728ac2039f45ba4a"
+    },
+    {
+      "name": "model_quantized.onnx.part002",
+      "bytes": 33554432,
+      "sha256": "fa1f888dab763fed28295e99b5e551d40d683d39f2932399885fa897e8bc0ca1"
+    },
+    {
+      "name": "model_quantized.onnx.part003",
+      "bytes": 33554432,
+      "sha256": "fe77b8d733f812735b7fb31601b4785458093794322512948aef7b936a884304"
+    },
+    {
+      "name": "model_quantized.onnx.part004",
+      "bytes": 33554432,
+      "sha256": "6d9f50d215936028b9fa6766f5b7aed2acbf11bdc6691c16172ffa4a5265e823"
+    },
+    {
+      "name": "model_quantized.onnx.part005",
+      "bytes": 33554432,
+      "sha256": "e141cf3f57f29e0a609856cc217601282fbd49d1da8cc551e30ac60d56edc569"
+    },
+    {
+      "name": "model_quantized.onnx.part006",
+      "bytes": 33554432,
+      "sha256": "9f058d4d22a19453659c247dd642f5119bcc02c8468b2ec2c69efac007d6f057"
+    },
+    {
+      "name": "model_quantized.onnx.part007",
+      "bytes": 33554432,
+      "sha256": "d161f347f2e437238bfe79e0729a89dd45912e8e714e5101e1d296e413f4a4aa"
+    },
+    {
+      "name": "model_quantized.onnx.part008",
+      "bytes": 33554432,
+      "sha256": "84fa0023ccfdb5e40665256be355d33eb739a5cc55c15711bb18d14a05d1b28e"
+    },
+    {
+      "name": "model_quantized.onnx.part009",
+      "bytes": 33554432,
+      "sha256": "e541fc67038c6de437ce81257ffa69132436ee4c7fe1e8a3aa30f0dad09f6472"
+    },
+    {
+      "name": "model_quantized.onnx.part010",
+      "bytes": 33554432,
+      "sha256": "5af771c6e6fb404d90bf1c3ddb006eafe137189bc9950cf10d9130605a2aab13"
+    },
+    {
+      "name": "model_quantized.onnx.part011",
+      "bytes": 33554432,
+      "sha256": "027bd440b14aae378fadb38f989646276a322b3ba9c00f9302552eda8130cb6d"
+    },
+    {
+      "name": "model_quantized.onnx.part012",
+      "bytes": 33554432,
+      "sha256": "f5bc0403a29464b374616220f528fa6c6a99cea325b1446c09698b14004f0dd2"
+    },
+    {
+      "name": "model_quantized.onnx.part013",
+      "bytes": 33554432,
+      "sha256": "b34201febd5e46000de0701e1f16a09efd6750eb7473da8d855bdc7115329a84"
+    },
+    {
+      "name": "model_quantized.onnx.part014",
+      "bytes": 33554432,
+      "sha256": "7016518d3bb7fd072372f0865bff22c85b7c7ae915ddc66b649cc7b9558da9d1"
+    },
+    {
+      "name": "model_quantized.onnx.part015",
+      "bytes": 8780077,
+      "sha256": "e83de026d524dc5680655849f280953c8af47c3ed04093351f5ff8a1edf3b780"
+    }
+  ]
+}

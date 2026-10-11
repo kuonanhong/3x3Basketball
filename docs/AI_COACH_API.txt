@@ -1,0 +1,20 @@
+Include <script src="coach.js"></script> near the end of the page.
+No model downloads until SACoach.load() is explicitly called.
+
+SACoach.init({onState(status),onProgress(progress)}) -> SACoach
+SACoach.load({onProgress(progress)}) -> Promise<status>
+SACoach.ask(text, {language,sport,level,player,opponent,onToken(chunk)}) -> Promise<string>
+SACoach.status() -> {state,model,bytes,error,generative}
+state: unloaded | loading | ready | generating | error
+SACoach.cancel() / unload(): terminate Worker; releases model; load again before ask.
+SACoach.clearCache() -> Promise: unload and delete smartaction-coach-* caches.
+
+State is also emitted as window event 'sa-coach-state' with event.detail = status.
+Render generated text using textContent, never innerHTML.
+Error MODEL_NOT_READY means prompt the user to load model, or separately display
+localized predefined tips labelled "basic coach (not generative AI)".
+No transcript is sent to an external inference service.
+Load streams 16 parts and verifies each SHA256 before reconstruction.
+Do not list the model parts in service worker installation precache: model loading
+must be opt-in. Offline local HTTP use works with all bundled assets. Browser
+cache is best effort and can be evicted by the browser.

@@ -1,0 +1,881 @@
+{
+  "schema": 1,
+  "app": "smartaction-sports",
+  "version": "6.0.0",
+  "layout": "repository-root",
+  "files": [
+    {
+      "path": ".nojekyll",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1394,
+      "sha256": "85a12a50797ee7f79d21c180dba6f47eb4531c0590cbcd1f86ca7ac381caa95e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8324,
+      "sha256": "d0e0004a9f39ea97bc0cc4ac78fe721f76a627dd05e568c6c48534ed88e626dc"
+    },
+    {
+      "path": "app.js",
+      "bytes": 24619,
+      "sha256": "b62869cf2f756c2a27f26714c0ca8376a0e943c05f211762d39f8bcc008c3c79"
+    },
+    {
+      "path": "assets/photos/alexander-ovechkin.jpg",
+      "bytes": 61754,
+      "sha256": "71c025ac5ea3bff3fec37b032eb8f632c236669e2e253da80dd69c16d744dad5"
+    },
+    {
+      "path": "assets/photos/babe-ruth.jpg",
+      "bytes": 40593,
+      "sha256": "8710475586af66a9f9ed86259bc7b1dd8d55799887b315f9d701ee173d819307"
+    },
+    {
+      "path": "assets/photos/buen-retiro-park.jpg",
+      "bytes": 116709,
+      "sha256": "23b2d77eb30faac79f4575a67892ab582eb703175fa82c20856c5143739f81e5"
+    },
+    {
+      "path": "assets/photos/central-park-kaohsiung.jpg",
+      "bytes": 194135,
+      "sha256": "1fa66a2af91db296b6cdbdcb983d60afecb1182fc003e34e81fe1e8dcee139b7"
+    },
+    {
+      "path": "assets/photos/central-park.jpg",
+      "bytes": 184757,
+      "sha256": "2f641d42c02df95981476e114712bc7609632419d96f333a0e49e16689e04be8"
+    },
+    {
+      "path": "assets/photos/champ-de-mars.jpg",
+      "bytes": 92436,
+      "sha256": "2d3e6167a4c351e19326749b0ed0149f1da4e556af3c75c57cbd86131558ea9f"
+    },
+    {
+      "path": "assets/photos/chapultepec.jpg",
+      "bytes": 180017,
+      "sha256": "abdfe6a1138e7cb8b06b2e3b5bcf0c0a5a605ac8d7c778c51daf9e52719fd3b8"
+    },
+    {
+      "path": "assets/photos/chien-ming-wang.jpg",
+      "bytes": 41331,
+      "sha256": "5bea7b510bc20baf9281ed10fd6dcb3de7b98d35282e11649713644b82f319bf"
+    },
+    {
+      "path": "assets/photos/cristiano-ronaldo.jpg",
+      "bytes": 53448,
+      "sha256": "854a1fa74fb031fec2d570f9ce944ded7e2db0241ffe022e24c495abe4dc1279"
+    },
+    {
+      "path": "assets/photos/daan-forest-park.jpg",
+      "bytes": 210309,
+      "sha256": "17e0e08387be6d476aa02e13f8fe5c979dfc1cf76d1aa4d8270f6058997ee539"
+    },
+    {
+      "path": "assets/photos/deng-yaping.jpg",
+      "bytes": 26875,
+      "sha256": "a7bb194da1afad16aeeaae1dc144a4847264047d4280dceadb0ed62d9263fd8a"
+    },
+    {
+      "path": "assets/photos/diana-taurasi.jpg",
+      "bytes": 36294,
+      "sha256": "8945cc2522b8ea27a846a767a0a3d3f3324a41d81b9c42d6e14b78a67dabde81"
+    },
+    {
+      "path": "assets/photos/dirk-nowitzki.jpg",
+      "bytes": 41168,
+      "sha256": "3b06cd2037b7ba18e9df4a721a339a738a3a28b45f15a0ee40abffdad526afe5"
+    },
+    {
+      "path": "assets/photos/giannis-antetokounmpo.jpg",
+      "bytes": 50354,
+      "sha256": "34d3d49deb638ca41fb059199f7244a73af6f799156d3f808f9e8667ba01cd5d"
+    },
+    {
+      "path": "assets/photos/giba.jpg",
+      "bytes": 27067,
+      "sha256": "7bed797df5f272e50ed273f4fa7f825e7f51e60032d7710d6a643fb2ae753055"
+    },
+    {
+      "path": "assets/photos/golden-gate-park.jpg",
+      "bytes": 207340,
+      "sha256": "0325ccb584fc0fba66176a10d0139d86fb1035d0367200c1d0f4bc7f4b495266"
+    },
+    {
+      "path": "assets/photos/hangang-park.jpg",
+      "bytes": 170254,
+      "sha256": "ec4661794fee10235354bb7f9df5ae7546920db91fe1d3018424472b3b9340e4"
+    },
+    {
+      "path": "assets/photos/hayley-wickenheiser.jpg",
+      "bytes": 40413,
+      "sha256": "466f6a754082c194eea255a16ce6e8d1dfda8166ab4cdb367f3593777a6d63d9"
+    },
+    {
+      "path": "assets/photos/hyde-park-london.jpg",
+      "bytes": 201720,
+      "sha256": "069271c183f909a95dfd7c40509d7424f8a8102f51b3c893ba6c242a903aadc1"
+    },
+    {
+      "path": "assets/photos/ibirapuera-park.jpg",
+      "bytes": 266056,
+      "sha256": "8f14d47aab0767b2af26c82ff5c412bd7d2782201794fbef9647fb4725285a95"
+    },
+    {
+      "path": "assets/photos/ichiro-suzuki.jpg",
+      "bytes": 52306,
+      "sha256": "c003125efa22903812eafc70b335b53074cd9f385787da2d2bc1c6d0b2507071"
+    },
+    {
+      "path": "assets/photos/jeremy-lin.jpg",
+      "bytes": 36806,
+      "sha256": "2408b18b5e5684a3cf4a812e621047e9ed1f153300a8ad17fc42d794f45c13b7"
+    },
+    {
+      "path": "assets/photos/jerry-rice.jpg",
+      "bytes": 27300,
+      "sha256": "5b3cdcf619046b23b7d81fddd088af255ab3efa00db02fe7347190f1b56d8b80"
+    },
+    {
+      "path": "assets/photos/jonah-lomu.jpg",
+      "bytes": 10725,
+      "sha256": "a42f6d9f0997f3f638ab0a84a73b3fab02509229acea0057e0aaf8c57da78b4f"
+    },
+    {
+      "path": "assets/photos/karch-kiraly.jpg",
+      "bytes": 50464,
+      "sha256": "0fe6c5e13e02d59ceb62fda71288c51a85455be633b30b1d0f86b31441c030f2"
+    },
+    {
+      "path": "assets/photos/kareem-abdul-jabbar.jpg",
+      "bytes": 37623,
+      "sha256": "d8a167fb241afefac424a6b7d93f26b812f52e4950d816788f314225d164d656"
+    },
+    {
+      "path": "assets/photos/kerri-walsh-jennings.jpg",
+      "bytes": 34886,
+      "sha256": "0ad0f23b1e47d19794a6602dccdd392ccb45ff4cb2f8c0b44f98d4d4670d0373"
+    },
+    {
+      "path": "assets/photos/kobe-bryant.jpg",
+      "bytes": 32496,
+      "sha256": "a1e3d828fa23c1e52f7a7783367dea4aeb7b414393e6439eba3bb0f7ecb9e368"
+    },
+    {
+      "path": "assets/photos/larry-bird.jpg",
+      "bytes": 38475,
+      "sha256": "ee4228bc3996a434384a47b67f4cafdcb878310f342a9ccf049f12104ebb044f"
+    },
+    {
+      "path": "assets/photos/lebron-james.jpg",
+      "bytes": 56823,
+      "sha256": "23b8f87b08abecaf7d1442fbef64417697bf8e36e895fdd3b3b4dbd0e9da9341"
+    },
+    {
+      "path": "assets/photos/lee-chong-wei.jpg",
+      "bytes": 52756,
+      "sha256": "16ffa5b269fade60a47f7352981a48e7446f6297d002d43eed33ec0c6352e1c9"
+    },
+    {
+      "path": "assets/photos/lin-dan.jpg",
+      "bytes": 33776,
+      "sha256": "0654ac40302ddaf3d20759317dc190392d68a2c6299573cf29e3a4edca20a131"
+    },
+    {
+      "path": "assets/photos/lin-yun-ju.jpg",
+      "bytes": 18643,
+      "sha256": "3e81120a7a92b5a9809e9f8cac58583924ff8d60e56a2766d243a8628bf0b762"
+    },
+    {
+      "path": "assets/photos/lionel-messi.jpg",
+      "bytes": 45734,
+      "sha256": "354bb0f17ce3519ebf518c22a26530255f671e53bcd142a318265a2876e1afa2"
+    },
+    {
+      "path": "assets/photos/lisa-leslie.jpg",
+      "bytes": 38047,
+      "sha256": "a750fc919647aa2ad5537b7e451c11cfeedfbc30fe5a713df12f8f5a2fa5713e"
+    },
+    {
+      "path": "assets/photos/lotus-pond-kaohsiung.jpg",
+      "bytes": 85189,
+      "sha256": "9fa1bd8a5b7d9180a4763ab57f54e7b447c22ec155a33fd1c34252829c391b3c"
+    },
+    {
+      "path": "assets/photos/lumphini-park.jpg",
+      "bytes": 138010,
+      "sha256": "7c62b0c88bf26875920f9be87c8dcb596e7d5397bc024ceb64e33958aaf96b4c"
+    },
+    {
+      "path": "assets/photos/ma-long.jpg",
+      "bytes": 31252,
+      "sha256": "f408802d65b1a3d5e81ddf9c22529c97bb3e82a86b7ca72ae6b1e19d28f2956a"
+    },
+    {
+      "path": "assets/photos/magic-johnson.jpg",
+      "bytes": 29190,
+      "sha256": "ddd637e6df96fd713e3d425fc82b1b0e41b6f9a92c905561df53cca4b4e15784"
+    },
+    {
+      "path": "assets/photos/manny-ramirez.jpg",
+      "bytes": 34253,
+      "sha256": "0ad34320a73f01b36cdd3724127947a0e88e33f4c72a48a258e73bcbe7ab026a"
+    },
+    {
+      "path": "assets/photos/mariano-rivera.jpg",
+      "bytes": 34991,
+      "sha256": "aba2617b675e4209e8cb98cfb56c8626ddeb42df68294c5983686f3662aa0165"
+    },
+    {
+      "path": "assets/photos/marina-bay-singapore.jpg",
+      "bytes": 142485,
+      "sha256": "5caaff6415bf68b91d83e2b5bdc55854e4e27dded5f7eadeafd86c700a1ca646"
+    },
+    {
+      "path": "assets/photos/marta-footballer.jpg",
+      "bytes": 44114,
+      "sha256": "fc5d6d2c26d9d9beab2891f90143c46322fc65557fb504560aff4ec5961e3e90"
+    },
+    {
+      "path": "assets/photos/mia-hamm.jpg",
+      "bytes": 42728,
+      "sha256": "4bdafc847d6eab17593d16f88ca8a5ab056d2a1739683db225316f189c2e5f5c"
+    },
+    {
+      "path": "assets/photos/michael-jordan.jpg",
+      "bytes": 35842,
+      "sha256": "a06de4ff493682a67f3355660575069d3ef10cfd65e853bb4b36c07e94fa5d3b"
+    },
+    {
+      "path": "assets/photos/michaela-blyde.jpg",
+      "bytes": 12556,
+      "sha256": "5f85003b11990c2589e2a9af228f7f5ab70a443d31e3a15823ab4ca69553a4de"
+    },
+    {
+      "path": "assets/photos/millennium-park.jpg",
+      "bytes": 243260,
+      "sha256": "6c8f90da352aa0e20f86aab6ec2fc1f379aa5d8569208ba23aaf372b2a480f3d"
+    },
+    {
+      "path": "assets/photos/naomi-osaka.jpg",
+      "bytes": 31381,
+      "sha256": "1e5d6b6373396f8d672e8884cade638ad47da15a1a6feca150f60c276753e60e"
+    },
+    {
+      "path": "assets/photos/national-stadium-kaohsiung.jpg",
+      "bytes": 179247,
+      "sha256": "25e1308e7ef80c5e76acf5a497827ec18e2a77b1d64c2a80fadd8309bd6dd11e"
+    },
+    {
+      "path": "assets/photos/nikola-joki.jpg",
+      "bytes": 36574,
+      "sha256": "0fe21e37419e1f1b9c34f3398448c1a77ce13f430deea527c7ac5b0cf3277581"
+    },
+    {
+      "path": "assets/photos/novak-djokovic.jpg",
+      "bytes": 52030,
+      "sha256": "7542ba66500b6dde92279f529cdfbcc0ef5ea1ae91649319e60e91404031dea4"
+    },
+    {
+      "path": "assets/photos/olympiapark-munich.jpg",
+      "bytes": 76983,
+      "sha256": "3e9c0438166e45b5355d0868f293f82403577de4a90056ce63b3dade3fab44de"
+    },
+    {
+      "path": "assets/photos/p-v-sindhu.jpg",
+      "bytes": 57951,
+      "sha256": "3d5c017de689ffb6b8596f287686bb8bae6d13d23a8860a10f11979994308ed2"
+    },
+    {
+      "path": "assets/photos/patrick-mahomes.jpg",
+      "bytes": 40342,
+      "sha256": "8fed6c2e0739faaba8fd94ed1b2268aa649e1535ff82523be35345533b2996e1"
+    },
+    {
+      "path": "assets/photos/pau-gasol.jpg",
+      "bytes": 27544,
+      "sha256": "d5d2615344441abf577b4bb8d354ed677bfb76f7240641fd8701fc0e00c200a4"
+    },
+    {
+      "path": "assets/photos/pel.jpg",
+      "bytes": 35905,
+      "sha256": "59457aea006797f773a37f8a6acaa7462e1663eee8e6d13bfd6770320dc7b0da"
+    },
+    {
+      "path": "assets/photos/rafael-nadal.jpg",
+      "bytes": 31792,
+      "sha256": "c6894489f0264283bfdb9e9bd56fb56e386fdf7f28d5e6cbba15e93162d8faac"
+    },
+    {
+      "path": "assets/photos/richie-mccaw.jpg",
+      "bytes": 44322,
+      "sha256": "3ea9facd8e8adcb00c0ac2ed057fb0c3c69c538c2c2bca58311ae12aab970c61"
+    },
+    {
+      "path": "assets/photos/roger-federer.jpg",
+      "bytes": 38992,
+      "sha256": "a82f6e4ceab5d4d9092b728bc6538a79b1b6c93e28efe75cf454ecb9ef0916c9"
+    },
+    {
+      "path": "assets/photos/royal-botanic-garden-sydney.jpg",
+      "bytes": 212034,
+      "sha256": "f3615333e6f788db0420cb7daab8a641c0256e1fc41a514793e1e83334955844"
+    },
+    {
+      "path": "assets/photos/rucker-park.jpg",
+      "bytes": 184239,
+      "sha256": "70a9d294903299d9655b711707a323174794442157341d80365f414f94452c4b"
+    },
+    {
+      "path": "assets/photos/rui-hachimura.jpg",
+      "bytes": 41622,
+      "sha256": "753b3c553af0df235ad454f4a7a033003011c066217881559143084208597b29"
+    },
+    {
+      "path": "assets/photos/serena-williams.jpg",
+      "bytes": 27715,
+      "sha256": "c879c35f55461019da5a4b93b796fa2727cb23ad5f2fb299ce8f0965c32df650"
+    },
+    {
+      "path": "assets/photos/shohei-ohtani.jpg",
+      "bytes": 55293,
+      "sha256": "4b0b4f28f9e3371a25c384d220eac4724ea3780f6b786ef74310f0de21e48826"
+    },
+    {
+      "path": "assets/photos/sidney-crosby.jpg",
+      "bytes": 33886,
+      "sha256": "cb9a571ab33f5a7537a57105dd0abe03e101e01da705e5c3922e220fe93c3771"
+    },
+    {
+      "path": "assets/photos/son-heung-min.jpg",
+      "bytes": 34869,
+      "sha256": "09dbe4922e916315447d8d228f62c242e03d8280dfe7777b9e16becc89fe97ac"
+    },
+    {
+      "path": "assets/photos/stanley-park.jpg",
+      "bytes": 117190,
+      "sha256": "0a6fc50135f5bedd059bd3e58d6a420bd405beee28d1876324563f9732fa453c"
+    },
+    {
+      "path": "assets/photos/stephen-curry.jpg",
+      "bytes": 32874,
+      "sha256": "045b5bb72e1aec4e63004843c65085f5481abbeafadefe6daa1f5101533f84d9"
+    },
+    {
+      "path": "assets/photos/table-mountain.jpg",
+      "bytes": 87132,
+      "sha256": "120480977172baa7bd3f8f2fdc35440dc63de220d82562ad6c50e347d546b03e"
+    },
+    {
+      "path": "assets/photos/tai-tzu-ying.jpg",
+      "bytes": 34044,
+      "sha256": "a39901fad194b0f5fac9d29d04eb8efd5d32ddebb9dd70fbaed0f3a17721a5cb"
+    },
+    {
+      "path": "assets/photos/taipei-101.jpg",
+      "bytes": 54557,
+      "sha256": "f2f0fbceb3bc164502c5e8abb3f5c29d71270364ec029467137d90bf7cda9708"
+    },
+    {
+      "path": "assets/photos/tim-duncan.jpg",
+      "bytes": 34845,
+      "sha256": "1c05081c0bc1a47db316cc693c2d9a21fe39bcaed2c6064237f8cbaaa7ed578a"
+    },
+    {
+      "path": "assets/photos/timo-boll.jpg",
+      "bytes": 21728,
+      "sha256": "59eaf140bca643dc621128109069cb1b55b3790886d24dd94a36254212799202"
+    },
+    {
+      "path": "assets/photos/tom-brady.jpg",
+      "bytes": 35101,
+      "sha256": "55e7735d9a4164fe3d3271132c445caba49bb877b4ec5ab4738b7173dcfa3c57"
+    },
+    {
+      "path": "assets/photos/tony-parker.jpg",
+      "bytes": 27380,
+      "sha256": "e26bdde16c06d14389b14d05a5432afeac73cfd348430619a7dca10d338afecf"
+    },
+    {
+      "path": "assets/photos/venice-beach.jpg",
+      "bytes": 132800,
+      "sha256": "0de51e06b4f62f30d5db54c8d9b1a5e5ae6a7231078ab049e1de5a3e7cecb8eb"
+    },
+    {
+      "path": "assets/photos/viktor-axelsen.jpg",
+      "bytes": 19171,
+      "sha256": "14b01a5c0ab49a0a56a28bc2f0503120853b9500dd51001f04e22490d2380e84"
+    },
+    {
+      "path": "assets/photos/walter-payton.jpg",
+      "bytes": 32762,
+      "sha256": "8027a8cf59cd55a7b2c27ce62900ce2cf56786de0d6a97808e9193ec4c954be3"
+    },
+    {
+      "path": "assets/photos/wayne-gretzky.jpg",
+      "bytes": 40616,
+      "sha256": "70035125782504210be274ba2d1aaea6fd704eec6b03600b09426453dfbc137c"
+    },
+    {
+      "path": "assets/photos/weiwuying-metropolitan-park.jpg",
+      "bytes": 87901,
+      "sha256": "edb9fa65dc3ddc5ea06577551d77afdad887478d8f439874e7a10aaaa7df12ba"
+    },
+    {
+      "path": "assets/photos/y-ki-ishikawa.jpg",
+      "bytes": 35726,
+      "sha256": "75997e1190e8d7916417e69365a33d3da01d0afd7e7998fe76e2bce29f623bd5"
+    },
+    {
+      "path": "assets/photos/yao-ming.jpg",
+      "bytes": 35016,
+      "sha256": "839eb46bda484365b7166fd810c44ebc679a68d2672ffcdb7d35dec55420c73d"
+    },
+    {
+      "path": "assets/photos/yoyogi-park.jpg",
+      "bytes": 91861,
+      "sha256": "1f00821a8e0c1b69a1fb5e721e24463e000db4859367fbfc4aeb79fc1e787be7"
+    },
+    {
+      "path": "assets/photos/zhu-ting-volleyball.jpg",
+      "bytes": 26413,
+      "sha256": "2add09fcd5f98a20eb1aaaa84805aa1a15f5ecddca55449ccd313c055dd10df3"
+    },
+    {
+      "path": "coach-worker.js",
+      "bytes": 9543,
+      "sha256": "1ca3edad8cffe7fcce8e06b9ed3418c6c6fc86443c9f420290d2652f2ad6fe85"
+    },
+    {
+      "path": "coach.js",
+      "bytes": 4438,
+      "sha256": "33c1fc3c4d9db24ea319495aa62a37e19ff21f54846c11d9cf5f4a5a81ea090f"
+    },
+    {
+      "path": "data/ASSET_CREDITS.html",
+      "bytes": 64338,
+      "sha256": "b396ad493a79b11621f60c2e0e417cf0f615b9740972ebeaa9bf1922023139d2"
+    },
+    {
+      "path": "data/catalog.js",
+      "bytes": 169553,
+      "sha256": "ee04907a38d46aed34b98ad6c133976ad7fcc8f5f74f054ac24bbb62b829d7f0"
+    },
+    {
+      "path": "data/catalog.json",
+      "bytes": 206436,
+      "sha256": "8f12dc47c7a98aeea1e8ef9ebd9465a625738bbeade72c796a8659a0a16fe255"
+    },
+    {
+      "path": "data/photo-attributions.json",
+      "bytes": 57308,
+      "sha256": "782a569f5a342a50e9100cb1bbd26bafdb189c8ac84224236a096a5046005bd5"
+    },
+    {
+      "path": "docs/AI_ASSET_PROVENANCE.json",
+      "bytes": 6472,
+      "sha256": "0fafd1e35f4dd9e6e6ad3540141cd17c802f2545e454135dbb02205a98c9fd59"
+    },
+    {
+      "path": "docs/AI_COACH_API.txt",
+      "bytes": 1255,
+      "sha256": "447dcd4c3ce1f0d73788fc634175526f381352d1c50aa257c8f1005b41a51ef4"
+    },
+    {
+      "path": "docs/AI_COACH_MODEL.html",
+      "bytes": 5651,
+      "sha256": "a02654b13c9476970673a2719fb0bbe61b83a39c6bb33d39b4cb980f65ac9617"
+    },
+    {
+      "path": "docs/AI_TEST_RESULT.json",
+      "bytes": 5475,
+      "sha256": "8590ad5f97a2657493190434b38eb5cdc753f985fe1d7fe96043024e7df17aab"
+    },
+    {
+      "path": "docs/DEPLOY.html",
+      "bytes": 7660,
+      "sha256": "363f702fcc61820bf410e4c4dcab80d2f2b77609f063a61a4f663805ab298f32"
+    },
+    {
+      "path": "game-core.js",
+      "bytes": 24622,
+      "sha256": "293200c5b20c777357055ec8360b84dbca1cbfb2510271a6b038ad1c7a750617"
+    },
+    {
+      "path": "guide.html",
+      "bytes": 25941,
+      "sha256": "70e73252fa333273580d3be71b51768b99bad98533029f17b47f324a52a12ecf"
+    },
+    {
+      "path": "icon.svg",
+      "bytes": 322,
+      "sha256": "95110a3a24f413d17e390e027e61a4ed08a0ec1f936d747bc20cede03f1d7b81"
+    },
+    {
+      "path": "index.html",
+      "bytes": 20504,
+      "sha256": "10bb1266b0be89c06e92754be31b625b18d92626243bd9865822f1382ccf5fd3"
+    },
+    {
+      "path": "lang/ar/index.html",
+      "bytes": 23058,
+      "sha256": "c975a6ae5e12a7c13eafe3ed6c1ee4c3db2d799a93f68c7fdc088c798824f83c"
+    },
+    {
+      "path": "lang/cs/index.html",
+      "bytes": 21404,
+      "sha256": "77831db1708314e01412c62bc398a56aa38b7599a6c616774feabc9d5a126032"
+    },
+    {
+      "path": "lang/de/index.html",
+      "bytes": 21343,
+      "sha256": "ba326c1f026c517cbecc207dd820498b852d5003ed12c6330e9a7f01832ac705"
+    },
+    {
+      "path": "lang/el/index.html",
+      "bytes": 23843,
+      "sha256": "7ea2ef72274a45c500546d3bef35be3bfe7a136733fcc7307553198bc97d488b"
+    },
+    {
+      "path": "lang/en/index.html",
+      "bytes": 20930,
+      "sha256": "dc235a2d314c0ea478e6b947d72910cc372c7eca8f6465f2dc77b04dda99ca58"
+    },
+    {
+      "path": "lang/es/index.html",
+      "bytes": 21514,
+      "sha256": "de0bf1fee07523290e89e3b59e7274857d6f3f054efa3ebd5075334c9eea85df"
+    },
+    {
+      "path": "lang/fi/index.html",
+      "bytes": 21390,
+      "sha256": "ca95586d2f33084a108ab137d64158a04a5e4ecf404d38e4794bab49a274185e"
+    },
+    {
+      "path": "lang/fil/index.html",
+      "bytes": 21898,
+      "sha256": "6cd5c3912d34f07184d5daa19c35355f494da3883085ef04fb5000ff8fe89778"
+    },
+    {
+      "path": "lang/fr/index.html",
+      "bytes": 21745,
+      "sha256": "74d77e85c19c7ce26eaf4a8914cfccc46f7b1e8455de3eab9c9e4a6059dfe70d"
+    },
+    {
+      "path": "lang/hi/index.html",
+      "bytes": 25837,
+      "sha256": "9bfaf653b0373638a187a7b6421689d13a94b3dba27479e29d95d211c6a1f22f"
+    },
+    {
+      "path": "lang/id/index.html",
+      "bytes": 21207,
+      "sha256": "f63b02e0fc2ab4e2fa932d9f2d6734ecf26bbbc79321d29926f9d2f2bf9cc7b8"
+    },
+    {
+      "path": "lang/it/index.html",
+      "bytes": 21524,
+      "sha256": "d77971f28b469a51e10a38573e3483eb3b8ca3e0d4ea534c99ee14316e73fca0"
+    },
+    {
+      "path": "lang/ja/index.html",
+      "bytes": 21854,
+      "sha256": "5f836a227f01c7fe57c06eb6e40a6de1a9ee7af6e7044276dd96776fb8f05667"
+    },
+    {
+      "path": "lang/ko/index.html",
+      "bytes": 21554,
+      "sha256": "a7640947f198a3ba23a142c1d2bc3f35384f02e04ed5a326406b60b9f7c79c62"
+    },
+    {
+      "path": "lang/ms/index.html",
+      "bytes": 21390,
+      "sha256": "014d4d62394f77e20d0e5dc265319879d38fc23e7f7d14ff6735d4534b8ba0d2"
+    },
+    {
+      "path": "lang/nl/index.html",
+      "bytes": 21050,
+      "sha256": "12af405c351db57bbba04786d5b8fa033ed1262edbb7a5ba89cfefa399fb3583"
+    },
+    {
+      "path": "lang/pl/index.html",
+      "bytes": 21461,
+      "sha256": "dc7daf35dc7a4b66c2112245cca40b2350431049e3d02c95d8a2b9b02cb71206"
+    },
+    {
+      "path": "lang/pt/index.html",
+      "bytes": 21529,
+      "sha256": "d50b771a1b8b6b129da595a46116d1a3ab0c981d190702c98f3526586b169919"
+    },
+    {
+      "path": "lang/ru/index.html",
+      "bytes": 24153,
+      "sha256": "c7f3632f99cdc278be3c0c69c16ef6d5515e2e702f507750c0ed731f416749f4"
+    },
+    {
+      "path": "lang/sv/index.html",
+      "bytes": 21175,
+      "sha256": "61792f6cbf45edc9d43b071a9d83ff21feb2f5eaefae90011c681c3d1e218f3f"
+    },
+    {
+      "path": "lang/th/index.html",
+      "bytes": 25808,
+      "sha256": "32d19adcd9c86df4825681c1f7b188291943b65ed19a1f7f2cf9770ba55e63ca"
+    },
+    {
+      "path": "lang/tr/index.html",
+      "bytes": 21184,
+      "sha256": "52a99aba4f73344cf0159f9d2a7c09c3d94b0f73d45bf396416c7632b383b8c4"
+    },
+    {
+      "path": "lang/uk/index.html",
+      "bytes": 23466,
+      "sha256": "5ba97788ef6f1a4b3a211259454c740df19fbc43e4ea1c1edccb1665062ed65f"
+    },
+    {
+      "path": "lang/vi/index.html",
+      "bytes": 22110,
+      "sha256": "d1bd82cbe387655d49361c9d3879a26b06c7ae9ee934b99c4281b8f425eff34d"
+    },
+    {
+      "path": "lang/zh-Hans/index.html",
+      "bytes": 20662,
+      "sha256": "dbd572d0cf98eecb80f24162f0e75fc5a9de4b4cf0e669f5b8b6869428c037c4"
+    },
+    {
+      "path": "lang/zh-Hant/index.html",
+      "bytes": 20659,
+      "sha256": "f1164a4e8961957e7e8ccf62a7c9c091937cdbb9c480bdfbdf912cf17d2441f2"
+    },
+    {
+      "path": "locales.js",
+      "bytes": 105001,
+      "sha256": "8eb90644608f2b1be3a005bd56e8d322468259d8ce0319207a3a03c342f2b865"
+    },
+    {
+      "path": "manifest.webmanifest",
+      "bytes": 283,
+      "sha256": "87b740b6254c7acdcdc2def91cade150892bb1a7d58423b01b7412d864f51513"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/LICENSE",
+      "bytes": 11343,
+      "sha256": "832dd9e00a68dd83b3c3fb9f5588dad7dcf337a0db50f7d9483f310cd292e92e"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/README.md",
+      "bytes": 545,
+      "sha256": "d7312dfc364cad2634eefaaf3aefd9cfda3cc27cda03332e18d09e600394ed75"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/added_tokens.json",
+      "bytes": 605,
+      "sha256": "58b54bbe36fc752f79a24a271ef66a0a0830054b4dfad94bde757d851968060b"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/config.json",
+      "bytes": 678,
+      "sha256": "777e01f0fbb3346eb229cb6fb278ed6533c1e4dcb9ebf4bed0f6e94ef17fa1b5"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/generation_config.json",
+      "bytes": 242,
+      "sha256": "f7e7ce458658b2d40d9eb213b91b77a8bf698845ab89360976722d7ac46928a3"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/merges.txt",
+      "bytes": 1671853,
+      "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part000",
+      "bytes": 33554432,
+      "sha256": "53eee8c13212903fde3db8534a9ce6e158f15ae43fa39a1b7a08bb88487c76b8"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part001",
+      "bytes": 33554432,
+      "sha256": "6b3db85d394ca1de874f8a61efb2000ee557fb3ffa8eeb8d728ac2039f45ba4a"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part002",
+      "bytes": 33554432,
+      "sha256": "fa1f888dab763fed28295e99b5e551d40d683d39f2932399885fa897e8bc0ca1"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part003",
+      "bytes": 33554432,
+      "sha256": "fe77b8d733f812735b7fb31601b4785458093794322512948aef7b936a884304"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part004",
+      "bytes": 33554432,
+      "sha256": "6d9f50d215936028b9fa6766f5b7aed2acbf11bdc6691c16172ffa4a5265e823"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part005",
+      "bytes": 33554432,
+      "sha256": "e141cf3f57f29e0a609856cc217601282fbd49d1da8cc551e30ac60d56edc569"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part006",
+      "bytes": 33554432,
+      "sha256": "9f058d4d22a19453659c247dd642f5119bcc02c8468b2ec2c69efac007d6f057"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part007",
+      "bytes": 33554432,
+      "sha256": "d161f347f2e437238bfe79e0729a89dd45912e8e714e5101e1d296e413f4a4aa"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part008",
+      "bytes": 33554432,
+      "sha256": "84fa0023ccfdb5e40665256be355d33eb739a5cc55c15711bb18d14a05d1b28e"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part009",
+      "bytes": 33554432,
+      "sha256": "e541fc67038c6de437ce81257ffa69132436ee4c7fe1e8a3aa30f0dad09f6472"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part010",
+      "bytes": 33554432,
+      "sha256": "5af771c6e6fb404d90bf1c3ddb006eafe137189bc9950cf10d9130605a2aab13"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part011",
+      "bytes": 33554432,
+      "sha256": "027bd440b14aae378fadb38f989646276a322b3ba9c00f9302552eda8130cb6d"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part012",
+      "bytes": 33554432,
+      "sha256": "f5bc0403a29464b374616220f528fa6c6a99cea325b1446c09698b14004f0dd2"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part013",
+      "bytes": 33554432,
+      "sha256": "b34201febd5e46000de0701e1f16a09efd6750eb7473da8d855bdc7115329a84"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part014",
+      "bytes": 33554432,
+      "sha256": "7016518d3bb7fd072372f0865bff22c85b7c7ae915ddc66b649cc7b9558da9d1"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.part015",
+      "bytes": 8780077,
+      "sha256": "e83de026d524dc5680655849f280953c8af47c3ed04093351f5ff8a1edf3b780"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/onnx/model_quantized.onnx.parts.json",
+      "bytes": 2969,
+      "sha256": "f22e021e256900d92423ed2b078e549a326084cae17c9f3ac3d8d7c26525271d"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/quantize_config.json",
+      "bytes": 285,
+      "sha256": "8da6e4e50ef7c210ba66a98a4256e6d60e38cef8a9a9c74d327251aaf4e78767"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/special_tokens_map.json",
+      "bytes": 613,
+      "sha256": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/tokenizer.json",
+      "bytes": 7031673,
+      "sha256": "a8506e7111b80c6d8635951a02eab0f4e1a8e4e5772da83846579e97b16f61bf"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/tokenizer_config.json",
+      "bytes": 7849,
+      "sha256": "6a14243f0ae04884e597b3f032c05e15de9f417318fdcac24ab4e2680e691430"
+    },
+    {
+      "path": "models/qwen2.5-0.5b/vocab.json",
+      "bytes": 2776833,
+      "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+    },
+    {
+      "path": "offline-manifest.json",
+      "bytes": 28565,
+      "sha256": "f9fbf25146b9012b81a182c86abbfc713879b25c17c1bf8a95d15c6c72e07271"
+    },
+    {
+      "path": "renderer.js",
+      "bytes": 35714,
+      "sha256": "dae59a7a8dece4c728c6e57312f7eeee7c1b1ae399fe2e398f923e6e2bc60ce6"
+    },
+    {
+      "path": "sitemap.xml",
+      "bytes": 2111,
+      "sha256": "dd35570005d33e16ab69f77e3e4963485b2fb455e24ba4219a95024729b233aa"
+    },
+    {
+      "path": "sports-engine.js",
+      "bytes": 29980,
+      "sha256": "5f5f20b4b72d9cfbbe50fbd3b8199b449d7dcdcc1977a60930e6acb3e8f9c448"
+    },
+    {
+      "path": "sports-i18n.js",
+      "bytes": 262568,
+      "sha256": "34a821e43be1b1c0b6e2f21219011e886eb19cca84e4f6733aee13b9a1eaeb39"
+    },
+    {
+      "path": "sports-ui.js",
+      "bytes": 18597,
+      "sha256": "e20feaa05a3efef22d0bb9767afe304fb7c53c935c8608d27760aa3d50d41027"
+    },
+    {
+      "path": "sports.css",
+      "bytes": 8600,
+      "sha256": "1e8e8e8e7e8ff2a2aa15705055fc6f7468097fd9da90647f691dbe3d1d3d0f12"
+    },
+    {
+      "path": "styles.css",
+      "bytes": 12867,
+      "sha256": "a6dc647eb03375caa91c3b9b988d4b67a97397b27475a2e744d207e167df33ce"
+    },
+    {
+      "path": "sw.js",
+      "bytes": 2719,
+      "sha256": "6aedc44d63e6935e2c8f926600f8d545bf21a9a7b1773059e9eece1a429413fd"
+    },
+    {
+      "path": "vendor/transformers/LICENSE",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "vendor/transformers/ONNXRUNTIME_LICENSE",
+      "bytes": 1073,
+      "sha256": "2f07c72751aed99790b8a4869cf2311df85a860b22ded05fa22803587a48922c"
+    },
+    {
+      "path": "vendor/transformers/ort-wasm-simd-threaded.jsep.mjs",
+      "bytes": 44484,
+      "sha256": "08fb86ec433c78bfb032c5d84a68b8e8e5a8d81268fa39e24314179a5767a5b9"
+    },
+    {
+      "path": "vendor/transformers/ort-wasm-simd-threaded.jsep.wasm",
+      "bytes": 21596019,
+      "sha256": "c46655e8a94afc45338d4cb2b840475f88e5012d524509916e505079c00bfa39"
+    },
+    {
+      "path": "vendor/transformers/transformers.min.js",
+      "bytes": 888173,
+      "sha256": "aa5002b70e789798da263f5f99c62bd3e8fcd0c119258a493c40c180648365fa"
+    }
+  ],
+  "removeLegacyPrefixes": [
+    "SmartAction_Basketball_20261007/"
+  ],
+  "removeLegacyFiles": [
+    "SmartAction_3x3_Preview.png",
+    "SmartAction_Basketball_FullPackage.zip",
+    "SmartAction_Game_Guide.html"
+  ]
+}

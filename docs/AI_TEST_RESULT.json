@@ -1,0 +1,88 @@
+{
+  "scope": "CPU inference and static/controller validation; no real browser, Intel Mac, Android or iPhone inference test performed.",
+  "packaged_model": "onnx-community/Qwen2.5-0.5B-Instruct",
+  "revision": "22942cb7d7ba4cc81bb4673549ca4d4614469b5e",
+  "dtype": "q8",
+  "sha256": "41834041ab1b29eff9fc592f1a29a1844133aea35832ea9fa91682be13016100",
+  "upstream_lfs_sha256_matches": true,
+  "model_parts": 16,
+  "all_part_hashes_verified": true,
+  "controller_tests": {
+    "passed": 8,
+    "total": 8,
+    "method": "Fake Worker API contract, no browser"
+  },
+  "native_test": {
+    "test": "Real CPU inference / onnxruntime-node 1.21.0; not a browser compatibility claim",
+    "time": "2026-10-11T05:30:28.400Z",
+    "model": "Qwen2.5-0.5B-Instruct",
+    "dtype": "q8",
+    "threads": 2,
+    "load_ms": 2036,
+    "generation_ms": 3698,
+    "prompt": [
+      {
+        "role": "system",
+        "content": "你是聰動運動遊戲教練。只用繁體中文回答，不超過三句話。依據以下資料回答，不能編造球員數據。參考資料：籃球運球要抬頭觀察隊友與防守位置、保持球靠近身體、低重心、練習雙手換手，先慢再快。遊戲內先以左手控制位置、右手調整手臂，觀察空檔再傳球或投籃。這是遊戲練習，不能提供醫療診斷。"
+      },
+      {
+        "role": "user",
+        "content": "初學者練習籃球運球時應注意什麼？"
+      }
+    ],
+    "answer": "1. 要掌握基本的動作技巧；\n2. 保持良好的站姿和呼吸；\n3. 注意環境和對手的位置；\n4. 遇到困難時可以尋求幫助；",
+    "limitations": "Single functional test; does not measure factual accuracy or broad multilingual quality."
+  },
+  "earlier_q8_test": {
+    "test": "Real CPU inference / onnxruntime-node 1.21.0; not a browser compatibility claim",
+    "time": "2026-10-11T05:28:03.010Z",
+    "model": "Qwen2.5-0.5B-Instruct",
+    "dtype": "q8",
+    "threads": 2,
+    "load_ms": 1713,
+    "generation_ms": 9240,
+    "prompt": [
+      {
+        "role": "system",
+        "content": "你是聰動運動遊戲教練。只用繁體中文回答，不超過三句話。依據以下資料回答，不能編造球員數據。參考資料：籃球運球要抬頭觀察隊友與防守位置、保持球靠近身體、低重心、練習雙手換手，先慢再快。遊戲內先以左手控制位置、右手調整手臂，觀察空檔再傳球或投籃。這是遊戲練習，不能提供醫療診斷。"
+      },
+      {
+        "role": "user",
+        "content": "初學者練習籃球運球時應注意什麼？"
+      }
+    ],
+    "answer": "1. 要注意球的運動特性，掌握球的運動方式和運動規則；\n2. 要注意球的運動速度和運動方向；\n3. 要注意球的運動力度和運動力量；\n4. 要注意球的運動範圍和運動範圍；\n5. 要注意球的運動狀態和運動狀態；\n6. 要注意球的運動過程和運動過程；\n7. 要注意球的運動過程和運動過程；\n8. 要注意球的運動過程和運動過程；\n9. 要注意球",
+    "limitations": "Single functional test; does not measure factual accuracy or broad multilingual quality."
+  },
+  "q4_comparison_not_in_package": {
+    "test": "Real CPU inference / onnxruntime-node 1.21.0; not a browser compatibility claim",
+    "time": "2026-10-11T05:30:11.188Z",
+    "model": "Qwen2.5-0.5B-Instruct",
+    "dtype": "q4",
+    "threads": 2,
+    "load_ms": 10144,
+    "generation_ms": 5898,
+    "prompt": [
+      {
+        "role": "system",
+        "content": "你是聰動運動遊戲教練。只用繁體中文回答，不超過三句話。依據以下資料回答，不能編造球員數據。參考資料：籃球運球要抬頭觀察隊友與防守位置、保持球靠近身體、低重心、練習雙手換手，先慢再快。遊戲內先以左手控制位置、右手調整手臂，觀察空檔再傳球或投籃。這是遊戲練習，不能提供醫療診斷。"
+      },
+      {
+        "role": "user",
+        "content": "初學者練習籃球運球時應注意什麼？"
+      }
+    ],
+    "answer": "初学者在练习籃板運球时需要注意以下几点：\n\n1. **掌握基本步伐**：首先需要学会正确的运球步法和身体协调。\n2. **观察队友与对手**：在传球前，应仔细观察对方的移动和防守情况。\n3. **调整角度**：根据场上环境和个人能力调整运球的角度和速度。\n4. **使用双臂换手**：可以尝试左右两侧交替使用双手进行运球，增加灵活性。\n\n以上就是对初学者练习篮板运球的基本要求。",
+    "limitations": "Single functional test; does not measure factual accuracy or broad multilingual quality."
+  },
+  "decision": "q8 retained to reduce download size; using explicit sport reference notes, repetition penalty1.15 and no-repeat-ngram3. No quantitative accuracy claim; both quantizations had instruction/wording limitations.",
+  "native_platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "browser_runtime": "Transformers.js3.8.1; ONNXRuntimeWeb1.22.0-dev.20250409-89f8206ba4; WASM1thread",
+  "native_runtime": "onnxruntime-node1.21.0 CPU2threads",
+  "input_token_guard_tests": {
+    "passed": 4,
+    "total": 4,
+    "scope": "Actual bundled-model tokenizer counts untruncated full chat; short prompt accepted, long Chinese prompt rejected; exact768 accepted and769 rejected before model generation",
+    "short_prompt_tokens": 28
+  }
+}
