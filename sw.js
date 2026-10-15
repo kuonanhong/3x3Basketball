@@ -1,8 +1,8 @@
 /* Scope-isolated shell. Large AI weights are opt-in, cached by coach-worker. */
 const ROOT=self.registration.scope;
 const PREFIX='sa-sports-'+encodeURIComponent(new URL(ROOT).pathname)+'-';
-const CACHE=PREFIX+'v6-20261011';
-const CORE=['index.html','styles.css','sports.css','locales.js','sports-i18n.js','data/catalog.js','game-core.js','sports-engine.js','renderer.js','coach.js','coach-worker.js','app.js','sports-ui.js','icon.svg','manifest.webmanifest','offline-manifest.json'];
+const CACHE=PREFIX+'v7-20261015';
+const CORE=['index.html','styles.css','sports.css','stage.css','locales.js','i18n/en.json','i18n/zh-Hant.json','data/catalog.js','game-core.js','sports-engine.js','renderer.js','coach.js','coach-worker.js','app.js','sports-ui.js','icon.svg','manifest.webmanifest','offline-manifest.json'];
 const local=p=>new URL(p,ROOT).href;
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE.map(local))).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith(PREFIX)&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));

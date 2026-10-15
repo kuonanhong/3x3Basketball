@@ -1,4 +1,5 @@
-/* SmartAction original 3-on-3 basketball simulation. MIT license. */
+/* SmartAction original basketball simulation. MIT license.
+   v7: 3-on-3 half court (default, unchanged scoring) and 5-on-5 full court (options.fullCourt). */
 (function (root, factory) {
   'use strict';
   var api = factory();
@@ -6,8 +7,8 @@
   if (root) root.SAHoopsCore = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
-  var HOOP = { x: 0, z: -6, y: 3.05 };
-  var BOUNDS = { minX: -7.5, maxX: 7.5, minZ: -6.75, maxZ: 6.75 };
+  var HALF = { hoops: [{ x: 0, z: -6, y: 3.05 }, { x: 0, z: -6, y: 3.05 }], bounds: { minX: -7.5, maxX: 7.5, minZ: -6.75, maxZ: 6.75 }, shotClock: 14, arc: 6.1 };
+  var FULL = { hoops: [{ x: 0, z: -12.6, y: 3.05 }, { x: 0, z: 12.6, y: 3.05 }], bounds: { minX: -7.5, maxX: 7.5, minZ: -14, maxZ: 14 }, shotClock: 24, arc: 6.75 };
   var GRAVITY = 9.81;
   var SETTINGS = {
     easy: { aiSpeed: 2.35, aiAccuracy: 0.51, defense: 0.38, playerSpeed: 4.4, shotBonus: 0.18 },
@@ -23,6 +24,11 @@
     this.difficulty = SETTINGS[options.difficulty] ? options.difficulty : 'easy';
     this.seed = (Number(options.seed) >>> 0) || 971031;
     this.duration = clamp(finite(options.duration, 180), 20, 900);
+    this.fullCourt = !!options.fullCourt;
+    this.teamSize = this.fullCourt ? 5 : 3;
+    this.layout = this.fullCourt ? FULL : HALF;
+    this.sport = this.fullCourt ? 'basketball5' : 'basketball';
+    this.rosters = clone(options.rosters || []);
     this.reset();
   }
   Core.prototype._random = function () {
@@ -31,12 +37,26 @@
     this._rng = x >>> 0;
     return this._rng / 4294967296;
   };
+  Core.prototype._hoop = function (team) { return this.layout.hoops[team]; };
+  Core.prototype._profile = function (i) {
+    var team = i < this.teamSize ? 0 : 1, slot = i % this.teamSize, r = this.rosters;
+    var raw = (Array.isArray(r[team]) ? r[team][slot] : r[i]) || {};
+    if (!raw || typeof raw !== 'object') return {};
+    var out = {};
+    if (raw.name) out.displayName = String(raw.name).slice(0, 100);
+    if (raw.id || raw.athleteId) out.athleteId = raw.id || raw.athleteId;
+    if (Number.isFinite(raw.heightCm)) out.heightCm = clamp(raw.heightCm, 145, 235);
+    if (Number.isFinite(raw.weightKg)) out.weightKg = clamp(raw.weightKg, 40, 170);
+    if (raw.gameRatings) out.gameRatings = clone(raw.gameRatings);
+    if (raw.appearance) out.appearance = clone(raw.appearance);
+    return out;
+  };
   Core.prototype.reset = function () {
     this._rng = this.seed;
     this.clock = 0;
     this.score = [0, 0];
     this.timeRemaining = this.duration;
-    this.shotClock = 14;
+    this.shotClock = this.layout.shotClock;
     this.selectedId = 0;
     this.possessionTeam = 0;
     this.shotCharge = 0;
@@ -47,11 +67,11 @@
     this._nextPossession = 0;
     this._lastInput = {};
     this.players = [];
-    for (var i = 0; i < 6; i++) {
-      this.players.push({ id: i, team: i < 3 ? 0 : 1, number: i % 3 + 1,
+    for (var i = 0; i < this.teamSize * 2; i++) {
+      this.players.push(Object.assign({ id: i, team: i < this.teamSize ? 0 : 1, number: i % this.teamSize + 1,
         x: 0, z: 0, y: 0, vx: 0, vz: 0, angle: Math.PI, armAngle: Math.PI, aimX: 0, aimZ: 0,
         stamina: 1, jumpTime: 0, crouching: false, action: 'idle',
-        cooldown: 0, aiTimer: 0.8 + this._random() * 0.8, actionTime: 0 });
+        cooldown: 0, aiTimer: 0.8 + this._random() * 0.8, actionTime: 0 }, this._profile(i)));
     }
     this.ball = { x: 0, y: 1, z: 0, vx: 0, vy: 0, vz: 0, holder: 0, ownerId: 0, state: 'held' };
     this._resetPossession(0);
@@ -71,27 +91,32 @@
     return result;
   };
   Core.prototype._resetPossession = function (team) {
-    var offense = team * 3;
-    var defense = (1 - team) * 3;
-    var positions = [{ x: 0, z: 2.2 }, { x: -4.1, z: 0.3 }, { x: 4.1, z: 0.3 }];
-    for (var i = 0; i < 3; i++) {
+    var n = this.teamSize, offense = team * n, defense = (1 - team) * n, hoop = this._hoop(team);
+    // dir points from the attacking hoop toward the offence's own side (+z for half court / team 0)
+    var dir = this.fullCourt ? (team === 0 ? 1 : -1) : 1;
+    var positions = this.fullCourt
+      ? [{ x: 0, z: 2.0 }, { x: -4.6, z: 0.5 }, { x: 4.6, z: 0.5 }, { x: -2.2, z: 6.5 }, { x: 2.2, z: 6.5 }]
+      : [{ x: 0, z: 2.2 }, { x: -4.1, z: 0.3 }, { x: 4.1, z: 0.3 }];
+    for (var i = 0; i < n; i++) {
       var a = this.players[offense + i];
       var b = this.players[defense + i];
-      a.x = positions[i].x; a.z = positions[i].z; a.vx = 0; a.vz = 0;
-      b.x = positions[i].x + (i === 1 ? 0.55 : -0.55); b.z = positions[i].z - 1.4;
+      // half court: positions are absolute (hoop at -6); full court: relative to the attacking hoop
+      var base = this.fullCourt ? { x: positions[i].x, z: hoop.z + dir * (positions[i].z + 8.2) } : positions[i];
+      a.x = base.x; a.z = base.z; a.vx = 0; a.vz = 0;
+      b.x = base.x + (i === 1 ? 0.55 : -0.55); b.z = base.z - dir * 1.4;
       b.vx = 0; b.vz = 0;
       a.aiTimer = 0.7 + this._random() * 0.65;
       b.aiTimer = 0.7 + this._random() * 0.65;
       a.y = b.y = 0; a.jumpTime = b.jumpTime = 0;
       a.action = b.action = 'idle'; a.actionTime = b.actionTime = 0;
       a.crouching = b.crouching = false; a.cooldown = b.cooldown = 0;
-      a.angle = b.angle = a.armAngle = b.armAngle = Math.PI;
+      a.angle = b.angle = a.armAngle = b.armAngle = dir > 0 ? Math.PI : 0;
       a.aimX = b.aimX = a.aimZ = b.aimZ = 0;
     }
     this._flight = null;
     this._resetDelay = 0;
     this.shotCharge = 0;
-    this.shotClock = 14;
+    this.shotClock = this.layout.shotClock;
     this.possessionTeam = team;
     this.ball.holder = offense;
     this.ball.ownerId = offense;
@@ -112,15 +137,16 @@
     this.ball.ownerId = p.id;
   };
   Core.prototype._move = function (p, dx, dz, speed, dt) {
-    if(p.gameRatings) speed *= clamp(0.8+Number(p.gameRatings.speed||50)/250,0.82,1.2);
+    if (p.gameRatings) speed *= clamp(0.8 + Number(p.gameRatings.speed || 50) / 250, 0.82, 1.2);
+    var B = this.layout.bounds;
     var length = Math.hypot(dx, dz);
     if (length > 1) { dx /= length; dz /= length; }
     var desiredX = dx * speed, desiredZ = dz * speed;
     var smooth = Math.min(1, dt * 15);
     p.vx += (desiredX - p.vx) * smooth;
     p.vz += (desiredZ - p.vz) * smooth;
-    p.x = clamp(p.x + p.vx * dt, BOUNDS.minX, BOUNDS.maxX);
-    p.z = clamp(p.z + p.vz * dt, BOUNDS.minZ, BOUNDS.maxZ);
+    p.x = clamp(p.x + p.vx * dt, B.minX, B.maxX);
+    p.z = clamp(p.z + p.vz * dt, B.minZ, B.maxZ);
     if (Math.abs(p.vx) + Math.abs(p.vz) > 0.15) {
       p.angle = Math.atan2(p.vx, p.vz);
       if (p.actionTime <= 0) p.action = this.ball.holder === p.id ? 'dribble' : 'run';
@@ -138,7 +164,7 @@
     this.ball.holder = p.id; this.ball.ownerId = p.id;
     this.ball.state = 'held'; this._flight = null;
     this.ball.vx = this.ball.vy = this.ball.vz = 0;
-    if (newClock || oldTeam !== p.team) this.shotClock = 14;
+    if (newClock || oldTeam !== p.team) this.shotClock = this.layout.shotClock;
     if (p.team === 0) this.selectedId = p.id;
     p.aiTimer = 0.65 + this._random() * 0.7;
     this._syncHeldBall();
@@ -171,8 +197,9 @@
   Core.prototype._shoot = function (p, charge, isAI, aimX, aimZ) {
     if (this.ball.holder !== p.id || p.cooldown > 0) return false;
     var settings = SETTINGS[this.difficulty];
+    var HOOP = this._hoop(p.team);
     var d = distance(p, HOOP);
-    var style = d < 1.75 && p.jumpTime > 0 ? 'dunk' : d < 3.1 ? 'layup' : d >= 6.1 ? 'three' : 'shot';
+    var style = d < 1.75 && p.jumpTime > 0 ? 'dunk' : d < 3.1 ? 'layup' : d >= this.layout.arc ? 'three' : 'shot';
     var points = style === 'three' ? 3 : 2;
     var nearest = 10;
     for (var i = 0; i < this.players.length; i++) {
@@ -193,7 +220,7 @@
     probability -= Math.max(0, 1.7 - nearest) * 0.15;
     if (style === 'dunk') probability = 0.94;
     if (style === 'layup') probability += 0.08;
-    if(p.gameRatings) probability += clamp((Number(p.gameRatings.skill||50)-50)/500,-0.1,0.1);
+    if (p.gameRatings) probability += clamp((Number(p.gameRatings.accuracy || p.gameRatings.skill || 50) - 50) / 500, -0.1, 0.1);
     probability = clamp(probability, 0.2, 0.96);
     var willScore = this._random() < probability;
     var angle = this._random() * Math.PI * 2;
@@ -208,7 +235,7 @@
     this.ball.holder = null; this.ball.ownerId = null; this.ball.state = 'shot';
     this._flight = { type: 'shot', elapsed: 0, duration: duration, fromX: p.x, fromY: this.ball.y,
       fromZ: p.z, initialVX: this.ball.vx, initialVY: this.ball.vy, initialVZ: this.ball.vz,
-      shooterId: p.id, team: p.team, style: style, points: points, willScore: willScore, resolved: false };
+      shooterId: p.id, team: p.team, style: style, points: points, willScore: willScore, resolved: false, hoop: { x: HOOP.x, z: HOOP.z, y: HOOP.y } };
     p.angle = Math.atan2(HOOP.x - p.x, HOOP.z - p.z);
     p.armAngle = p.angle;
     p.action = style; p.actionTime = 0.65; p.cooldown = 0.8;
@@ -223,6 +250,7 @@
     if (owner.team === p.team || distance(p, owner) > 1.35) return;
     p.cooldown = 0.85;
     var chance = p.team === 0 ? 0.38 + SETTINGS[this.difficulty].shotBonus : SETTINGS[this.difficulty].defense * 0.42;
+    if (p.gameRatings) chance += clamp((Number(p.gameRatings.defense || 50) - 50) / 400, -0.08, 0.08);
     if (this._random() < chance) {
       this._takeBall(p, true);
       p.action = 'steal'; p.actionTime = 0.4;
@@ -232,16 +260,20 @@
   Core.prototype._ai = function (p, dt) {
     var settings = SETTINGS[this.difficulty];
     var holder = this.ball.holder === null ? null : this.players[this.ball.holder];
+    var n = this.teamSize, slot = p.id % n;
+    var HOOP = this._hoop(p.team);                                       // the hoop this player attacks
+    var dir = this.fullCourt ? (p.team === 0 ? 1 : -1) : 1;              // from the attacking hoop toward own side
     var targetX = p.x, targetZ = p.z, speed = settings.aiSpeed;
+    var spread = this.fullCourt ? 2.6 : 3.0;
     if (!holder) {
       if (this.ball.state === 'loose') { targetX = this.ball.x; targetZ = this.ball.z; }
       else {
-        targetX = (p.id % 3 - 1) * 3.0;
-        targetZ = p.team === this.possessionTeam ? -3.8 : -4.9;
+        targetX = (slot - (n - 1) / 2) * spread;
+        targetZ = HOOP.z + dir * (p.team === this.possessionTeam ? 2.2 : 1.1);
       }
     } else if (holder.id === p.id) {
       var lane = Math.sin(this.clock * 0.55 + p.id) * 1.9;
-      targetX = lane; targetZ = -3.2;
+      targetX = lane; targetZ = HOOP.z + dir * 2.8;
       p.aiTimer -= dt;
       var nearbyDefender = 8;
       for (var k = 0; k < this.players.length; k++) {
@@ -256,19 +288,21 @@
         p.aiTimer = 0.65 + this._random() * 0.8;
       }
     } else if (p.team === holder.team) {
-      var wing = p.id % 3;
-      targetX = wing === 1 ? -4.9 : wing === 2 ? 4.9 : 0.4;
-      targetZ = wing === 0 ? -3.2 : -1.4 + Math.sin(this.clock * 0.7 + p.id) * 0.7;
+      var wing = slot;
+      var wingX = [0.4, -4.9, 4.9, -2.6, 2.6][wing] || 0;
+      var wingZ = wing === 0 ? 3.2 : wing <= 2 ? 5.0 + Math.sin(this.clock * 0.7 + p.id) * 0.7 : 7.4;
+      targetX = wingX; targetZ = HOOP.z + dir * wingZ;
       if (distance(p, holder) < 1.4) targetX += p.x < holder.x ? -1 : 1;
     } else {
-      var matchup = this.players[(1 - p.team) * 3 + p.id % 3];
+      var matchup = this.players[(1 - p.team) * n + slot];
+      var ownHoop = this._hoop(1 - p.team);                                // the hoop this player defends
       if (matchup.id === holder.id) {
-        targetX = holder.x + (HOOP.x - holder.x) * 0.13;
-        targetZ = holder.z + (HOOP.z - holder.z) * 0.13;
+        targetX = holder.x + (ownHoop.x - holder.x) * 0.13;
+        targetZ = holder.z + (ownHoop.z - holder.z) * 0.13;
         if (distance(p, holder) < 1.12 && this._random() < dt * settings.defense * 0.8) this._steal(p);
       } else {
         targetX = matchup.x * 0.9;
-        targetZ = matchup.z - 0.75;
+        targetZ = matchup.z + (ownHoop.z - matchup.z) * 0.12;
       }
       speed *= 0.9;
     }
@@ -279,6 +313,7 @@
     this._move(p, dx, dz, speed, dt);
   };
   Core.prototype._ballStep = function (dt) {
+    var B = this.layout.bounds;
     if (this.ball.holder !== null) { this._syncHeldBall(); return; }
     var flight = this._flight;
     if (flight && flight.type === 'pass') {
@@ -304,6 +339,7 @@
     if (flight && flight.type === 'shot') {
       flight.elapsed += dt;
       var elapsed = flight.elapsed;
+      var HOOP = flight.hoop || this._hoop(flight.team);
       this.ball.x = flight.fromX + flight.initialVX * elapsed;
       this.ball.z = flight.fromZ + flight.initialVZ * elapsed;
       this.ball.y = flight.fromY + flight.initialVY * elapsed - 0.5 * GRAVITY * elapsed * elapsed;
@@ -349,11 +385,11 @@
       this.ball.vy = Math.abs(this.ball.vy) * 0.56;
       this.ball.vx *= 0.7; this.ball.vz *= 0.7;
     }
-    if (this.ball.x < BOUNDS.minX || this.ball.x > BOUNDS.maxX) {
-      this.ball.x = clamp(this.ball.x, BOUNDS.minX, BOUNDS.maxX); this.ball.vx *= -0.65;
+    if (this.ball.x < B.minX || this.ball.x > B.maxX) {
+      this.ball.x = clamp(this.ball.x, B.minX, B.maxX); this.ball.vx *= -0.65;
     }
-    if (this.ball.z < BOUNDS.minZ || this.ball.z > BOUNDS.maxZ) {
-      this.ball.z = clamp(this.ball.z, BOUNDS.minZ, BOUNDS.maxZ); this.ball.vz *= -0.65;
+    if (this.ball.z < B.minZ || this.ball.z > B.maxZ) {
+      this.ball.z = clamp(this.ball.z, B.minZ, B.maxZ); this.ball.vz *= -0.65;
     }
     if (this.ball.y < 2.0) {
       var nearest = null, nearestDistance = 0.82;
@@ -371,6 +407,7 @@
   };
   Core.prototype._substep = function (dt, input, actions) {
     if (this.ended) return;
+    var B = this.layout.bounds, n = this.teamSize;
     this.clock += dt;
     this.timeRemaining = Math.max(0, this.timeRemaining - dt);
     if (this.timeRemaining <= 0) {
@@ -386,7 +423,7 @@
     }
     var selected = this.players[this.selectedId];
     if (actions.switchPlayer) {
-      this.selectedId = (this.selectedId + 1) % 3;
+      this.selectedId = (this.selectedId + 1) % n;
       selected = this.players[this.selectedId];
       this.shotCharge = 0;
     }
@@ -425,17 +462,18 @@
     selected.aimZ = aimLength > 1 ? az / aimLength : az;
     selected.armAngle = aimLength > 0.2 ? Math.atan2(ax, az) : selected.angle;
     // A small stable separation avoids overlapping bodies without expensive rigid bodies.
-    for (var a = 0; a < 6; a++) for (var b = a + 1; b < 6; b++) {
+    var total = this.players.length;
+    for (var a = 0; a < total; a++) for (var b = a + 1; b < total; b++) {
       var first = this.players[a], second = this.players[b];
       var dx = second.x - first.x, dz = second.z - first.z;
       var d = Math.hypot(dx, dz);
       if (d < 0.65) {
         if (d < 0.001) { dx = (a % 2 ? 1 : -1) * 0.01; dz = 0.01; d = Math.hypot(dx, dz); }
         var correction = (0.65 - d) * 0.35;
-        first.x = clamp(first.x - dx / d * correction, BOUNDS.minX, BOUNDS.maxX);
-        first.z = clamp(first.z - dz / d * correction, BOUNDS.minZ, BOUNDS.maxZ);
-        second.x = clamp(second.x + dx / d * correction, BOUNDS.minX, BOUNDS.maxX);
-        second.z = clamp(second.z + dz / d * correction, BOUNDS.minZ, BOUNDS.maxZ);
+        first.x = clamp(first.x - dx / d * correction, B.minX, B.maxX);
+        first.z = clamp(first.z - dz / d * correction, B.minZ, B.maxZ);
+        second.x = clamp(second.x + dx / d * correction, B.minX, B.maxX);
+        second.z = clamp(second.z + dz / d * correction, B.minZ, B.maxZ);
       }
     }
     this._ballStep(dt);
@@ -463,7 +501,8 @@
   };
   Core.prototype.getSnapshot = function () {
     return clone({ version: 1, difficulty: this.difficulty, seed: this.seed, duration: this.duration,
-      players: this.players, ball: this.ball, hoop: HOOP, bounds: BOUNDS,
+      sport: this.fullCourt ? 'basketball5' : undefined, courtMode: this.fullCourt ? 'full' : 'half', teamSize: this.teamSize,
+      players: this.players, ball: this.ball, hoop: this.layout.hoops[0], hoops: this.layout.hoops, arc: this.layout.arc, bounds: this.layout.bounds,
       clock: this.clock, timeRemaining: this.timeRemaining, shotClock: this.shotClock,
       score: this.score, selectedId: this.selectedId, possessionTeam: this.possessionTeam,
       shotCharge: this.shotCharge, ended: this.ended,
@@ -471,7 +510,8 @@
         nextPossession: this._nextPossession, lastInput: this._lastInput } });
   };
   Core.prototype.applySnapshot = function (snapshot) {
-    if (!snapshot || snapshot.version !== 1 || !Array.isArray(snapshot.players) || snapshot.players.length !== 6 || !snapshot.ball) {
+    var n = snapshot && snapshot.courtMode === 'full' ? 5 : 3;
+    if (!snapshot || snapshot.version !== 1 || !Array.isArray(snapshot.players) || snapshot.players.length !== n * 2 || !snapshot.ball) {
       throw new Error('Invalid basketball snapshot');
     }
     var s = clone(snapshot);
@@ -479,11 +519,12 @@
       if (s.players[i].id !== i || (s.players[i].team !== 0 && s.players[i].team !== 1) ||
         !Number.isFinite(s.players[i].x) || !Number.isFinite(s.players[i].z)) throw new Error('Invalid player snapshot');
     }
-    if (!Number.isInteger(s.selectedId) || s.selectedId < 0 || s.selectedId > 2 ||
-      (s.ball.holder !== null && (!Number.isInteger(s.ball.holder) || s.ball.holder < 0 || s.ball.holder > 5))) throw new Error('Invalid possession snapshot');
+    if (!Number.isInteger(s.selectedId) || s.selectedId < 0 || s.selectedId > n - 1 ||
+      (s.ball.holder !== null && (!Number.isInteger(s.ball.holder) || s.ball.holder < 0 || s.ball.holder > n * 2 - 1))) throw new Error('Invalid possession snapshot');
     if (!Array.isArray(s.score) || s.score.length !== 2 || !s.score.every(Number.isFinite) ||
       !Number.isFinite(s.clock) || !Number.isFinite(s.timeRemaining) ||
       ![s.ball.x, s.ball.y, s.ball.z].every(Number.isFinite)) throw new Error('Invalid state snapshot');
+    this.fullCourt = s.courtMode === 'full'; this.teamSize = n; this.layout = this.fullCourt ? FULL : HALF; this.sport = this.fullCourt ? 'basketball5' : 'basketball';
     this.difficulty = SETTINGS[s.difficulty] ? s.difficulty : 'easy';
     this.seed = (s.seed >>> 0) || 971031; this.duration = s.duration;
     this.players = s.players; this.ball = s.ball; this.clock = s.clock;
@@ -499,5 +540,5 @@
     this._events = [];
     return this;
   };
-  return { Core: Core, hoop: clone(HOOP), bounds: clone(BOUNDS), scoring: 'recreational-2-and-3', version: '1.0.0' };
+  return { Core: Core, hoop: clone(HALF.hoops[0]), bounds: clone(HALF.bounds), fullCourt: clone(FULL), scoring: 'recreational-2-and-3', version: '1.1.0' };
 });

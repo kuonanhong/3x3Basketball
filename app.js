@@ -1,10 +1,10 @@
-/* SmartAction Court application. All gameplay and replays run on this device. */
+/* SmartAction Sports v7 application shell. All gameplay and replays run on this device. */
 (function () {
   'use strict';
   const ownScript = document.currentScript;
   const assetBase = new URL('.', ownScript && ownScript.src ? ownScript.src : location.href);
   const $ = id => document.getElementById(id);
-  const canvas = $('court');
+  const canvas = $('court'), stage = $('stage');
   let core = new SAHoopsCore.Core({ difficulty: 'easy', seed: 971031 });
   const renderer = new SAHoopsRenderer(canvas);
   const localeData = SAHoopsI18n;
@@ -13,46 +13,80 @@
   let playing = false, paused = false, replayState = null, pendingHighlight = null;
   let latestClip = null, lastHighlightAt = -30, frameId = 0, tickAccumulator = 0;
   let captureAccumulator = 0, lastFrame = performance.now(), lastRender = 0, fpsStart = lastFrame, frameCount = 0;
-  let lowFpsWindows = 0, muted = true, soundChosen = false, audio = null, toastTimer = 0;
+  let lowFpsWindows = 0, muted = true, soundChosen = false, audio = null, toastTimer = 0, flashTimer = 0;
   let benchmarkDone = false, benchmarkCost = null;
   const history = [], MAX_HISTORY = 180, STEP = 1 / 60;
   const keys = new Set();
   const sticks = { moveX: 0, moveZ: 0, aimX: 0, aimZ: 0 };
   const actions = { jump: false, crouch: false, pass: false, shootHeld: false, shootReleased: false, switchPlayer: false };
   const heldTouches = new Set();
+  const languageLoads = new Map();
   function stored(name, fallback) { try { return localStorage.getItem(name) || fallback; } catch (_) { return fallback; } }
   function save(name, value) { try { localStorage.setItem(name, value); } catch (_) {} }
-  function message(key) { return localeData.messages[language][key] || localeData.messages.en[key] || key; }
+  function message(key) { const dict = localeData.messages[language] || {}; return dict[key] || (localeData.messages.en || {})[key] || (localeData.messages['zh-Hant'] || {})[key] || key; }
   function chooseLanguage(raw) {
     if (!raw) return null;
     if (supported.includes(raw)) return raw;
-    const value = raw.toLowerCase();
+    const value = String(raw).toLowerCase();
     if (value.startsWith('zh')) return /hant|tw|hk|mo/.test(value) ? 'zh-Hant' : 'zh-Hans';
+    if (value.startsWith('no') || value.startsWith('nn')) return supported.includes('nb') ? 'nb' : null;
+    if (value.startsWith('tl')) return supported.includes('fil') ? 'fil' : null;
+    if (value.startsWith('pt')) return 'pt';
     const short = value.split('-')[0];
     return supported.includes(short) ? short : null;
   }
-  function setLanguage(code) {
-    language = supported.includes(code) ? code : 'en';
+  function languageFromRegion() {
+    // Used only when none of the browser languages is supported: the IANA time zone hints at the region's main language.
+    try {
+      const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      if (!zone) return null;
+      const hit = localeData.languages.find(l => Array.isArray(l.tz) && l.tz.includes(zone));
+      return hit ? hit.code : null;
+    } catch (_) { return null; }
+  }
+  function applyLanguage() {
     document.documentElement.lang = language;
-    document.documentElement.dir = localeData.languages.find(x => x.code === language).dir || 'ltr';
+    document.documentElement.dir = (localeData.languages.find(x => x.code === language) || {}).dir || 'ltr';
     document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = message(el.dataset.i18n); });
-    document.title = message('titleV6') + ' · SmartAction Sports';
+    document.title = message('titleV7') + ' · SmartAction Sports';
     $('language').value = language;
     $('language').setAttribute('aria-label', message('language'));
     $('movePad').setAttribute('aria-label', message('move'));
     $('aimPad').setAttribute('aria-label', message('aim'));
-    canvas.setAttribute('aria-label', message('titleV6'));
+    $('dockToggle').title = message('dockToggle');
+    canvas.setAttribute('aria-label', message('titleV7'));
     $('sound').textContent = message(muted ? 'sound' : 'mute');
     if (benchmarkDone) $('benchmarkStatus').textContent = message('quality') + ': ' + message(recommended);
-    if (replayState) $('highlightTitle').textContent = highlightText(replayState.event.type);
+    if (replayState) $('highlightTitle').textContent = highlightText(replayState.event);
     updateQualityLabels();
-    window.dispatchEvent(new CustomEvent('sa-language',{detail:language}));
+    window.dispatchEvent(new CustomEvent('sa-language', { detail: language }));
+  }
+  function loadDictionary(code) {
+    if (localeData.messages[code]) return Promise.resolve(true);
+    if (languageLoads.has(code)) return languageLoads.get(code);
+    const job = fetch(new URL((localeData.lazyPath || 'i18n/') + code + '.json', assetBase).href, { credentials: 'omit' })
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(dict => { if (dict && typeof dict === 'object') localeData.messages[code] = dict; return true; })
+      .catch(() => false);
+    languageLoads.set(code, job);
+    return job;
+  }
+  function setLanguage(code) {
+    language = supported.includes(code) ? code : 'en';
+    if (!localeData.messages[language]) {
+      // Show the embedded fallback immediately, then re-render when the dictionary arrives.
+      applyLanguage();
+      return loadDictionary(language).then(ok => { if (!ok) toast('coachError'); applyLanguage(); return ok; });
+    }
+    applyLanguage();
+    return Promise.resolve(true);
   }
   localeData.languages.forEach(entry => {
     const option = document.createElement('option'); option.value = entry.code; option.textContent = entry.name; $('language').appendChild(option);
   });
   const fixedLanguage = document.documentElement.dataset.defaultLang;
-  const preferred = new URLSearchParams(location.search).get('lang') || fixedLanguage || stored('sa-court-language', '') || (navigator.languages || [navigator.language]).find(x => chooseLanguage(x));
+  const preferred = new URLSearchParams(location.search).get('lang') || fixedLanguage || stored('sa-court-language', '') ||
+    (navigator.languages || [navigator.language]).map(chooseLanguage).find(Boolean) || languageFromRegion();
   setLanguage(chooseLanguage(preferred) || 'en');
   $('language').addEventListener('change', e => { save('sa-court-language', e.target.value); setLanguage(e.target.value); });
   if (!$('guideLink').getAttribute('href').startsWith('data:')) $('guideLink').href = new URL('guide.html', assetBase).href;
@@ -69,6 +103,11 @@
     clearTimeout(toastTimer); $('toast').textContent = message(key); $('toast').hidden = false;
     toastTimer = setTimeout(() => { $('toast').hidden = true; }, 3200);
   }
+  function flash(text) {
+    const el = $('resultFlash'); clearTimeout(flashTimer);
+    el.hidden = true; el.textContent = text; void el.offsetWidth; el.hidden = false;
+    flashTimer = setTimeout(() => { el.hidden = true; }, 1700);
+  }
   function clearInput() {
     keys.clear(); heldTouches.clear(); Object.keys(actions).forEach(key => { actions[key] = false; });
     Object.keys(sticks).forEach(key => { sticks[key] = 0; });
@@ -78,13 +117,13 @@
   function startMatch() {
     core.difficulty = $('difficulty').value; core.reset(); history.length = 0;
     window.dispatchEvent(new CustomEvent('sa-match-reset'));
-    if (!soundChosen) { muted=false; $('sound').textContent=message('mute'); }
+    if (!soundChosen) { muted = false; $('sound').textContent = message('mute'); }
     playSound('pass');
     latestClip = null; replayState = null; pendingHighlight = null; tickAccumulator = captureAccumulator = 0;
     lastHighlightAt = -30; playing = true; paused = false; clearInput();
     $('startOverlay').hidden = true; $('pauseOverlay').hidden = true; $('endOverlay').hidden = true; $('highlightBanner').hidden = true;
     $('pause').textContent = message('pause'); canvas.focus({ preventScroll: true }); updateHud();
-    if(window.innerWidth<=780) document.querySelector('.arena-panel').scrollIntoView?.({block:'start',behavior:'smooth'});
+    stage.scrollIntoView?.({ block: 'start', behavior: 'smooth' });
   }
   $('start').addEventListener('click', startMatch);
   $('playAgain').addEventListener('click', startMatch);
@@ -98,7 +137,7 @@
   $('switchPlayer').addEventListener('click', () => { actions.switchPlayer = true; canvas.focus({ preventScroll: true }); });
   document.addEventListener('visibilitychange', () => { if (document.hidden) { finishReplay(); setPaused(true); clearInput(); } lastFrame = performance.now(); });
   window.addEventListener('blur', clearInput);
-  const keyActions = { KeyQ: 'jump', KeyE: 'crouch', KeyJ: 'pass', KeyK: 'shootHeld', KeyZ:'twistLeft', KeyC:'twistRight', KeyF:'shoulderUp', KeyR:'shoulderDown', Tab: 'switchPlayer' };
+  const keyActions = { KeyQ: 'jump', KeyE: 'crouch', KeyJ: 'pass', KeyK: 'shootHeld', Tab: 'switchPlayer' };
   const gameKeys = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ...Object.keys(keyActions)];
   function allowsKeys(e) { return playing && !paused && !replayState && !core.ended && !/INPUT|SELECT|TEXTAREA|BUTTON/.test(e.target.tagName) && !document.querySelector('dialog[open]'); }
   document.addEventListener('keydown', e => {
@@ -111,7 +150,6 @@
     const wasHeld = keys.has(e.code); keys.delete(e.code);
     if (e.code === 'KeyK' && wasHeld) { actions.shootHeld = false; actions.shootReleased = true; }
     if (e.code === 'KeyE') actions.crouch = false;
-    if (['KeyZ','KeyC','KeyF','KeyR'].includes(e.code)) actions[keyActions[e.code]]=false;
   });
   function installPad(id, prefix) {
     const pad = $(id), knob = pad.querySelector('.stick-knob'); let pointer = null;
@@ -141,45 +179,50 @@
       if (e.pointerId !== pointer) return; pointer = null; heldTouches.delete(action); button.classList.remove('active');
       if (action === 'shoot') { actions.shootHeld = keys.has('KeyK'); actions.shootReleased = !actions.shootHeld; }
       if (action === 'crouch') actions.crouch = keys.has('KeyE');
-      if (action==='twistLeft') actions.twistLeft=keys.has('KeyZ');
-      if (action==='twistRight') actions.twistRight=keys.has('KeyC');
-      if (action==='shoulderUp') actions.shoulderUp=keys.has('KeyF');
-      if (action==='shoulderDown') actions.shoulderDown=keys.has('KeyR');
     }
     button.addEventListener('pointerup', release); button.addEventListener('pointercancel', release); button.addEventListener('lostpointercapture', release);
   });
+  $('dockToggle').addEventListener('click', () => {
+    const hidden = stage.classList.toggle('dock-hidden');
+    $('dockToggle').setAttribute('aria-pressed', String(!hidden)); save('sa-dock', hidden ? 'hidden' : 'shown'); clearInput(); renderer.resize();
+  });
+  if (stored('sa-dock', 'shown') === 'hidden' && matchMedia('(pointer:fine)').matches) { stage.classList.add('dock-hidden'); $('dockToggle').setAttribute('aria-pressed', 'false'); }
   function input() {
     return Object.assign({}, actions, {
       moveX: sticks.moveX + (keys.has('KeyD') ? 1 : 0) - (keys.has('KeyA') ? 1 : 0),
       moveZ: sticks.moveZ + (keys.has('KeyS') ? 1 : 0) - (keys.has('KeyW') ? 1 : 0),
       aimX: sticks.aimX + (keys.has('ArrowRight') ? 1 : 0) - (keys.has('ArrowLeft') ? 1 : 0),
       aimZ: sticks.aimZ + (keys.has('ArrowDown') ? 1 : 0) - (keys.has('ArrowUp') ? 1 : 0),
-      twistX:(actions.twistRight?1:0)-(actions.twistLeft?1:0),
-      shoulderX:(actions.shoulderUp?1:0)-(actions.shoulderDown?1:0),
-      crouch: actions.crouch || heldTouches.has('crouch')
+      crouch: actions.crouch || heldTouches.has('crouch'),
+      power: keys.has('KeyQ') || heldTouches.has('jump')
     });
   }
   function updateHud() {
     $('blueScore').textContent = String(core.score[0]).padStart(2, '0'); $('orangeScore').textContent = String(core.score[1]).padStart(2, '0');
     const seconds = Math.ceil(core.timeRemaining); $('gameClock').textContent = String(Math.floor(seconds / 60)).padStart(2, '0') + ':' + String(seconds % 60).padStart(2, '0');
-    $('shotClock').textContent = Number.isFinite(core.shotClock)?String(Math.ceil(core.shotClock)).padStart(2,'0'):'—';
+    $('shotClock').textContent = Number.isFinite(core.shotClock) ? String(Math.ceil(core.shotClock)).padStart(2, '0') : '—';
     if (window.SASportsUI) window.SASportsUI.updateMetrics(core);
-    $('chargeHud').hidden = !(core.shotCharge > 0 && !replayState); $('chargeFill').style.width = Math.min(100, core.shotCharge * 100) + '%';
+    const charging = core.shotCharge > 0 && !replayState;
+    $('chargeHud').hidden = !charging; $('chargeFill').style.width = Math.min(100, core.shotCharge * 100) + '%';
   }
   function capture(dt) {
     captureAccumulator += dt;
     if (captureAccumulator < 1 / 30) return;
     captureAccumulator %= 1 / 30; history.push(core.getSnapshot()); if (history.length > MAX_HISTORY) history.shift();
   }
-  function highlightText(type) {
-    if (core.sport && core.sport!=='basketball') return message('replayGeneric');
-    return message('highlight_' + ({ dunk: 'dunk', three: 'three', layup: 'layup', block: 'block', steal: 'steal' }[type] || 'score'));
+  const HIGHLIGHT_KEYS = { dunk: 'highlight_dunk', three: 'highlight_three', layup: 'highlight_layup', block: 'highlight_block', steal: 'highlight_steal', score: 'highlight_score',
+    goal: 'highlight_goal', homeRun: 'highlight_homeRun', hit: 'highlight_hit', try: 'highlight_try', touchdown: 'highlight_touchdown', rally: 'highlight_rally', serve: 'highlight_ace',
+    wicket: 'highlight_wicket', boundary: 'highlight_hit', pinsDown: 'highlight_strikeBowl', holed: 'highlight_holeOut', pocketed: 'highlight_score', catch: 'highlight_block', target: 'highlight_score', finish: 'highlight_score' };
+  function highlightText(event) {
+    const type = typeof event === 'string' ? event : (event && event.type) || 'score';
+    if (!core.sport || core.sport === 'basketball' || core.sport === 'basketball5') return message(HIGHLIGHT_KEYS[type] || 'highlight_score');
+    return message(HIGHLIGHT_KEYS[type] || 'replayGeneric');
   }
   function beginReplay(clip) {
     if (!clip || clip.frames.length < 2) { toast('replayUnavailable'); return; }
     latestClip = clip; replayState = { event: clip.event, frames: clip.frames, elapsed: 0, manualAngle: 0,
       duration: Math.max(0.5, clip.frames[clip.frames.length - 1].clock - clip.frames[0].clock) / 0.45 };
-    clearInput(); canvas.style.touchAction = 'none'; $('pauseOverlay').hidden = true; $('highlightTitle').textContent = highlightText(clip.event.type); $('highlightBanner').hidden = false;
+    clearInput(); canvas.style.touchAction = 'none'; $('pauseOverlay').hidden = true; $('highlightTitle').textContent = highlightText(clip.event); $('highlightBanner').hidden = false;
   }
   function finishReplay() { if (!replayState) return; replayState = null; canvas.style.touchAction = ''; $('highlightBanner').hidden = true; tickAccumulator = 0; clearInput(); $('pauseOverlay').hidden = !paused; }
   let orbitPointer = null, orbitX = 0;
@@ -189,15 +232,18 @@
   canvas.addEventListener('pointerup', endOrbit); canvas.addEventListener('pointercancel', endOrbit); canvas.addEventListener('lostpointercapture', endOrbit);
   $('skipReplay').addEventListener('click', finishReplay);
   $('replay').addEventListener('click', () => beginReplay(latestClip));
+  function lerpSnapshot(a, b, t) {
+    const out = Object.assign({}, a, { clock: a.clock + (b.clock - a.clock) * t,
+      players: a.players.map((p, i) => { const q = b.players[i] || p; return Object.assign({}, p, { x: p.x + (q.x - p.x) * t, y: p.y + (q.y - p.y) * t, z: p.z + (q.z - p.z) * t }); }),
+      ball: Object.assign({}, a.ball, { x: a.ball.x + (b.ball.x - a.ball.x) * t, y: a.ball.y + (b.ball.y - a.ball.y) * t, z: a.ball.z + (b.ball.z - a.ball.z) * t }) });
+    return out;
+  }
   function replaySnapshot() {
     const frames = replayState.frames, first = frames[0], target = first.clock + replayState.elapsed * 0.45;
     let index = 0; while (index < frames.length - 2 && frames[index + 1].clock < target) index++;
     const a = frames[index], b = frames[Math.min(index + 1, frames.length - 1)];
     const t = Math.max(0, Math.min(1, (target - a.clock) / Math.max(0.0001, b.clock - a.clock)));
-    const out = Object.assign({}, a, { clock: a.clock + (b.clock - a.clock) * t,
-      players: a.players.map((p, i) => { const q = b.players[i]; return Object.assign({}, p, {x:p.x+(q.x-p.x)*t,y:p.y+(q.y-p.y)*t,z:p.z+(q.z-p.z)*t}); }),
-      ball: Object.assign({}, a.ball, {x:a.ball.x+(b.ball.x-a.ball.x)*t,y:a.ball.y+(b.ball.y-a.ball.y)*t,z:a.ball.z+(b.ball.z-a.ball.z)*t}) });
-    return out;
+    return lerpSnapshot(a, b, t);
   }
   function playSound(type) {
     if (muted) return;
@@ -205,23 +251,24 @@
       audio = audio || new (window.AudioContext || window.webkitAudioContext)();
       if (audio.state === 'suspended') audio.resume();
       const oscillator = audio.createOscillator(), gain = audio.createGain();
-      oscillator.type = 'sine'; oscillator.frequency.setValueAtTime(type === 'score' ? 600 : 140, audio.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(type === 'score' ? 900 : 65, audio.currentTime + 0.13);
-      gain.gain.setValueAtTime(0.045, audio.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.17);
+      const hit = type === 'hit';
+      oscillator.type = hit ? 'triangle' : 'sine'; oscillator.frequency.setValueAtTime(type === 'score' ? 600 : hit ? 320 : 140, audio.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(type === 'score' ? 900 : hit ? 90 : 65, audio.currentTime + (hit ? 0.08 : 0.13));
+      gain.gain.setValueAtTime(hit ? 0.08 : 0.045, audio.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.17);
       oscillator.connect(gain); gain.connect(audio.destination); oscillator.start(); oscillator.stop(audio.currentTime + 0.18);
-      if(type==='score' && $('venueMode') && $('venueMode').value!=='park') {
-        const buffer=audio.createBuffer(1,Math.floor(audio.sampleRate*1.1),audio.sampleRate), samples=buffer.getChannelData(0);
-        let v=0;for(let i=0;i<samples.length;i++){v=v*.92+(Math.random()*2-1)*.08;samples[i]=v;}
-        const crowd=audio.createBufferSource(), filter=audio.createBiquadFilter(), envelope=audio.createGain();
-        crowd.buffer=buffer;filter.type='bandpass';filter.frequency.value=950;filter.Q.value=.5;
-        envelope.gain.setValueAtTime(.001,audio.currentTime);envelope.gain.linearRampToValueAtTime(.48,audio.currentTime+.15);envelope.gain.exponentialRampToValueAtTime(.001,audio.currentTime+1.08);
-        crowd.connect(filter);filter.connect(envelope);envelope.connect(audio.destination);crowd.start();crowd.stop(audio.currentTime+1.1);
+      if (type === 'score' && $('venueMode') && $('venueMode').value !== 'park') {
+        const buffer = audio.createBuffer(1, Math.floor(audio.sampleRate * 1.1), audio.sampleRate), samples = buffer.getChannelData(0);
+        let v = 0; for (let i = 0; i < samples.length; i++) { v = v * .92 + (Math.random() * 2 - 1) * .08; samples[i] = v; }
+        const crowd = audio.createBufferSource(), filter = audio.createBiquadFilter(), envelope = audio.createGain();
+        crowd.buffer = buffer; filter.type = 'bandpass'; filter.frequency.value = 950; filter.Q.value = .5;
+        envelope.gain.setValueAtTime(.001, audio.currentTime); envelope.gain.linearRampToValueAtTime(.48, audio.currentTime + .15); envelope.gain.exponentialRampToValueAtTime(.001, audio.currentTime + 1.08);
+        crowd.connect(filter); filter.connect(envelope); envelope.connect(audio.destination); crowd.start(); crowd.stop(audio.currentTime + 1.1);
       }
     } catch (_) { muted = true; }
   }
-  $('sound').addEventListener('click', () => { soundChosen=true; muted = !muted; $('sound').textContent = message(muted ? 'sound' : 'mute'); if (!muted) playSound('score'); });
+  $('sound').addEventListener('click', () => { soundChosen = true; muted = !muted; $('sound').textContent = message(muted ? 'sound' : 'mute'); if (!muted) playSound('score'); });
   $('fullscreen').addEventListener('click', async () => {
-    try { if (document.fullscreenElement) await document.exitFullscreen(); else if (document.querySelector('.arena-panel').requestFullscreen) await document.querySelector('.arena-panel').requestFullscreen(); else toast('rotateHint'); } catch (_) { toast('rotateHint'); }
+    try { if (document.fullscreenElement) await document.exitFullscreen(); else if (stage.requestFullscreen) await stage.requestFullscreen(); else toast('rotateHint'); } catch (_) { toast('rotateHint'); }
   });
   function openDialog(id) { finishReplay(); setPaused(true); $(id).showModal(); }
   $('help').addEventListener('click', () => openDialog('helpDialog')); $('courts').addEventListener('click', () => openDialog('mapDialog'));
@@ -241,14 +288,13 @@
         const embed = new URL('https://www.google.com/maps/embed/v1/view'); embed.searchParams.set('key', key); embed.searchParams.set('center', point); embed.searchParams.set('zoom', '15');
         $('embeddedMap').src = embed.href; $('embeddedMap').hidden = false;
       }
-    }, error => { $('locate').disabled = false; $('mapStatus').textContent = message(error.code === 1 ? 'mapDenied' : 'mapUnavailable'); }, {enableHighAccuracy:true,timeout:12000,maximumAge:60000});
+    }, error => { $('locate').disabled = false; $('mapStatus').textContent = message(error.code === 1 ? 'mapDenied' : 'mapUnavailable'); }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 });
   });
   async function benchmark() {
     const costs = [];
-    // Measure actual drawing submission. RAM hints are optional and approximate.
     for (let i = 0; i < 20; i++) {
       await new Promise(resolve => requestAnimationFrame(resolve));
-      const before = performance.now(); renderer.render(core.getSnapshot(), { cameraAngle: 0 }); costs.push(performance.now() - before);
+      const before = performance.now(); renderer.render(core.getSnapshot(), { cameraAngle: 0, view: 'wide' }); costs.push(performance.now() - before);
     }
     costs.sort((a, b) => a - b); benchmarkCost = costs[Math.floor(costs.length * 0.8)];
     const memoryHint = Number(navigator.deviceMemory) || null, coreHint = Number(navigator.hardwareConcurrency) || null;
@@ -258,12 +304,30 @@
     $('start').disabled = false;
   }
   $('start').disabled = true;
+  const RESULT_KEYS = { single: 'result_single', double: 'result_double', triple: 'result_triple', homeRun: 'result_homeRun', walk: 'result_walk', strikeout: 'result_strikeout', flyOut: 'result_flyOut', groundOut: 'result_groundOut', lineOut: 'result_lineOut',
+    foul: 'result_foul', bowled: 'result_bowled', caught: 'result_caught', six: 'result_six', four: 'result_four', dot: 'result_dot', strikeBowl: 'strikeBowling', spare: 'spare', gutter: 'gutter', scratch: 'scratch', holeInOne: 'holeInOne' };
   function onEvents(events) {
-    if (events.some(e => e.type === 'score')) playSound('score'); else if (events.some(e => e.type === 'pass')) playSound('pass');
-    const rank = {dunk:6,three:5,layup:4,block:3,steal:2,score:1,goal:5,homeRun:6,hit:3,touchdown:6,try:5,point:4,bullseye:6,finish:5};
-    window.dispatchEvent(new CustomEvent('sa-game-events',{detail:events}));
-    const event = events.filter(e => rank[e.type]).sort((a,b) => rank[b.type] - rank[a.type])[0];
-    if (event && !pendingHighlight && core.clock - lastHighlightAt > 12 && history.length > 20) { pendingHighlight = {event,until:core.clock+0.65}; lastHighlightAt = core.clock; }
+    if (events.some(e => e.type === 'score')) playSound('score'); else if (events.some(e => e.type === 'contact' || e.type === 'pinsDown' || e.type === 'ballClick')) playSound('hit'); else if (events.some(e => e.type === 'pass')) playSound('pass');
+    const rank = { dunk: 6, three: 5, layup: 4, block: 3, steal: 2, score: 1, goal: 5, homeRun: 6, hit: 3, touchdown: 6, try: 5, point: 4, bullseye: 6, finish: 5, wicket: 5, boundary: 5, holed: 6, pinsDown: 2, pocketed: 3, catch: 4 };
+    window.dispatchEvent(new CustomEvent('sa-game-events', { detail: events }));
+    for (const e of events) {
+      if (e.type === 'out' && RESULT_KEYS[e.style]) flash(message(RESULT_KEYS[e.style]));
+      else if (e.type === 'hit' && e.bases) flash(message(RESULT_KEYS[['', 'single', 'double', 'triple'][e.bases]]));
+      else if (e.type === 'homeRun') flash(message('result_homeRun'));
+      else if (e.type === 'walk') flash(message('result_walk'));
+      else if (e.type === 'foul') flash(message('result_foul'));
+      else if (e.type === 'wicket') flash(message(e.style === 'caught' ? 'result_caught' : 'result_bowled'));
+      else if (e.type === 'boundary') flash(message(e.runs === 6 ? 'result_six' : 'result_four'));
+      else if (e.type === 'strike' && e.strikes === 3) { /* strikeout flash comes from the out event */ }
+      else if (e.type === 'pinsDown' && e.style !== 'pins') flash(message(RESULT_KEYS[e.style]));
+      else if (e.type === 'gutter') flash(message('gutter'));
+      else if (e.type === 'scratch') flash(message('scratch'));
+      else if (e.type === 'holed') flash(message(e.strokes === 1 ? 'holeInOne' : 'inHole'));
+      else if (e.type === 'inningOver') flash(message('inningOver'));
+      else if (e.type === 'flagPull') flash(message('flagPulled'));
+    }
+    const event = events.filter(e => rank[e.type]).sort((a, b) => rank[b.type] - rank[a.type])[0];
+    if (event && !pendingHighlight && core.clock - lastHighlightAt > 12 && history.length > 20 && !(event.type === 'pinsDown' && event.style === 'pins')) { pendingHighlight = { event, until: core.clock + 0.65 }; lastHighlightAt = core.clock; }
     if (events.some(e => e.type === 'gameOver')) {
       pendingHighlight = null; $('result').textContent = message(core.score[0] === core.score[1] ? 'draw' : core.score[0] > core.score[1] ? 'winnerBlue' : 'winnerOrange');
       $('endOverlay').hidden = false; clearInput();
@@ -279,7 +343,7 @@
           core.step(STEP, input()); actions.jump = actions.pass = actions.shootReleased = actions.switchPlayer = false;
           tickAccumulator -= STEP; capture(STEP); onEvents(core.consumeEvents());
           if (pendingHighlight && core.clock >= pendingHighlight.until) {
-            const clip = {event:pendingHighlight.event,frames:history.filter(s => s.clock >= pendingHighlight.event.time - 2.8)};
+            const clip = { event: pendingHighlight.event, frames: history.filter(s => s.clock >= pendingHighlight.event.time - 2.8) };
             pendingHighlight = null; beginReplay(clip); tickAccumulator = 0; break;
           }
         }
@@ -287,8 +351,8 @@
       const renderInterval = activeQuality === 'lite' ? 1000 / 30 : 1000 / 60;
       if (now - lastRender >= renderInterval - 1) {
         const snapshot = replayState ? replaySnapshot() : core.getSnapshot();
-        const viewOptions=window.SASportsUI?window.SASportsUI.renderOptions(snapshot):{cameraAngle:0};
-        renderer.render(snapshot, Object.assign({},viewOptions,replayState?{replay:true,cameraAngle:replayState.elapsed/replayState.duration*Math.PI*2+replayState.manualAngle,focusId:replayState.event.playerId}:{}));
+        const viewOptions = window.SASportsUI ? window.SASportsUI.renderOptions(snapshot) : { cameraAngle: 0, view: 'wide' };
+        renderer.render(snapshot, Object.assign({}, viewOptions, replayState ? { replay: true, cameraAngle: replayState.elapsed / replayState.duration * Math.PI * 2 + replayState.manualAngle, focusId: replayState.event.playerId } : {}));
         lastRender = now; frameCount++; updateHud();
       }
       if (now - fpsStart > 3000) {
@@ -300,18 +364,20 @@
     frameId = requestAnimationFrame(frame);
   }
   window.addEventListener('resize', () => renderer.resize());
-  if (window.ResizeObserver) new ResizeObserver(() => renderer.resize()).observe(canvas.parentElement);
+  if (window.ResizeObserver) new ResizeObserver(() => renderer.resize()).observe(stage);
   window.SAHoopsApp = {
-    get core(){return core;}, renderer,
-    getLanguage:()=>language, message,
-    setPaused,
-    setSport:(sport)=>{
-      finishReplay();clearInput();history.length=0;latestClip=null;pendingHighlight=null;playing=false;paused=false;
-      core=sport==='basketball'?new SAHoopsCore.Core({difficulty:$('difficulty').value,seed:971031}):new SASports.Core({sport,difficulty:$('difficulty').value,seed:971031});
-      $('startOverlay').hidden=false;$('endOverlay').hidden=true;$('pauseOverlay').hidden=true;$('pause').textContent=message('pause');
-      tickAccumulator=captureAccumulator=0;updateHud();window.dispatchEvent(new CustomEvent('sa-match-reset'));return core;
+    get core() { return core; }, renderer,
+    getLanguage: () => language, message, setLanguage, loadDictionary,
+    setPaused, toast, flash,
+    setSport: (sport) => {
+      finishReplay(); clearInput(); history.length = 0; latestClip = null; pendingHighlight = null; playing = false; paused = false;
+      core = sport === 'basketball' ? new SAHoopsCore.Core({ difficulty: $('difficulty').value, seed: 971031 })
+        : sport === 'basketball5' ? new SAHoopsCore.Core({ difficulty: $('difficulty').value, seed: 971031, fullCourt: true })
+        : new SASports.Core({ sport, difficulty: $('difficulty').value, seed: 971031 });
+      $('startOverlay').hidden = false; $('endOverlay').hidden = true; $('pauseOverlay').hidden = true; $('pause').textContent = message('pause');
+      tickAccumulator = captureAccumulator = 0; updateHud(); window.dispatchEvent(new CustomEvent('sa-match-reset')); return core;
     },
-    diagnostics: () => ({language,playing,paused,replay:!!replayState,quality:activeQuality,recommended,benchmarkCost,historyFrames:history.length,clipFrames:latestClip?latestClip.frames.length:0,liveClock:core.clock,canvasPixels:canvas.width*canvas.height,localAI:true,networkMultiplayer:false}),
+    diagnostics: () => ({ language, playing, paused, replay: !!replayState, quality: activeQuality, recommended, benchmarkCost, historyFrames: history.length, clipFrames: latestClip ? latestClip.frames.length : 0, liveClock: core.clock, canvasPixels: canvas.width * canvas.height, localAI: true, networkMultiplayer: false, languages: supported.length }),
     getReplay: () => latestClip,
     restart: startMatch
   };
@@ -321,5 +387,5 @@
     navigator.serviceWorker.register(new URL('sw.js', assetBase).href).catch(() => {});
   }
   window.addEventListener('pagehide', () => { clearInput(); cancelAnimationFrame(frameId); });
-  window.addEventListener('pageshow', e => { if(e.persisted){lastFrame=performance.now();frameId=requestAnimationFrame(frame);} });
+  window.addEventListener('pageshow', e => { if (e.persisted) { lastFrame = performance.now(); frameId = requestAnimationFrame(frame); } });
 })();

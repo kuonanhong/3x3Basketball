@@ -1,105 +1,129 @@
-# SmartAction Sports v6 — 聰動運動館
+# SmartAction Sports v7 — 聰動運動場・世界球類
 
-免費靜態網頁運動練習：16 個簡化模式、24 個世界場景、60 位運動員資料卡、84 張授權照片、26 種介面語言，以及選配的本機 CPU 生成式 AI 教練。這是原創練習遊戲，不是官方聯盟遊戲或網路真人同步對戰。
+免費靜態網頁運動練習：**30 種奧運／亞運／東亞運球類練習模式**、單一畫面雙手操控、廣角全場鏡頭、**225 位真實運動明星資料**（場上每個位置對應一位明星）、**54 種介面語言**（依瀏覽器與所在地區自動選擇）、24 個世界場景與選配的本機 CPU 生成式 AI 教練。原創練習遊戲，不是官方聯盟遊戲，也不是網路真人同步對戰。
 
-本版以使用者上傳的 `SmartAction_Basketball_FullPackage(2).zip` 為修改依據；部分 ChatGPT 參考連結需登入或無法取得完整內容，未將未讀對話當成已驗證規格。
+本版以 v6 套件為基礎重構。v6 README 中提及的 ChatGPT 參考連結在本次製作時無法讀取（需登入或分享頁無內容），未將未讀對話當成已驗證規格；所有需求以使用者說明（2.1–2.4 與第三項）為準。
 
 ## 立即使用
 
-解壓縮 `SmartAction_Sports_v6_FullPackage.zip`，進入 `SmartAction_Sports`。Mac／Linux 可執行 `bash Start_Local.sh`；Windows 可執行 `Start_Local.bat`，需要已安裝 Python。也可在含 `index.html` 的目錄直接啟動 HTTP 伺服器：
+解壓縮後進入 `SmartAction_Sports`，以本機 HTTP 伺服器開啟（不要用 `file://` 雙擊）：
 
 ```bash
-python3 -m http.server 8080 --bind 127.0.0.1
+bash Start_Local.sh          # Mac / Linux；Windows 用 Start_Local.bat（需 Python 3）
+# 或 python3 -m http.server 8080 --bind 127.0.0.1
 ```
 
-開啟 <http://127.0.0.1:8080/>。停止伺服器按 Control+C。GitHub Pages 使用 HTTPS 可直接開啟；不要依賴雙擊 `file://index.html` 來啟動模型 Worker 或定位。
+開啟 <http://127.0.0.1:8080/>。GitHub Pages 版本：<https://kuonanhong.github.io/3x3Basketball/>。
 
 - [完整操作說明](guide.html)
 - [SSH 上傳與根目錄部署](docs/DEPLOY.html)
 - [AI 模型、論文、授權與離線](docs/AI_COACH_MODEL.html)
-- [全部照片來源及授權](data/ASSET_CREDITS.html)
+- [全部照片來源、授權與運動員資料來源](data/ASSET_CREDITS.html)
 
-## 本版模式與操作
+## v7 的四項主要改進
 
-包含 3×3 籃球、5×5 足球、棒球打擊、羽球單／雙打、桌球單／雙打、網球單／雙打、美式足球、冰球、橄欖球、排球、手球、短跑、射箭，共 16 個模式。團體隊友／對手由本機 AI 控制；各模式採簡化練習規則，不是完整職業聯盟或奧運規則。
+### 2.1 更多奧運／亞運／東亞運球類（30 種模式）
+
+| 類型 | 模式 | 賽事標籤 |
+|---|---|---|
+| 籃球 | 3×3 半場、**5×5 全場** | 奧運・亞運・東亞運 |
+| 足球系 | 5 人制足球 | 奧運・亞運・東亞運 |
+| 打擊系（全新引擎） | 棒球打擊、**壘球打擊**、**板球打擊** | 奧運・亞運 |
+| 網類 | 羽球單／雙、桌球單／雙、網球單／雙、**軟式網球雙打** | 奧運・亞運・東亞運 |
+| 排球系 | 排球、**沙灘排球 2×2**、**藤球** | 奧運・亞運 |
+| 球門系 | 手球、**曲棍球**、冰球、**水球**、**袖棍球** | 奧運・亞運・冬奧 |
+| 持球前進 | 七人制橄欖球、美式足球、**腰旗美式足球** | 奧運（2028）・亞運 |
+| 個人技術 | **壁球**、**高爾夫**、**保齡球**、**撞球**、短跑、射箭 | 奧運・亞運・東亞運 |
+
+粗體為本版新增（14 項）。每個模式都有多語規則說明與賽事標籤；各模式為簡化練習規則。
+
+### 2.2 單一畫面：全寬、85–95% 高、控制鍵固定在畫面正下方
+
+- 主畫面 `#stage` 佔滿瀏覽器寬度，高度為視窗高度減去導覽列（桌機約 93%，手機直向約 90%，手機橫向約 90%），`min-height` 保證小螢幕可玩。
+- 計分板、運動／視角快速切換、暫停、重播、切換球員、音效、全螢幕、說明全部疊在畫面上方；左右搖桿與 Q/E/J/K 四鍵固定在畫面最下方的透明控制列（可用 ☷ 鍵隱藏／顯示）。鍵盤操作不變。
+- 新增預設「廣角（全場）」鏡頭：鏡頭拉高拉遠並加上輕微廣角鏡頭變形，整個場地與四周（看台、樹木、建築、場景照片）都在畫面內；人物比例放大 1.18 倍。打擊類自動使用「打者視角」（投手在遠方、好球帶在眼前）；高爾夫／保齡球使用跟球鏡頭。第三人稱、近身、第一人稱仍可選。
+
+### 2.3 場上人物對應真實運動明星
+
+- `data/catalog.json` 共 225 位運動員（v6 60 位 + 新增 165 位），每個模式先發名單由該運動的明星名單排出，**同一場不重複**（名單不足時才輪用）。
+- 每位明星含：身高／體重（僅收錄公開常見數字，查不到者為 null，不補造）、慣用手、遊戲能力值（速度、技巧、力量、防守、準確度；虛構平衡參數）、技術特徵標籤、以及**外觀描述**（膚色、髮色、髮型、鬍子、體格、著名配件、球衣號碼）。
+- 渲染器依身高體重體格畫出不同身材，依描述畫髮型／鬍子／髮帶／帽子／頭盔／護目鏡，胸前顯示號碼；**有授權照片的 60 位以照片作為臉部**，其餘以風格化五官呈現。這是風格化近似，不是官方肖像授權；詳見 `data/ASSET_CREDITS.html`。
+- 新增明星可用 `python3 tools/fetch_athlete_photos.py`（需網路）從 Wikimedia Commons 擷取 CC BY／CC BY-SA／CC0／公有領域肖像並自動寫入授權資訊；查不到合格授權的會保持無照片。
+
+### 2.4 全新打擊引擎（棒球／壘球／板球）
+
+- 投手會投出**快速球、曲球、滑球、變速球**（壘球：上飄、下墜、變速；板球：快球、彈跳快球、腳邊低球、旋轉球），球路在後段才變化，並依難度決定好球率與球速。
+- 畫面有**好球帶**、**球棒擊球點游標**（左手 W/A/S/D 或左搖桿移動）、**來球落點預測圈**（輕鬆全程顯示、一般中段顯示、挑戰只在最後顯示）與**縮小的時機環**。
+- 按住 K（或主要鍵）準備、球越過本壘時放開揮棒；**時機誤差 × 位置誤差** 決定擊球品質 → 擊球初速、仰角（右手方向鍵／右搖桿調整仰角與推拉）、方向（太早拉打、太晚推打）。Q = 強力揮棒（窗口較小、距離更遠）、E = 穩定揮棒（窗口較大）、J = 觸擊。
+- 球飛行含空氣阻力；守備員有反應時間並依難度決定接殺機率；結果為一壘／二壘／三壘安打、全壘打（越過全壘打牆）、飛球／平飛／滾地出局、界外、好球、壞球、四壞保送、三振；三出局換局。板球以距離計分（邊界 4 分、飛越 6 分），揮空擊中三柱門或被接殺即出局，每 6 球一輪。
+- 畫面上方顯示壞球／好球／出局／局（板球：得分／三柱門／輪／球數）與球種球速，擊球後顯示初速、仰角、距離與時機判定。
+
+## 操作
 
 | 動作 | 鍵盤 | 觸控 |
 |---|---|---|
-| 移動腿部 | W/A/S/D | 左搖桿 |
-| 手部瞄準 | 方向鍵 | 右搖桿 |
-| 跳／蹲 | Q/E | 下方動作鍵 |
-| 傳球／次要動作 | J | 傳球鍵 |
-| 蓄力與出手 | 按住 K 後放開 | 按住主要動作鍵後放開 |
-| 切換球員 | Tab | 切換球員按鈕 |
-| 棒球轉腰 | Z/C | 轉腰鍵 |
-| 棒球肩部角度 | F/R | 肩部鍵 |
+| 移動（打擊：球棒擊球點） | W/A/S/D | 左搖桿 |
+| 瞄準（打擊：仰角與推拉） | 方向鍵 | 右搖桿 |
+| 跳／蹲（打擊：強力／穩定揮棒） | Q / E | 左側兩鍵 |
+| 傳球／次要動作（打擊：觸擊；高爾夫等：重設瞄準） | J | J 鍵 |
+| 蓄力與出手／揮棒 | 按住 K 後放開 | 按住主要鍵後放開 |
+| 切換球員 | Tab | 切換球員鍵 |
+| 暫停 | Esc | 暫停鍵 |
 
-左右手觸控區位於球場畫面下方。提供第一人稱、近身跟隨、第三人稱、拉近／拉遠與慢速環繞精彩重播。街球／業餘、職業級、最高級代表遊戲 AI 難度，不表示官方 NBA 或其他聯盟授權。
+## 語言
 
-## 場景、資料與語言
+54 種語言：繁中、簡中、英、日、韓、阿拉伯、馬來、泰、越、印尼、菲律賓、德、波蘭、捷克、葡、芬、瑞典、俄、法、西、義、印地、荷、土、希臘、烏克蘭（v6 26 種）+ 孟加拉、烏爾都、波斯、希伯來、泰米爾、泰盧固、馬拉地、旁遮普、緬甸、高棉、寮、尼泊爾、僧伽羅、蒙古、哈薩克、烏茲別克、亞塞拜然、斯瓦希里、阿姆哈拉、匈牙利、羅馬尼亞、丹麥、挪威、保加利亞、克羅埃西亞、塞爾維亞、斯洛伐克、加泰隆尼亞（新增 28 種）。阿拉伯、希伯來、波斯、烏爾都為右至左版面。
 
-- 24 個世界場景包含高雄與臺北景點、公園、洛克公園及威尼斯海灘球場。照片是平面背景，不是當地實景 3D 重建或即時街景。
-- Google Maps 使用一般地圖／搜尋連結，不需部署付費 Maps 金鑰。GPS 由使用者按鈕啟用；手動座標也可。Commons 附近照片查詢不保證全球每個地點都有結果，也不代表照片所在地可打球。
-- 60 位運動員有資料卡照片，56 位有來源身高。未找到的身高或體重不補造。場內採通用幾何人物，不是授權的真實球員臉部模型。
-- 遊戲速度、力量、技巧與防守值是虛構平衡參數，不是實測或官方評分。
-- 照片各有 CC BY、CC BY-SA、CC0 或公有領域標示；保留作者與授權。著作權許可不包含球員肖像、人格權、代言或商標許可。本作無球員或聯盟背書。
-- 26 種語言：繁中、簡中、英、日、韓、阿拉伯、馬來、泰、越南、印尼、菲律賓、德、波蘭、捷克、葡萄牙、芬蘭、瑞典、俄、法、西班牙、義大利、印地、荷蘭、土耳其、希臘、烏克蘭語。
-- 語言由瀏覽器偏好／網址語言參數／手動選擇決定，不依靠 GPS 推測國籍。日光、天氣、季節、氣候是畫面效果，並非即時氣象。
+- 來源：`i18n/<code>.json`（每語 378 鍵，英文為主鍵集）；`tools/build_i18n.cjs` 產生 `locales.js`（內嵌繁中與英文，其餘語言按需載入並由 Service Worker 快取）；`tools/build_languages.cjs` 產生 54 個 `lang/<code>/index.html` 可被搜尋引擎索引的預翻譯入口頁。
+- 選擇順序：網址 `?lang=` → 預翻譯入口頁 → 使用者曾選過的語言 → 瀏覽器語言清單 → **IANA 時區推測所在地區的主要語言** → 英文。不使用 GPS 推測國籍。
+- 翻譯由生成式模型依英文主鍵產生並做鍵值完整性驗證；棒球／板球等術語在部分語言以慣用外來語呈現，歡迎母語者修正 JSON 後重新建置。
 
-## 真正的 CPU AI 教練與離線
+## 檔案結構
 
-已附 Qwen2.5-0.5B-Instruct ONNX q8 權重、分詞器、Transformers.js 與 ONNX Runtime WASM。模型本體為 512,096,557 bytes，分成 16 塊；連同分詞器和執行資源共 **546,143,152 bytes（約 546 MB）**。按「載入 AI 教練」才下載／載入，不影響先玩基本遊戲。推論在使用者 CPU 執行，GitHub Pages 不提供伺服器推論。
+```
+index.html            單一畫面主頁（stage + 設定、世界場景、球員比較、AI 教練）
+stage.css             主畫面版面（全寬、高度、HUD、控制列、手機直橫向）
+styles.css sports.css 其餘樣式
+app.js                應用殼層：輸入、迴圈、重播、語言載入、HUD
+sports-ui.js          運動選單、名單、頭像、控制標籤、世界場景、教練 UI
+game-core.js          籃球 3×3 半場 / 5×5 全場模擬
+sports-engine.js      其餘 28 種模式（球門／網類／持球／打擊 v2／壁球／高爾夫／保齡球／撞球／短跑／射箭）
+renderer.js           Canvas 2D 渲染：廣角鏡頭、場地、器材、人物外觀、打擊 HUD
+locales.js i18n/      54 語字典與語言註冊表（含時區提示）
+data/catalog.json     場景與 225 位運動員（editable source）→ tools/build_catalog.cjs → data/catalog.js
+coach.js coach-worker.js vendor/ models/   選配 CPU 生成式 AI 教練（Qwen2.5-0.5B-Instruct ONNX q8）
+tools/                build_catalog / build_i18n / build_languages / build_credits / build_manifest / fetch_athlete_photos / fetch_model
+tests/                Node 與 Python 測試（引擎、渲染、整合契約、離線、部署）
+Upload_SmartAction_Sports.sh   一鍵重建＋驗證＋備份＋上傳到 kuonanhong/3x3Basketball
+```
 
-這是小模型資源折衷，不能宣稱最準。回答可能重複、混用語言或出錯。未載入模型時，基本教練是明確標示的固定多語規則提示。建議先用 RAM 16 GB 以上桌機／筆電嘗試；這是保守建議，不是實測最低需求，手機未必能執行 AI。
+## 生成式 AI 教練（回覆學徒問題）
 
-已完成相同 q8 權重的 Linux／Node CPU 真實生成檢查與分塊 SHA 驗證；這不能代替瀏覽器 WASM、Intel Mac、iPhone、Android 等實機相容性驗證，亦不代表已證明回答準確度。AI 詳情見 [模型說明](docs/AI_COACH_MODEL.html)。
+已附 Transformers.js 與 ONNX Runtime WASM；Qwen2.5-0.5B-Instruct q8 權重（512,096,557 bytes，16 塊）**不含在本 zip**，以縮小附件：
 
-完全離線時保留完整專案，以本機 HTTP 伺服器開啟。瀏覽器快取可能被清除，不是永久備份；地圖和附近照片查詢需要網路。「準備離線核心」不會偷偷下載大型模型，模型需另外主動載入。
+- 若 GitHub 上已有 v6 的 `models/`，上傳腳本會自動沿用遠端既有且 SHA-256 驗證通過的分塊（不重傳、不刪除）。
+- 本機要離線測試 AI 時：`python3 tools/fetch_model.py --from "/路徑/v6/SmartAction_Sports"`（複製 v6 分塊）或 `--download`（從 Hugging Face 固定版本下載並分塊驗證）。
+
+教練提示詞已涵蓋 30 種模式的練習要點與本場數據，以學徒（初學者）問答為框架；未載入模型時顯示固定多語提示並明確標示「非生成式 AI」。小模型回答可能重複或出錯，不應視為專業訓練評估。
 
 ## 上傳到 `kuonanhong/3x3Basketball`
 
-使用 Git、Python 3.10+ 與現有 SSH 金鑰。腳本優先選 Python 3.11；可用 `SPORTS_PYTHON` 指定。無須 PAT。
+需要 Git、Python 3.10+、Node.js 18+ 與可用的 SSH 金鑰（`ssh -T git@github.com`）。
 
 ```bash
-ssh -T git@github.com
-bash Upload_SmartAction_Sports.sh --dry-run
-bash Upload_SmartAction_Sports.sh --push
+bash Upload_SmartAction_Sports.sh --build --dry-run     # 重建資料／字典／語言頁／清單並預覽
+bash Upload_SmartAction_Sports.sh --build --push        # 備份遠端 main → 分批上傳 → 驗證 → fast-forward main
 ```
 
-若不在來源目錄，指定 `--source "/完整路徑/SmartAction_Sports"`。預設只預覽。腳本會驗證部署清單與模型分塊、備份遠端、分批推暫存分支，完成才更新 main；不修改來源的 Git 狀態。部署直接平鋪在儲存庫根目錄，保留必要的 `models/`、`assets/` 等資產階層。只清理已查核的舊包裝目錄與發行檔，不隨意刪除未知遠端內容。
+其他選項：`--fetch-photos`（先擷取開放授權肖像）、`--fetch-model --models-from DIR` 或 `--download-model`（準備權重）、`--stage-only`、`--batch-mib`、`--no-keep-remote-models`。完整說明見 `--help` 與 [docs/DEPLOY.html](docs/DEPLOY.html)。GitHub → Settings → Pages → Deploy from a branch → **main → /(root)**。
 
-GitHub → Settings → Pages → Deploy from a branch → **main → /(root)**。部署成功後開啟 <https://kuonanhong.github.io/3x3Basketball/>。
-
-新增／修改資源後：
+## 測試
 
 ```bash
-python3 tools/build_manifest.py
-bash Upload_SmartAction_Sports.sh --dry-run
-bash Upload_SmartAction_Sports.sh --push
+for f in tests/*.cjs; do node --test "$f"; done; node tests/core.test.cjs
+python3 -m unittest tests.test_build_manifest tests.test_deploy
 ```
-
-只修改既有清單檔案也可執行 `bash Upload_SmartAction_Sports.sh --refresh-manifest`。模型更換需要同步更新 `.parts.json`，不能只更新外層清單。`--push --stage-only` 只上傳備份與暫存；`--batch-mib 32` 可調整批次。完整參數請用 `--help`。
-
-`tests/`、`tools/`、預覽圖、ZIP、上傳腳本不部署到網站，但保留於完整附件供本機維護。模型分塊為真實 bytes，不是 Git LFS 指標。
-
-## 容量、頻寬與多人使用
-
-網站約 550 MB 等級，低於 Pages 1 GB 發布容量；腳本檢查最終保留內容。分塊只解決單檔問題，不增加總容量。GitHub Pages 每月約 100 GB 軟性頻寬限制，粗估僅約 180 次全新完整 AI 資源下載，還未計其他網站內容；快取與不使用模型會改變實際流量。
-
-本機運算不是無限免費託管，不能保證十萬人同時下載、不延遲或永不當機。真正遠端真人對戰需另建同步服務。本版沒有聲稱已完成全部奧運／職業賽事項目或所有知名運動員。
 
 ## English quick start
 
-Serve this folder over HTTP, then open the browser:
-
-```bash
-python3 -m http.server 8080 --bind 127.0.0.1
-```
-
-Open <http://127.0.0.1:8080/>. Choose a sport and click Start. Use WASD to move, arrows to aim, Q/E to jump/crouch, J to pass, and hold/release K for the main action. Baseball adds Z/C hip rotation and F/R shoulder adjustment. Touch controls sit below the canvas.
-
-The 16 modes are simplified local practice games with local computer opponents, not online multiplayer or official league simulations. Athlete photos are reference cards; generic avatars and fictional game ratings do not represent licensed likenesses or official ability measurements. Real scene photos are not 3D geographic reconstructions.
-
-The optional Qwen q8 coach runs on the visitor's CPU and requires approximately 546 MB of model/runtime assets. Its small-model quality is experimental. Node/Linux CPU inference has been tested; browser WASM, Intel Mac and mobile inference have not all been verified. Games work without loading the model.
-
-Deploy with your SSH key: `bash Upload_SmartAction_Sports.sh --dry-run`, then `--push`. Set GitHub Pages to **main / (root)**. Rebuild manifests with `python3 tools/build_manifest.py` after changes. Read [guide.html](guide.html), [deployment instructions](docs/DEPLOY.html), [model details](docs/AI_COACH_MODEL.html), and [photo credits](data/ASSET_CREDITS.html).
+Serve the folder over HTTP (`python3 -m http.server 8080 --bind 127.0.0.1`) and open <http://127.0.0.1:8080/>. Pick any of the 30 Olympic / Asian Games ball-sport practice modes from the picker on the stage; the whole arena and both-hand controls fit on one screen (keyboard: WASD move, arrows aim, Q/E, J, hold-and-release K). Batting modes (baseball, softball, cricket) use a new pitch/zone/timing engine. Every on-field figure is built from a real athlete's catalogue entry (height, build, stylized look, licensed portrait where available); ratings are fictional presets. 54 interface languages are picked from the browser language or the device's region. Deploy with `bash Upload_SmartAction_Sports.sh --build --push`; the optional 546 MB on-device coach model is kept on GitHub from v6 or fetched with `tools/fetch_model.py`.

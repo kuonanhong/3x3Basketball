@@ -69,6 +69,9 @@
         language: String(options.language || navigator.language || 'en').slice(0, 60),
         sport: String(options.sport || 'basketball').slice(0, 80),
         level: String(options.level || 'amateur').slice(0, 80),
+        sportName: String(options.sportName || '').slice(0, 80),
+        rule: String(options.rule || '').slice(0, 420),
+        metrics: options.metrics ? JSON.stringify(Object.fromEntries(Object.entries(options.metrics).filter(([k, v]) => typeof v === 'number' && v !== 0 && ['hits', 'strikes', 'outs', 'runs', 'homeRuns', 'contactQuality', 'longestRally', 'strokes', 'pins', 'pocketed', 'lastRing'].includes(k)).map(([k, v]) => [k, Math.round(v * 100) / 100]))).slice(0, 200) : '',
         player: JSON.stringify(options.player || {}).slice(0, 320),
         opponent: JSON.stringify(options.opponent || {}).slice(0, 320),
       };

@@ -1,0 +1,89 @@
+/* SmartAction Sports v7 — one-screen stage: full-width arena, 85–95% viewport height,
+   HUD overlays on top, both-hand controls docked right at the bottom of the scene. */
+:root{--nav-h:56px;--dock-h:156px;--hud-bg:#0b161cc4;--hud-line:#ffffff22}
+.site-nav{height:var(--nav-h);padding:0 3%;box-sizing:border-box;max-width:none}
+.site-nav .brand-mark{width:30px;height:30px;font-size:22px;border-radius:8px}.site-nav .brand{font-size:11px}.site-nav .brand small{font-size:7px;margin-top:2px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.stage{position:relative;width:100%;height:calc(100svh - var(--nav-h));min-height:380px;background:#0f1d25;overflow:hidden;direction:ltr;user-select:none;-webkit-user-select:none;scroll-margin-top:0}
+@supports not (height:100svh){.stage{height:calc(100vh - var(--nav-h))}}
+.stage:fullscreen{height:100vh;width:100vw}
+#court{position:absolute;inset:0;width:100%;height:100%;display:block;outline-offset:-5px;touch-action:none}
+/* --- top HUD --- */
+.hud-top{position:absolute;top:0;left:0;right:0;z-index:5;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:8px 10px;pointer-events:none}
+.hud-top>*{pointer-events:auto}
+.stage .scoreboard{height:auto;background:var(--hud-bg);border:1px solid var(--hud-line);border-bottom:1px solid var(--hud-line);border-radius:12px;padding:6px 16px;gap:22px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);flex:none}
+.stage .team strong{font-size:26px}.stage .clock>span{font-size:22px}.stage .clock{min-width:64px}
+.hud-tools{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px;max-width:66%;direction:ltr}
+.hud-tools button,.hud-tools select{min-height:32px;font-size:11px;padding:4px 9px;background:var(--hud-bg);border-color:var(--hud-line);border-radius:8px;color:#e6f0ea;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.hud-tools select{max-width:190px;padding-inline-end:22px}
+.hud-tools button[aria-pressed="false"]{opacity:.55}
+.hud-field{display:inline-flex}
+.stage .court-badge{top:auto;bottom:calc(var(--dock-h) + 36px);left:10px;z-index:3}
+.count-hud{position:absolute;top:66px;left:50%;transform:translateX(-50%);z-index:3;display:flex;align-items:center;gap:10px;background:var(--hud-bg);border:1px solid var(--hud-line);padding:6px 12px;border-radius:10px;font-size:11px;letter-spacing:.5px;pointer-events:none;white-space:nowrap}
+.count-group{display:inline-flex;align-items:center;gap:5px}.count-group b{font-weight:600;color:#a9bfc2;font-size:9px;letter-spacing:1px;text-transform:uppercase}.count-group i{font-style:normal;font-weight:800;font-size:15px;color:#f3f7e6;min-width:12px;text-align:center}
+.count-pitch{color:#dbe9aa;font-weight:700;border-left:1px solid #fff2;padding-left:10px}
+.metrics-hud{position:absolute;left:10px;bottom:calc(var(--dock-h) + 8px);z-index:3;max-width:58%;font-size:11px;line-height:1.5;color:#dbe9aa;background:var(--hud-bg);padding:5px 9px;border-radius:8px;pointer-events:none;font-variant-numeric:tabular-nums}
+.metrics-hud:empty{display:none}
+.stage .scene-caption{position:absolute;right:10px;bottom:calc(var(--dock-h) + 8px);z-index:3;display:flex;gap:8px;max-width:40%;background:var(--hud-bg);font-size:10px;padding:4px 8px;border-radius:8px;color:#b0c6c8;pointer-events:none}
+.stage .scene-caption a{pointer-events:auto;color:#d5e5a6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%}
+.result-flash{position:absolute;top:34%;left:50%;transform:translate(-50%,-50%);z-index:4;font-size:clamp(24px,4.5vw,52px);font-weight:900;letter-spacing:-.02em;color:#fff;text-shadow:0 4px 24px #000c,0 0 2px #000;pointer-events:none;animation:sa-flash 1.7s ease-out forwards;text-align:center;max-width:90%}
+@keyframes sa-flash{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}70%{opacity:1}100%{opacity:0;transform:translate(-50%,-60%) scale(1)}}
+.stage .highlight-banner{z-index:7;top:66px}
+.stage .charge-hud{bottom:calc(var(--dock-h) + 44px);z-index:3;width:200px}
+.stage .start-overlay,.stage .pause-overlay{z-index:6}
+.start-card{max-width:560px;width:min(92vw,560px);background:#0e1d25b8;border:1px solid #ffffff14;border-radius:16px}
+.start-card h2{font-size:clamp(22px,3.2vw,34px);margin:8px 0}
+.start-rule{font-size:12px;line-height:1.65;color:#c6d6d8!important;max-height:110px;overflow:auto;margin:4px 0 0}
+/* --- dock: both hands directly under the scene --- */
+.dock{position:absolute;left:0;right:0;bottom:0;z-index:4;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:end;gap:14px;padding:10px 18px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(to top,#0b161cf4 0%,#0b161ccc 60%,#0b161c00 100%);direction:ltr;touch-action:none}
+.stage.dock-hidden{--dock-h:0px}.stage.dock-hidden .dock{display:none}
+.dock .stick-caption{font-size:9px;max-width:120px;margin-bottom:5px}
+.dock .stick-pad{width:108px;height:108px}
+.dock .touch-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;width:100%;max-width:560px;margin:0 auto}
+.dock .touch-actions button{min-height:52px;font-size:12px;flex-direction:column;gap:2px;padding:6px 4px;background:#21384280;border-color:#ffffff22;backdrop-filter:blur(4px)}
+.dock .touch-actions button b{font-size:9px}
+.dock .touch-actions .shoot-button{background:#bed48728;border-color:#9bb272}
+.dock .touch-actions button.active{background:#dae99e;color:#1b3024}
+.dock .touch-actions button[hidden]{display:none}
+.stage-note{margin:-6px 0 14px}
+.event-tags{font-size:10px;letter-spacing:1px;color:#dbe9aa;text-transform:uppercase}
+.event-tags:empty{display:none}
+.rules-panel{margin-top:0}
+.roster-title{font-size:13px;margin:16px 0 4px}
+.roster-strip p{margin:4px 0}
+.roster-strip .roster-chip{display:inline-block;margin:2px 6px 2px 0;padding:2px 7px;border:1px solid #37505a;border-radius:12px;color:#d5e5a6;font-size:10px}
+.roster-strip .roster-chip.away{color:#f2a16c}
+html[dir=rtl] .stage .court-badge{left:10px;right:auto}
+html[dir=rtl] .stage .scene-caption{right:10px;left:auto}
+html[dir=rtl] .metrics-hud{left:10px;right:auto}
+html[dir=rtl] .hud-top{direction:rtl}
+/* --- responsive --- */
+@media(max-width:1000px){.dock .stick-pad{width:98px;height:98px}.dock{gap:10px;padding:8px 12px calc(8px + env(safe-area-inset-bottom))}}
+@media(max-width:780px){
+  :root{--nav-h:48px;--dock-h:150px}
+  .stage{height:calc(100svh - var(--nav-h));min-height:420px}
+  .hud-top{padding:6px}.stage .scoreboard{padding:4px 10px;gap:12px}.stage .team{font-size:8px;gap:6px}.stage .team strong{font-size:20px}.stage .clock>span{font-size:17px}.stage .clock small{font-size:8px}
+  .hud-tools{max-width:52%;gap:3px}.hud-tools button,.hud-tools select{min-height:28px;font-size:10px;padding:3px 6px}.hud-tools select{max-width:112px}
+  .count-hud{top:56px;font-size:10px;gap:7px;padding:4px 8px}.count-group i{font-size:13px}
+  .dock{grid-template-columns:auto minmax(0,1fr) auto;gap:8px;padding:6px 10px calc(8px + env(safe-area-inset-bottom))}
+  .dock .stick-pad{width:92px;height:92px}.dock .stick-caption{font-size:8px;max-width:92px;margin-bottom:3px}
+  .dock .touch-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;max-width:220px}
+  .dock .touch-actions button{min-height:46px;font-size:10px;padding:4px 2px}.dock .touch-actions button b{display:none}
+  .stage .court-badge{font-size:8px;bottom:calc(var(--dock-h) + 30px)}
+  .metrics-hud{font-size:10px;max-width:56%}
+  .stage .scene-caption{font-size:9px;max-width:42%}
+  .stage .charge-hud{width:160px}
+  .start-card{padding:14px}
+}
+@media(max-width:420px){.dock .stick-pad{width:82px;height:82px}.dock .touch-actions{max-width:150px;gap:4px}.dock .touch-actions button{min-height:42px;font-size:9px}.hud-tools select{max-width:92px}.hud-tools button{padding:3px 5px}}
+/* landscape phones: use the whole height, slimmer dock */
+@media(max-height:520px) and (orientation:landscape){
+  :root{--nav-h:40px;--dock-h:118px}
+  .site-nav{height:40px;padding:0 2%}
+  .stage{height:calc(100svh - var(--nav-h));min-height:300px}
+  .dock{padding:4px 12px calc(4px + env(safe-area-inset-bottom));align-items:center}
+  .dock .stick-pad{width:84px;height:84px}.dock .stick-caption{display:none}
+  .dock .touch-actions{grid-template-columns:repeat(4,minmax(0,1fr));max-width:420px;gap:6px}.dock .touch-actions button{min-height:40px;font-size:10px}
+  .count-hud{top:52px}.stage .scoreboard{padding:3px 10px}.stage .team strong{font-size:18px}.stage .clock>span{font-size:16px}
+}
+@media(pointer:fine) and (min-width:1000px){.dock .stick-pad{cursor:grab}}
