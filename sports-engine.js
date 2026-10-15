@@ -29,7 +29,7 @@
   /* ---- Sport catalogue -------------------------------------------------------------------- */
   var sports = [
     { id: 'soccer5', family: 'goal', teamSize: 5, fieldType: 'goal', bounds: bounds(11, 17), kind: 'soccer', radius: 0.22, goalWidth: 5, goalHeight: 2.5, events: [EV.O, EV.A, EV.E] },
-    { id: 'baseball', family: 'batting', teamSize: 5, fieldType: 'baseball', bounds: { minX: -30, maxX: 30, minZ: -27, maxZ: 17 }, kind: 'baseball', radius: 0.075, events: [EV.O, EV.A],
+    { id: 'baseball', family: 'batting', teamSize: 9, fieldType: 'baseball', bounds: { minX: -30, maxX: 30, minZ: -27, maxZ: 17 }, kind: 'baseball', radius: 0.075, events: [EV.O, EV.A],
       batting: { plateZ: 13, moundZ: -1.2, releaseY: 1.85, underhand: false, bounce: false, fence: 38, fenceHeight: 2.6, exit: 24, zone: { halfWidth: 0.32, bottom: 0.45, top: 1.15 }, ballVisual: 0.075,
         pitches: [['fastball', 1.0, 0, 0], ['curveball', 0.84, 0.05, -0.42], ['slider', 0.92, 0.36, -0.1], ['changeup', 0.78, -0.08, -0.16]] } },
     { id: 'badminton', family: 'net', teamSize: 1, fieldType: 'net', bounds: bounds(3.05, 6.7), kind: 'shuttle', radius: 0.12, netHeight: 1.55, bounces: 0, events: [EV.O, EV.A, EV.E] },
@@ -348,17 +348,20 @@
   Core.prototype._battingRestart = function () {
     var s = this.spec, bt = s.batting, n = s.teamSize, m = this.metrics;
     var batter = this.players[0], pitcher = this.players[n];
-    batter.x = batter.handedness === 'left' ? 0.75 : -0.75; batter.z = bt.plateZ + 0.15; batter.angle = Math.PI; batter.armAngle = batter.handedness === 'left' ? Math.PI * 0.5 : -Math.PI * 0.5;
+    /* real stance: the batter stands side-on in the box, chest toward the plate, head turned to the pitcher */
+    batter.x = batter.handedness === 'left' ? 0.75 : -0.75; batter.z = bt.plateZ + 0.15; batter.angle = batter.handedness === 'left' ? -Math.PI * 0.5 : Math.PI * 0.5; batter.armAngle = batter.angle; batter.lookAngle = Math.PI;
     pitcher.x = 0; pitcher.z = bt.moundZ; pitcher.angle = 0; pitcher.armAngle = 0;
     /* team-mates wait beside the plate (dugout side), fielders spread in the field */
-    for (var i = 1; i < n; i++) { var mate = this.players[i]; mate.x = s.bounds.maxX * 0.55 + (i - 1) * 1.3; mate.z = bt.plateZ + 1.2 - (i - 1) * 0.3; mate.angle = Math.PI; }
+    for (var i = 1; i < n; i++) { var mate = this.players[i]; mate.x = s.bounds.maxX * 0.5 + (i - 1) * 1.15; mate.z = bt.plateZ + 2.2 - (i - 1) * 0.25; mate.angle = -Math.PI * 0.5; }
+    /* fielders after the pitcher: baseball has the full nine (C, 1B, 2B, SS, 3B, LF, CF, RF) */
     var spots = bt.bounce ? [[0.6, bt.plateZ + 1.4], [-7, bt.plateZ - 10], [8, bt.plateZ - 12], [-3, bt.plateZ - 22], [6, bt.plateZ - 24]]
+      : n >= 9 ? [[0, bt.plateZ + 1.3], [8.4, bt.plateZ - 11.4], [4.2, bt.plateZ - 18], [-4.2, bt.plateZ - 18], [-8.4, bt.plateZ - 11.4], [-14, bt.plateZ - 27], [0, bt.plateZ - 33], [14, bt.plateZ - 27]]
       : [[0, bt.plateZ + 1.3], [-6.5, bt.plateZ - 9], [6.5, bt.plateZ - 9], [-9, bt.plateZ - 22], [9, bt.plateZ - 22]];
     for (var j = 1; j < n; j++) { var f = this.players[n + j], spot = spots[j - 1] || spots[spots.length - 1]; f.x = spot[0]; f.z = spot[1]; f.angle = 0; f.homeX = spot[0]; f.homeZ = spot[1]; }
     this.selectedId = 0;
     this.batter = this.batter || {};
     this.batter.cursorX = 0; this.batter.cursorY = (bt.zone.bottom + bt.zone.top) / 2; this.batter.loaded = false; this.batter.loadTime = 0; this.batter.swungAt = null; this.batter.swingKind = null;
-    this.batter.lastContact = null; this.batter.fielderTarget = null;
+    this.batter.lastContact = null; this.batter.fielderTarget = null; this.batter.chasers = null;
     this._pitchTimer = 1.4; this._take(pitcher);
     if (!m.inningStarted) { m.inningStarted = true; }
   };
@@ -449,6 +452,11 @@
     /* fielders start running toward the predicted landing spot */
     var vy = b.vy, tFlight = Math.max(0.2, (vy + Math.sqrt(Math.max(0, vy * vy + 2 * GRAVITY * b.y))) / GRAVITY);
     this.batter.fielderTarget = { x: b.x + b.vx * tFlight * 0.88, z: b.z + b.vz * tFlight * 0.88, t: tFlight };
+    /* only the two fielders closest to the landing point chase (the catcher stays home unless it is a bunt) */
+    var tgtP = this.batter.fielderTarget, cand = [];
+    for (var ci = s.teamSize + 1 + (kind === 'bunt' ? 0 : 1); ci < this.players.length; ci++) cand.push(this.players[ci]);
+    cand.sort(function (a, c2) { return Math.hypot(a.x - tgtP.x, a.z - tgtP.z) - Math.hypot(c2.x - tgtP.x, c2.z - tgtP.z); });
+    this.batter.chasers = cand.slice(0, s.teamSize >= 9 ? 2 : cand.length).map(function (pl) { return pl.id; });
     this._event('contact', { playerId: p.id, timing: m.swingTiming, power: exit, quality: q, launch: launch, direction: direction, kind: kind });
   };
   Core.prototype._call = function (call, cross, swinging) {
@@ -521,7 +529,7 @@
       var reaction = this.difficulty === 'easy' ? 0.5 : this.difficulty === 'normal' ? 0.32 : 0.16;
       for (var i = n + 1; i < this.players.length; i++) {
         var fd = this.players[i];
-        if (f.elapsed < reaction) { fd.armAngle = fd.angle; continue; }
+        if (f.elapsed < reaction || (cur.chasers && cur.chasers.indexOf(fd.id) < 0)) { fd.armAngle = fd.angle; continue; }
         var tgt = (f.elapsed < (cur.fielderTarget ? cur.fielderTarget.t * 0.6 : 0)) && cur.fielderTarget ? cur.fielderTarget : b;
         this._toward(fd, clamp(tgt.x, s.bounds.minX + 0.3, s.bounds.maxX - 0.3), clamp(tgt.z, s.bounds.minZ + 0.3, s.bounds.maxZ - 0.3), c.speed * 0.95 * (0.85 + rating(fd, 'speed') / 500), dt);
         fd.armAngle = fd.angle;

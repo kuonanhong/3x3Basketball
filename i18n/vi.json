@@ -424,5 +424,21 @@
   "famousFor": "Nổi tiếng với",
   "backToPicker": "Quay lại các môn thể thao",
   "startWithLineup": "Bắt đầu với đội hình này",
-  "cameraFollow": "Theo sát ngôi sao"
+  "cameraFollow": "Theo sát ngôi sao",
+  "quitMatch": "Kết thúc trận",
+  "quitMatchHint": "Kết thúc trận này và quay lại menu thể thao (trang vẫn mở)",
+  "exitApp": "Đóng ứng dụng",
+  "exitAppHint": "Đóng toàn bộ ứng dụng và trang web này",
+  "leaveTitle": "Kết thúc trận này hay đóng toàn bộ ứng dụng?",
+  "quitConfirm": "Kết thúc trận, quay lại menu thể thao",
+  "exitConfirm": "Đóng toàn bộ ứng dụng và trang",
+  "orderN": "Người đánh số {n}",
+  "battingOrder": "Thứ tự đánh bóng của bạn",
+  "defenseLineup": "Hàng phòng thủ đối phương ({n} cầu thủ)",
+  "nowBatting": "Đang đánh",
+  "changePlayer": "Đổi cầu thủ",
+  "leftHanded": "Thuận tay trái",
+  "rightHanded": "Thuận tay phải",
+  "onFieldPlayers": "Tất cả cầu thủ trên sân",
+  "versionUpdated": "Đã cập nhật lên phiên bản mới nhất"
 }

@@ -1,7 +1,7 @@
 /* Scope-isolated shell. Large AI weights are opt-in, cached by coach-worker. */
 const ROOT=self.registration.scope;
 const PREFIX='sa-sports-'+encodeURIComponent(new URL(ROOT).pathname)+'-';
-const CACHE=PREFIX+'v7.1-20261015b';
+const CACHE=PREFIX+'v7.2-20261015';
 const CORE=['index.html','styles.css','sports.css','stage.css','locales.js','i18n/en.json','i18n/zh-Hant.json','data/catalog.js','game-core.js','sports-engine.js','renderer.js','coach.js','coach-worker.js','app.js','sports-ui.js','icon.svg','manifest.webmanifest','offline-manifest.json'];
 const local=p=>new URL(p,ROOT).href;
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE.map(local))).then(()=>self.skipWaiting())));
@@ -13,9 +13,9 @@ self.addEventListener('fetch',event=>{
  if(path.startsWith('models/'))return;
  if(!/\.(?:js|mjs|css|json|html|wasm|jpg|png|svg|webmanifest)$/.test(path)&&req.mode!=='navigate')return;
  event.respondWith((async()=>{
-  const c=await caches.open(CACHE),hit=await c.match(req);
+  const c=await caches.open(CACHE),hit=await c.match(req)||await c.match(req,{ignoreSearch:true});
   if(hit&&(path.startsWith('assets/')||path.startsWith('vendor/')))return hit;
-  try{const response=await fetch(req);if(response.ok&&response.type!=='opaque')await c.put(req,response.clone());return response;}
+  try{const response=await fetch(req,req.mode==='navigate'?undefined:{cache:'no-cache'});if(response.ok&&response.type!=='opaque')await c.put(req,response.clone());return response;}
   catch(error){if(hit)return hit;if(req.mode==='navigate'){const shell=await c.match(local('index.html'));if(shell)return shell;}throw error;}
  })());
 });

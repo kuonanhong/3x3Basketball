@@ -424,5 +424,21 @@
   "famousFor": "Erről ismert",
   "backToPicker": "Vissza a sportokhoz",
   "startWithLineup": "Indítás ezzel a felállással",
-  "cameraFollow": "Sztár követése"
+  "cameraFollow": "Sztár követése",
+  "quitMatch": "Meccs vége",
+  "quitMatchHint": "A meccs befejezése és vissza a sportmenübe (az oldal nyitva marad)",
+  "exitApp": "Alkalmazás bezárása",
+  "exitAppHint": "Az egész alkalmazás és a weboldal bezárása",
+  "leaveTitle": "Befejezed a meccset, vagy bezárod az egész alkalmazást?",
+  "quitConfirm": "Meccs befejezése, vissza a sportmenübe",
+  "exitConfirm": "Az egész alkalmazás és oldal bezárása",
+  "orderN": "{n}. ütő",
+  "battingOrder": "Saját ütősorrend",
+  "defenseLineup": "Ellenfél védekezése ({n} játékos)",
+  "nowBatting": "Ütésen",
+  "changePlayer": "Játékoscsere",
+  "leftHanded": "Balkezes",
+  "rightHanded": "Jobbkezes",
+  "onFieldPlayers": "Minden játékos a pályán",
+  "versionUpdated": "Frissítve a legújabb verzióra"
 }

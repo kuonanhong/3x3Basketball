@@ -10,7 +10,7 @@
   <link rel="canonical" href="https://kuonanhong.github.io/3x3Basketball/lang/zh-Hans/">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="sports.css"><link rel="stylesheet" href="stage.css">
+  <link rel="stylesheet" href="styles.css?v=7.2.0"><link rel="stylesheet" href="sports.css?v=7.2.0"><link rel="stylesheet" href="stage.css?v=7.2.0">
   <title>聪动运动场・世界球类 · SmartAction Sports</title>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"SmartAction Sports","description":"Free local practice for 30 Olympic / Asian Games ball sports with one-screen two-hand controls, 54 interface languages, licensed scene photos, athlete-based rosters, replays and an optional on-device generative coach.","url":"https://kuonanhong.github.io/3x3Basketball/","gamePlatform":["Web browser"],"playMode":"SinglePlayer","isAccessibleForFree":true,"genre":["Sports","Training"],"author":{"@type":"Organization","name":"SmartAction"}}</script>
   <link rel="alternate" hreflang="zh-Hant" href="https://kuonanhong.github.io/3x3Basketball/lang/zh-Hant/">
@@ -83,11 +83,15 @@
         <label class="hud-field"><span class="sr-only" data-i18n="sportPicker">选择运动</span><select id="sportQuick" aria-label="Sport"></select></label>
         <label class="hud-field"><span class="sr-only" data-i18n="camera">视角</span><select id="cameraQuick" aria-label="Camera"><option value="wide" data-i18n="wideView">广角（全场）</option><option value="third" data-i18n="thirdPerson">第三人称</option><option value="close" data-i18n="closePerson">近身跟随</option><option value="first" data-i18n="firstPerson">第一人称</option></select></label>
         <button id="pause" data-i18n="pause">暂停</button><button id="replay" data-i18n="replay">精彩回放</button><button id="switchPlayer" data-i18n="switchPlayer">切换球员</button><button id="sound" data-i18n="sound">音效</button><button id="fullscreen" data-i18n="fullscreen">全屏</button><button id="help" data-i18n="help">说明</button><button id="dockToggle" aria-pressed="true" title="Touch controls">☷</button>
-        <button id="closeApp" class="close-button" aria-label="Close" title="Close"><span aria-hidden="true">✕</span></button>
+      </div>
+      <div class="hud-exit">
+        <button id="quitMatch" class="quit-button" data-i18n-title="quitMatchHint" title="結束本場比賽，回到運動選單（網頁不關閉）"><span class="ico" aria-hidden="true">⏹</span><span data-i18n="quitMatch">结束本场</span></button>
+        <button id="closeApp" class="close-button" data-i18n-title="exitAppHint" aria-label="關閉整個應用程式與網頁" title="關閉整個應用程式與網頁"><span class="ico" aria-hidden="true">✕</span><span class="close-label" data-i18n="exitApp">关闭程序</span></button>
       </div>
     </div>
     <div class="court-badge"><span id="sportBadge">3×3</span> <span id="venueBadge">WORLD</span> <i></i> <span id="qualityBadge">AUTO</span> <i></i> <span id="eventBadge"></span></div>
     <div class="count-hud" id="countHud" hidden><span class="count-group"><b data-i18n="balls">坏球</b><i id="countBalls">0</i></span><span class="count-group"><b data-i18n="strikes">好球</b><i id="countStrikes">0</i></span><span class="count-group"><b data-i18n="outs">出局</b><i id="countOuts">0</i></span><span class="count-group"><b data-i18n="inning">局</b><i id="countInning">1</i></span><span id="countPitch" class="count-pitch"></span></div>
+    <div class="matchup-hud" id="matchupHud" hidden></div>
     <div class="metrics-hud" id="metricsHud" aria-live="off"></div>
     <div class="result-flash" id="resultFlash" hidden></div>
     <div class="scene-caption"><span id="sceneName"></span><a id="sceneCredit" target="_blank" rel="noopener noreferrer"></a></div>
@@ -98,7 +102,10 @@
     <div id="startOverlay" class="start-overlay" hidden><div class="start-card"><span class="ball-icon" aria-hidden="true">◉</span><p class="eyebrow">MOVE TOGETHER. PLAY ANYWHERE.</p><h2 id="startTitle"></h2><p id="startRule" class="start-rule"></p><div id="startLineup" class="start-lineup"></div><button id="start" class="primary" data-i18n="start">开始比赛</button><div class="start-actions"><button id="changeSport" data-i18n="changeSport">更换运动</button><button id="editLineup" data-i18n="lineup">首发名单</button></div><small id="benchmarkStatus" data-i18n="benchmark">正在测试设备性能…</small></div></div>
     <div id="pauseOverlay" class="pause-overlay" hidden><button id="resume" class="primary" data-i18n="resume">继续</button></div>
     <div id="endOverlay" class="pause-overlay" hidden><div class="end-card"><h2 data-i18n="endGame">比赛结束</h2><p id="result"></p><button id="playAgain" class="primary" data-i18n="restart">重新开始</button><button id="endChangeSport" data-i18n="changeSport">更换运动</button></div></div>
-    <div id="closeOverlay" class="pause-overlay" hidden><div class="end-card"><h2 data-i18n="closeTitle">要离开聪动运动场吗？</h2><p data-i18n="closeBody">比赛将结束，网页随即关闭。下次打开仍会记住您的语言与设置。</p><button id="closeConfirm" class="primary" data-i18n="closeConfirm">关闭网页</button><button id="closeCancel" data-i18n="closeCancel">继续游玩</button></div></div>
+    <div id="closeOverlay" class="pause-overlay" hidden><div class="end-card leave-card"><h2 data-i18n="leaveTitle">要结束本场比赛，还是关闭整个程序？</h2>
+      <button id="quitConfirm" class="leave-option"><span class="ico" aria-hidden="true">⏹</span><span><strong data-i18n="quitConfirm">结束本场，回到运动菜单</strong><small data-i18n="quitMatchHint">结束本场比赛，回到运动菜单（网页不关闭）</small></span></button>
+      <button id="closeConfirm" class="leave-option danger"><span class="ico" aria-hidden="true">✕</span><span><strong data-i18n="exitConfirm">关闭整个程序与网页</strong><small data-i18n="closeBody">比赛将结束，网页随即关闭。下次打开仍会记住您的语言与设置。</small></span></button>
+      <button id="closeCancel" class="primary" data-i18n="closeCancel">继续游玩</button></div></div>
     <div id="closedOverlay" class="pause-overlay" hidden><div class="end-card"><h2 data-i18n="closedTitle">已关闭</h2><p data-i18n="closedBody">现在可以安全地关闭此标签页。</p><button id="reopen" class="primary" data-i18n="reopen">重新打开</button></div></div>
     <div class="dock" id="touchControls">
       <div class="stick-area"><div class="stick-caption"><span>01</span> <span id="moveCaption" data-i18n="move">移动</span></div><div id="movePad" class="stick-pad" aria-label="Movement joystick"><span class="pad-arrows" aria-hidden="true">↑<br>←　→<br>↓</span><span class="stick-knob"></span></div></div>
@@ -156,9 +163,10 @@
     <div class="learning-grid">
       <section class="content-panel athlete-panel" id="lineupPanel"><div class="panel-heading"><div><p class="eyebrow">ATHLETE / LINE-UP</p><h2 data-i18n="lineup">首发名单</h2></div><button id="autoPick" data-i18n="autoPick">自动排阵</button></div>
         <p class="fine-note" data-i18n="lineupHint">每个位置选一位明星；同一场比赛不可重复上场。对手由电脑控制。</p>
-        <div class="lineup-grid"><div><h3 class="roster-title" data-i18n="homeLineup">我方首发</h3><div id="lineupHome" class="lineup-slots"></div></div><div><h3 class="roster-title away" data-i18n="awayLineup">对方首发</h3><div id="lineupAway" class="lineup-slots"></div></div></div>
+        <div class="lineup-team"><h3 class="roster-title" id="homeLineupTitle" data-i18n="homeLineup">我方首发</h3><div id="lineupHome" class="lineup-cards"></div></div>
+        <div class="lineup-team"><h3 class="roster-title away" id="awayLineupTitle" data-i18n="awayLineup">对方首发</h3><div id="lineupAway" class="lineup-cards"></div></div>
         <div class="compare-selects" hidden><label class="field"><span data-i18n="selectHome">选择我方球员</span><select id="homeAthlete"></select></label><label class="field"><span data-i18n="selectAway">选择对方球员</span><select id="awayAthlete"></select></label></div>
-        <h3 class="roster-title" data-i18n="starCard">明星资料</h3><div id="athleteCards" class="athlete-cards"></div><div id="teamRosters" class="roster-strip"></div><p class="fine-note" data-i18n="athleteLikenessNote">场上每位人物依据真实运动员公开的身高、体型与造型制作；有授权照片时脸部使用该照片。属风格化近似，并非官方肖像授权。</p><p class="fine-note" data-i18n="gameRatingsNote">速度、技巧、力量与防守为游戏设计值，不是真实选手的实测能力。</p><p class="fine-note" data-i18n="photoRightsNote">照片授权与来源可查；不代表球员／联盟代言。</p>
+        <div id="athleteCards" class="athlete-cards" hidden></div><div id="teamRosters" class="roster-strip"></div><p class="fine-note" data-i18n="athleteLikenessNote">场上每位人物依据真实运动员公开的身高、体型与造型制作；有授权照片时脸部使用该照片。属风格化近似，并非官方肖像授权。</p><p class="fine-note" data-i18n="gameRatingsNote">速度、技巧、力量与防守为游戏设计值，不是真实选手的实测能力。</p><p class="fine-note" data-i18n="photoRightsNote">照片授权与来源可查；不代表球员／联盟代言。</p>
       </section>
       <section class="content-panel coach-panel"><div class="panel-heading"><div><p class="eyebrow">CPU / COACH</p><h2 data-i18n="coach">教练</h2></div><span class="chip">Qwen 0.5B</span></div>
         <p class="fine-note" data-i18n="coachApprentice">向教练提问（设备端生成式 AI）</p><p class="fine-note" data-i18n="coachLocalNotice">可选生成式 AI 需手动下载模型，使用您设备的 CPU 运行；部分手机可能缓慢或无法使用，回答也可能出错。</p><p class="fine-note"><span data-i18n="downloadModelSize">模型下载大小</span> ≈ 547 MB</p><div class="coach-buttons"><button id="loadCoach" data-i18n="loadCoach">加载 AI 教练</button><button id="unloadCoach" data-i18n="unloadCoach">卸载模型</button></div><progress id="coachProgress" max="1" value="0" hidden></progress><p id="coachStatus" role="status"></p>
@@ -171,6 +179,6 @@
   <dialog id="mapDialog"><button class="dialog-close" data-close data-i18n="close">关闭</button><h2 data-i18n="nearbyCourts">附近篮球场</h2><p data-i18n="mapPrivacy">只有点击定位才获取位置；打开地图时才将坐标带到 Google 地图。</p><button id="locate" class="primary" data-i18n="locate">获取我的位置</button><p id="mapStatus" role="status"></p><p id="coordinates"></p><div id="mapActions" hidden><a id="currentMap" class="button" target="_blank" rel="noopener noreferrer" data-i18n="latLon">经纬度</a><a id="nearbyMap" class="button primary" target="_blank" rel="noopener noreferrer" data-i18n="openMaps">打开 Google 地图</a></div><iframe id="embeddedMap" title="Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" hidden></iframe></dialog>
   <div id="toast" class="toast" role="status" hidden></div>
   <noscript><p>請啟用 JavaScript 以執行本機運動遊戲。Enable JavaScript to play.</p></noscript>
-  <script src="locales.js"></script><script src="data/catalog.js"></script><script src="game-core.js"></script><script src="sports-engine.js"></script><script src="renderer.js"></script><script src="coach.js"></script><script src="app.js"></script><script src="sports-ui.js"></script>
+  <script src="locales.js?v=7.2.0"></script><script src="data/catalog.js?v=7.2.0"></script><script src="game-core.js?v=7.2.0"></script><script src="sports-engine.js?v=7.2.0"></script><script src="renderer.js?v=7.2.0"></script><script src="coach.js?v=7.2.0"></script><script src="app.js?v=7.2.0"></script><script src="sports-ui.js?v=7.2.0"></script>
 </body>
 </html>

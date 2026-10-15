@@ -424,5 +424,21 @@
   "famousFor": "Known for",
   "backToPicker": "Back to sports",
   "startWithLineup": "Start with this line-up",
-  "cameraFollow": "Follow the star"
+  "cameraFollow": "Follow the star",
+  "quitMatch": "End match",
+  "quitMatchHint": "End this match and go back to the sports menu (the page stays open)",
+  "exitApp": "Close app",
+  "exitAppHint": "Close the whole app and this web page",
+  "leaveTitle": "End this match, or close the whole app?",
+  "quitConfirm": "End match, back to sports menu",
+  "exitConfirm": "Close the whole app and page",
+  "orderN": "#{n} batter",
+  "battingOrder": "Your batting order",
+  "defenseLineup": "Opponent defence ({n} players)",
+  "nowBatting": "At bat",
+  "changePlayer": "Change player",
+  "leftHanded": "Left-handed",
+  "rightHanded": "Right-handed",
+  "onFieldPlayers": "Every player on the field",
+  "versionUpdated": "Updated to the latest version"
 }

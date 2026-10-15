@@ -424,5 +424,21 @@
   "famousFor": "Známy vďaka",
   "backToPicker": "Späť na športy",
   "startWithLineup": "Začať s touto zostavou",
-  "cameraFollow": "Sledovať hviezdu"
+  "cameraFollow": "Sledovať hviezdu",
+  "quitMatch": "Ukončiť zápas",
+  "quitMatchHint": "Ukončiť tento zápas a vrátiť sa do ponuky športov (stránka zostane otvorená)",
+  "exitApp": "Zavrieť aplikáciu",
+  "exitAppHint": "Zavrieť celú aplikáciu aj túto webovú stránku",
+  "leaveTitle": "Ukončiť tento zápas, alebo zavrieť celú aplikáciu?",
+  "quitConfirm": "Ukončiť zápas, späť do ponuky športov",
+  "exitConfirm": "Zavrieť celú aplikáciu aj stránku",
+  "orderN": "{n}. pálkar",
+  "battingOrder": "Vaše poradie pálkarov",
+  "defenseLineup": "Obrana súpera ({n} hráčov)",
+  "nowBatting": "Na pálke",
+  "changePlayer": "Zmeniť hráča",
+  "leftHanded": "Ľavák",
+  "rightHanded": "Pravák",
+  "onFieldPlayers": "Všetci hráči na ihrisku",
+  "versionUpdated": "Aktualizované na najnovšiu verziu"
 }

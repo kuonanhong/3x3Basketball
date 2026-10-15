@@ -424,5 +424,21 @@
   "famousFor": "成名事迹",
   "backToPicker": "返回运动项目",
   "startWithLineup": "以此名单开始",
-  "cameraFollow": "跟随明星"
+  "cameraFollow": "跟随明星",
+  "quitMatch": "结束本场",
+  "quitMatchHint": "结束本场比赛，回到运动菜单（网页不关闭）",
+  "exitApp": "关闭程序",
+  "exitAppHint": "关闭整个应用程序与网页",
+  "leaveTitle": "要结束本场比赛，还是关闭整个程序？",
+  "quitConfirm": "结束本场，回到运动菜单",
+  "exitConfirm": "关闭整个程序与网页",
+  "orderN": "第 {n} 棒",
+  "battingOrder": "我方击球顺序",
+  "defenseLineup": "对方防守（{n} 人）",
+  "nowBatting": "击球中",
+  "changePlayer": "更换球员",
+  "leftHanded": "左手",
+  "rightHanded": "右手",
+  "onFieldPlayers": "场上全部球员",
+  "versionUpdated": "已更新到最新版本"
 }

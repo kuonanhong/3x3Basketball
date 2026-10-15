@@ -424,5 +424,21 @@
   "famousFor": "Nima bilan mashhur",
   "backToPicker": "Sport turlariga qaytish",
   "startWithLineup": "Shu tarkib bilan boshlash",
-  "cameraFollow": "Yulduzni kuzatish"
+  "cameraFollow": "Yulduzni kuzatish",
+  "quitMatch": "Oʻyinni tugatish",
+  "quitMatchHint": "Bu oʻyinni tugatib, sport turlari menyusiga qaytish (sahifa ochiq qoladi)",
+  "exitApp": "Ilovani yopish",
+  "exitAppHint": "Butun ilovani va ushbu veb-sahifani yopish",
+  "leaveTitle": "Bu oʻyinni tugatasizmi yoki butun ilovani yopasizmi?",
+  "quitConfirm": "Oʻyinni tugatish, sport menyusiga qaytish",
+  "exitConfirm": "Butun ilova va sahifani yopish",
+  "orderN": "{n}-zarba beruvchi",
+  "battingOrder": "Sizning zarba berish tartibingiz",
+  "defenseLineup": "Raqib himoyasi ({n} oʻyinchi)",
+  "nowBatting": "Zarba bermoqda",
+  "changePlayer": "Oʻyinchini almashtirish",
+  "leftHanded": "Chapaqay",
+  "rightHanded": "Oʻnaqay",
+  "onFieldPlayers": "Maydondagi barcha oʻyinchilar",
+  "versionUpdated": "Eng soʻnggi versiyaga yangilandi"
 }

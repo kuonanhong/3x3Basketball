@@ -424,5 +424,21 @@
   "famousFor": "Čím se proslavil(a)",
   "backToPicker": "Zpět na sporty",
   "startWithLineup": "Začít s touto sestavou",
-  "cameraFollow": "Sledovat hvězdu"
+  "cameraFollow": "Sledovat hvězdu",
+  "quitMatch": "Ukončit zápas",
+  "quitMatchHint": "Ukončit tento zápas a vrátit se do nabídky sportů (stránka zůstane otevřená)",
+  "exitApp": "Zavřít aplikaci",
+  "exitAppHint": "Zavřít celou aplikaci i tuto webovou stránku",
+  "leaveTitle": "Ukončit tento zápas, nebo zavřít celou aplikaci?",
+  "quitConfirm": "Ukončit zápas, zpět do nabídky sportů",
+  "exitConfirm": "Zavřít celou aplikaci i stránku",
+  "orderN": "{n}. pálkař",
+  "battingOrder": "Vaše pořadí pálkařů",
+  "defenseLineup": "Obrana soupeře (hráčů: {n})",
+  "nowBatting": "Na pálce",
+  "changePlayer": "Vyměnit hráče",
+  "leftHanded": "Levák",
+  "rightHanded": "Pravák",
+  "onFieldPlayers": "Všichni hráči na hřišti",
+  "versionUpdated": "Aktualizováno na nejnovější verzi"
 }

@@ -424,5 +424,21 @@
   "famousFor": "Poznat po",
   "backToPicker": "Natrag na sportove",
   "startWithLineup": "Započni s ovom postavom",
-  "cameraFollow": "Prati zvijezdu"
+  "cameraFollow": "Prati zvijezdu",
+  "quitMatch": "Završi utakmicu",
+  "quitMatchHint": "Završi ovu utakmicu i vrati se na izbornik sportova (stranica ostaje otvorena)",
+  "exitApp": "Zatvori aplikaciju",
+  "exitAppHint": "Zatvori cijelu aplikaciju i ovu web-stranicu",
+  "leaveTitle": "Završiti ovu utakmicu ili zatvoriti cijelu aplikaciju?",
+  "quitConfirm": "Završi utakmicu, natrag na izbornik sportova",
+  "exitConfirm": "Zatvori cijelu aplikaciju i stranicu",
+  "orderN": "{n}. udarač",
+  "battingOrder": "Vaš redoslijed udarača",
+  "defenseLineup": "Protivnička obrana ({n} igrača)",
+  "nowBatting": "Na udaranju",
+  "changePlayer": "Promijeni igrača",
+  "leftHanded": "Ljevak",
+  "rightHanded": "Dešnjak",
+  "onFieldPlayers": "Svi igrači na terenu",
+  "versionUpdated": "Ažurirano na najnoviju verziju"
 }

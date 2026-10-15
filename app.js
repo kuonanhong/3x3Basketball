@@ -48,6 +48,7 @@
     document.documentElement.lang = language;
     document.documentElement.dir = (localeData.languages.find(x => x.code === language) || {}).dir || 'ltr';
     document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = message(el.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-title]').forEach(el => { const v = message(el.dataset.i18nTitle); el.title = v; el.setAttribute('aria-label', v); });
     document.title = message('titleV7') + ' · SmartAction Sports';
     $('language').value = language;
     $('language').setAttribute('aria-label', message('language'));
@@ -195,8 +196,23 @@
   }
   function hidePicker() { $('pickerOverlay').hidden = true; if (!playing) $('startOverlay').hidden = false; }
   $('changeSport').addEventListener('click', showPicker); $('endChangeSport').addEventListener('click', showPicker);
-  $('closeApp').addEventListener('click', () => { finishReplay(); if (playing && !core.ended) setPaused(true); $('closeOverlay').hidden = false; });
-  $('closeCancel').addEventListener('click', () => { $('closeOverlay').hidden = true; });
+  /* Two exits, like any desktop or phone app: "End match" (back to the sports menu, page stays) and ✕ "Close app". */
+  function endMatch() {
+    finishReplay(); playing = false; paused = false; pendingHighlight = null; clearInput();
+    $('pauseOverlay').hidden = true; $('closeOverlay').hidden = true; $('endOverlay').hidden = true; $('chargeHud').hidden = true;
+    core.reset(); history.length = 0; window.dispatchEvent(new CustomEvent('sa-match-reset')); showPicker();
+  }
+  function askLeave(focus) {
+    if (!playing || core.ended) { if (focus === 'quit') { endMatch(); return; } }
+    finishReplay(); if (playing && !core.ended) setPaused(true);
+    $('pauseOverlay').hidden = true; $('closeOverlay').hidden = false;
+    $('quitConfirm').classList.toggle('suggested', focus === 'quit'); $('closeConfirm').classList.toggle('suggested', focus === 'exit');
+    try { (focus === 'quit' ? $('quitConfirm') : $('closeConfirm')).focus({ preventScroll: true }); } catch (_) {}
+  }
+  $('quitMatch').addEventListener('click', () => askLeave('quit'));
+  $('closeApp').addEventListener('click', () => askLeave('exit'));
+  $('quitConfirm').addEventListener('click', endMatch);
+  $('closeCancel').addEventListener('click', () => { $('closeOverlay').hidden = true; if (playing && paused) $('pauseOverlay').hidden = false; });
   $('closeConfirm').addEventListener('click', async () => {
     playing = false; clearInput(); $('closeOverlay').hidden = true; $('closedOverlay').hidden = false;
     try { if (document.fullscreenElement) await document.exitFullscreen(); } catch (_) {}
@@ -347,6 +363,7 @@
   const RESULT_KEYS = { single: 'result_single', double: 'result_double', triple: 'result_triple', homeRun: 'result_homeRun', walk: 'result_walk', strikeout: 'result_strikeout', flyOut: 'result_flyOut', groundOut: 'result_groundOut', lineOut: 'result_lineOut',
     foul: 'result_foul', bowled: 'result_bowled', caught: 'result_caught', six: 'result_six', four: 'result_four', dot: 'result_dot', strikeBowl: 'strikeBowling', spare: 'spare', gutter: 'gutter', scratch: 'scratch', holeInOne: 'holeInOne' };
   function onEvents(events) {
+    if (events.length) window.dispatchEvent(new CustomEvent('sa-events', { detail: events }));
     if (events.some(e => e.type === 'score')) playSound('score'); else if (events.some(e => e.type === 'contact' || e.type === 'pinsDown' || e.type === 'ballClick')) playSound('hit'); else if (events.some(e => e.type === 'pass')) playSound('pass');
     const rank = { dunk: 6, three: 5, layup: 4, block: 3, steal: 2, score: 1, goal: 5, homeRun: 6, hit: 3, touchdown: 6, try: 5, point: 4, bullseye: 6, finish: 5, wicket: 5, boundary: 5, holed: 6, pinsDown: 2, pocketed: 3, catch: 4 };
     window.dispatchEvent(new CustomEvent('sa-game-events', { detail: events }));
@@ -431,7 +448,13 @@
   frameId = requestAnimationFrame(frame);
   benchmark().catch(() => { benchmarkDone = true; setQuality('lite'); $('start').disabled = false; $('benchmarkStatus').textContent = message('lite'); });
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && ownScript && ownScript.src) {
-    navigator.serviceWorker.register(new URL('sw.js', assetBase).href).catch(() => {});
+    const hadController = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.register(new URL('sw.js', assetBase).href, { updateViaCache: 'none' }).then(reg => reg.update && reg.update()).catch(() => {});
+    // a newer version took over: reload once (only when no match is running) so HTML, JS and CSS never mix versions
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!hadController) return; let done = false; try { done = sessionStorage.getItem('sa-sw-reloaded') === '1'; sessionStorage.setItem('sa-sw-reloaded', '1'); } catch (_) {}
+      if (!done && !playing) location.reload(); else toast('versionUpdated');
+    });
   }
   window.addEventListener('pagehide', () => { clearInput(); cancelAnimationFrame(frameId); });
   window.addEventListener('pageshow', e => { if (e.persisted) { lastFrame = performance.now(); frameId = requestAnimationFrame(frame); } });

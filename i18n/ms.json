@@ -424,5 +424,21 @@
   "famousFor": "Terkenal dengan",
   "backToPicker": "Kembali ke senarai sukan",
   "startWithLineup": "Mula dengan barisan ini",
-  "cameraFollow": "Ikut bintang"
+  "cameraFollow": "Ikut bintang",
+  "quitMatch": "Tamatkan perlawanan",
+  "quitMatchHint": "Tamatkan perlawanan ini dan kembali ke menu sukan (halaman kekal dibuka)",
+  "exitApp": "Tutup aplikasi",
+  "exitAppHint": "Tutup seluruh aplikasi dan halaman web ini",
+  "leaveTitle": "Tamatkan perlawanan ini, atau tutup seluruh aplikasi?",
+  "quitConfirm": "Tamatkan perlawanan, kembali ke menu sukan",
+  "exitConfirm": "Tutup seluruh aplikasi dan halaman",
+  "orderN": "Pemukul ke-{n}",
+  "battingOrder": "Susunan pemukul anda",
+  "defenseLineup": "Pertahanan lawan ({n} pemain)",
+  "nowBatting": "Sedang memukul",
+  "changePlayer": "Tukar pemain",
+  "leftHanded": "Kidal",
+  "rightHanded": "Tangan kanan",
+  "onFieldPlayers": "Semua pemain di padang",
+  "versionUpdated": "Dikemas kini ke versi terkini"
 }

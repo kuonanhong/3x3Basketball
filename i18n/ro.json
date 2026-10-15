@@ -424,5 +424,21 @@
   "famousFor": "Cunoscut pentru",
   "backToPicker": "Înapoi la sporturi",
   "startWithLineup": "Începe cu această echipă",
-  "cameraFollow": "Urmărește vedeta"
+  "cameraFollow": "Urmărește vedeta",
+  "quitMatch": "Încheie meciul",
+  "quitMatchHint": "Încheie acest meci și revino la meniul de sporturi (pagina rămâne deschisă)",
+  "exitApp": "Închide aplicația",
+  "exitAppHint": "Închide întreaga aplicație și această pagină web",
+  "leaveTitle": "Închei acest meci sau închizi întreaga aplicație?",
+  "quitConfirm": "Încheie meciul, înapoi la meniul de sporturi",
+  "exitConfirm": "Închide întreaga aplicație și pagina",
+  "orderN": "Batătorul nr. {n}",
+  "battingOrder": "Ordinea ta la bătaie",
+  "defenseLineup": "Apărarea adversă ({n} jucători)",
+  "nowBatting": "La bătaie",
+  "changePlayer": "Schimbă jucătorul",
+  "leftHanded": "Stângaci",
+  "rightHanded": "Dreptaci",
+  "onFieldPlayers": "Toți jucătorii de pe teren",
+  "versionUpdated": "Actualizat la cea mai recentă versiune"
 }

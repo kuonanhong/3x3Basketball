@@ -424,5 +424,21 @@
   "famousFor": "מפורסם בזכות",
   "backToPicker": "חזרה לענפי הספורט",
   "startWithLineup": "התחל עם ההרכב הזה",
-  "cameraFollow": "עקוב אחרי הכוכב"
+  "cameraFollow": "עקוב אחרי הכוכב",
+  "quitMatch": "סיום משחק",
+  "quitMatchHint": "סיום המשחק הזה וחזרה לתפריט הענפים (הדף נשאר פתוח)",
+  "exitApp": "סגירת האפליקציה",
+  "exitAppHint": "סגירת האפליקציה כולה ודף האינטרנט הזה",
+  "leaveTitle": "לסיים את המשחק הזה, או לסגור את כל האפליקציה?",
+  "quitConfirm": "סיום משחק, חזרה לתפריט הענפים",
+  "exitConfirm": "סגירת כל האפליקציה והדף",
+  "orderN": "חובט מס׳ {n}",
+  "battingOrder": "סדר החבטות שלך",
+  "defenseLineup": "הגנת היריב ({n} שחקנים)",
+  "nowBatting": "בחבטה",
+  "changePlayer": "החלפת שחקן",
+  "leftHanded": "שמאלי",
+  "rightHanded": "ימני",
+  "onFieldPlayers": "כל השחקנים במגרש",
+  "versionUpdated": "עודכן לגרסה האחרונה"
 }

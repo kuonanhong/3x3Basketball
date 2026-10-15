@@ -424,5 +424,21 @@
   "famousFor": "Célèbre pour",
   "backToPicker": "Retour aux sports",
   "startWithLineup": "Commencer avec cette composition",
-  "cameraFollow": "Suivre la star"
+  "cameraFollow": "Suivre la star",
+  "quitMatch": "Terminer le match",
+  "quitMatchHint": "Terminer ce match et revenir au menu des sports (la page reste ouverte)",
+  "exitApp": "Fermer l'appli",
+  "exitAppHint": "Fermer toute l'application et cette page web",
+  "leaveTitle": "Terminer ce match ou fermer toute l'application ?",
+  "quitConfirm": "Terminer le match, retour au menu des sports",
+  "exitConfirm": "Fermer toute l'application et la page",
+  "orderN": "{n}e frappeur",
+  "battingOrder": "Votre ordre des frappeurs",
+  "defenseLineup": "Défense adverse ({n} joueurs)",
+  "nowBatting": "Au bâton",
+  "changePlayer": "Changer de joueur",
+  "leftHanded": "Gaucher",
+  "rightHanded": "Droitier",
+  "onFieldPlayers": "Tous les joueurs sur le terrain",
+  "versionUpdated": "Mis à jour vers la dernière version"
 }

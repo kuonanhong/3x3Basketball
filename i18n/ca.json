@@ -424,5 +424,21 @@
   "famousFor": "Conegut per",
   "backToPicker": "Torna als esports",
   "startWithLineup": "Comença amb aquesta alineació",
-  "cameraFollow": "Segueix l'estrella"
+  "cameraFollow": "Segueix l'estrella",
+  "quitMatch": "Acaba el partit",
+  "quitMatchHint": "Acaba aquest partit i torna al menú d'esports (la pàgina continua oberta)",
+  "exitApp": "Tanca l'app",
+  "exitAppHint": "Tanca tota l'aplicació i aquesta pàgina web",
+  "leaveTitle": "Vols acabar aquest partit o tancar tota l'aplicació?",
+  "quitConfirm": "Acaba el partit, torna al menú d'esports",
+  "exitConfirm": "Tanca tota l'aplicació i la pàgina",
+  "orderN": "Batedor núm. {n}",
+  "battingOrder": "El teu ordre de bateig",
+  "defenseLineup": "Defensa rival ({n} jugadors)",
+  "nowBatting": "Al bat",
+  "changePlayer": "Canvia de jugador",
+  "leftHanded": "Esquerrà",
+  "rightHanded": "Dretà",
+  "onFieldPlayers": "Tots els jugadors al camp",
+  "versionUpdated": "Actualitzat a la darrera versió"
 }

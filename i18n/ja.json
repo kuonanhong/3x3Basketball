@@ -424,5 +424,21 @@
   "famousFor": "主な実績",
   "backToPicker": "競技選択に戻る",
   "startWithLineup": "このメンバーで開始",
-  "cameraFollow": "スターを追う"
+  "cameraFollow": "スターを追う",
+  "quitMatch": "試合終了",
+  "quitMatchHint": "この試合を終了してスポーツメニューに戻ります（ページは開いたまま）",
+  "exitApp": "アプリを閉じる",
+  "exitAppHint": "アプリ全体とこのWebページを閉じます",
+  "leaveTitle": "この試合を終了しますか？それともアプリ全体を閉じますか？",
+  "quitConfirm": "試合を終了してスポーツメニューへ",
+  "exitConfirm": "アプリとページをすべて閉じる",
+  "orderN": "{n}番打者",
+  "battingOrder": "自チームの打順",
+  "defenseLineup": "相手守備（{n}人）",
+  "nowBatting": "打席中",
+  "changePlayer": "選手交代",
+  "leftHanded": "左利き",
+  "rightHanded": "右利き",
+  "onFieldPlayers": "フィールド上の全選手",
+  "versionUpdated": "最新バージョンに更新しました"
 }

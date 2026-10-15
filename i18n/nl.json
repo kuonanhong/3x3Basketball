@@ -424,5 +424,21 @@
   "famousFor": "Bekend om",
   "backToPicker": "Terug naar sporten",
   "startWithLineup": "Starten met deze opstelling",
-  "cameraFollow": "Volg de ster"
+  "cameraFollow": "Volg de ster",
+  "quitMatch": "Wedstrijd beëindigen",
+  "quitMatchHint": "Deze wedstrijd beëindigen en terug naar het sportmenu (de pagina blijft open)",
+  "exitApp": "App sluiten",
+  "exitAppHint": "De hele app en deze webpagina sluiten",
+  "leaveTitle": "Deze wedstrijd beëindigen of de hele app sluiten?",
+  "quitConfirm": "Wedstrijd beëindigen, terug naar sportmenu",
+  "exitConfirm": "Hele app en pagina sluiten",
+  "orderN": "{n}e slagman",
+  "battingOrder": "Jouw slagvolgorde",
+  "defenseLineup": "Verdediging tegenstander ({n} spelers)",
+  "nowBatting": "Aan slag",
+  "changePlayer": "Speler wisselen",
+  "leftHanded": "Linkshandig",
+  "rightHanded": "Rechtshandig",
+  "onFieldPlayers": "Alle spelers op het veld",
+  "versionUpdated": "Bijgewerkt naar de nieuwste versie"
 }

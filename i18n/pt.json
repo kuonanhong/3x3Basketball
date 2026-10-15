@@ -424,5 +424,21 @@
   "famousFor": "Conhecido por",
   "backToPicker": "Voltar aos desportos",
   "startWithLineup": "Começar com esta formação",
-  "cameraFollow": "Seguir a estrela"
+  "cameraFollow": "Seguir a estrela",
+  "quitMatch": "Encerrar partida",
+  "quitMatchHint": "Encerrar esta partida e voltar ao menu de esportes (a página continua aberta)",
+  "exitApp": "Fechar app",
+  "exitAppHint": "Fechar todo o aplicativo e esta página web",
+  "leaveTitle": "Encerrar esta partida ou fechar todo o aplicativo?",
+  "quitConfirm": "Encerrar partida e voltar ao menu de esportes",
+  "exitConfirm": "Fechar todo o aplicativo e a página",
+  "orderN": "{n}º rebatedor",
+  "battingOrder": "Sua ordem de rebatedores",
+  "defenseLineup": "Defesa adversária ({n} jogadores)",
+  "nowBatting": "No bastão",
+  "changePlayer": "Trocar jogador",
+  "leftHanded": "Canhoto",
+  "rightHanded": "Destro",
+  "onFieldPlayers": "Todos os jogadores em campo",
+  "versionUpdated": "Atualizado para a versão mais recente"
 }

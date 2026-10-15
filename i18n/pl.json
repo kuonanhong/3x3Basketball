@@ -424,5 +424,21 @@
   "famousFor": "Słynie z",
   "backToPicker": "Wróć do dyscyplin",
   "startWithLineup": "Zacznij z tym składem",
-  "cameraFollow": "Śledź gwiazdę"
+  "cameraFollow": "Śledź gwiazdę",
+  "quitMatch": "Zakończ mecz",
+  "quitMatchHint": "Zakończ ten mecz i wróć do menu sportów (strona pozostanie otwarta)",
+  "exitApp": "Zamknij aplikację",
+  "exitAppHint": "Zamknij całą aplikację i tę stronę internetową",
+  "leaveTitle": "Zakończyć ten mecz czy zamknąć całą aplikację?",
+  "quitConfirm": "Zakończ mecz, wróć do menu sportów",
+  "exitConfirm": "Zamknij całą aplikację i stronę",
+  "orderN": "Pałkarz nr {n}",
+  "battingOrder": "Twoja kolejność odbijania",
+  "defenseLineup": "Obrona przeciwnika (graczy: {n})",
+  "nowBatting": "Przy kiju",
+  "changePlayer": "Zmień zawodnika",
+  "leftHanded": "Leworęczny",
+  "rightHanded": "Praworęczny",
+  "onFieldPlayers": "Wszyscy zawodnicy na boisku",
+  "versionUpdated": "Zaktualizowano do najnowszej wersji"
 }

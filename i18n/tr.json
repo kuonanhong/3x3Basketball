@@ -424,5 +424,21 @@
   "famousFor": "Öne çıkan özelliği",
   "backToPicker": "Sporlara dön",
   "startWithLineup": "Bu kadroyla başla",
-  "cameraFollow": "Yıldızı takip et"
+  "cameraFollow": "Yıldızı takip et",
+  "quitMatch": "Maçı bitir",
+  "quitMatchHint": "Bu maçı bitir ve spor menüsüne dön (sayfa açık kalır)",
+  "exitApp": "Uygulamayı kapat",
+  "exitAppHint": "Tüm uygulamayı ve bu web sayfasını kapat",
+  "leaveTitle": "Bu maçı bitirmek mi, yoksa tüm uygulamayı kapatmak mı?",
+  "quitConfirm": "Maçı bitir, spor menüsüne dön",
+  "exitConfirm": "Tüm uygulamayı ve sayfayı kapat",
+  "orderN": "{n}. vurucu",
+  "battingOrder": "Vuruş sıranız",
+  "defenseLineup": "Rakip savunma ({n} oyuncu)",
+  "nowBatting": "Vuruşta",
+  "changePlayer": "Oyuncu değiştir",
+  "leftHanded": "Solak",
+  "rightHanded": "Sağlak",
+  "onFieldPlayers": "Sahadaki tüm oyuncular",
+  "versionUpdated": "En son sürüme güncellendi"
 }

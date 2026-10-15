@@ -424,5 +424,21 @@
   "famousFor": "Känd för",
   "backToPicker": "Tillbaka till idrotter",
   "startWithLineup": "Starta med denna uppställning",
-  "cameraFollow": "Följ stjärnan"
+  "cameraFollow": "Följ stjärnan",
+  "quitMatch": "Avsluta match",
+  "quitMatchHint": "Avsluta matchen och gå tillbaka till sportmenyn (sidan förblir öppen)",
+  "exitApp": "Stäng appen",
+  "exitAppHint": "Stäng hela appen och den här webbsidan",
+  "leaveTitle": "Avsluta matchen eller stänga hela appen?",
+  "quitConfirm": "Avsluta match, tillbaka till sportmenyn",
+  "exitConfirm": "Stäng hela appen och sidan",
+  "orderN": "Slagman {n}",
+  "battingOrder": "Din slagordning",
+  "defenseLineup": "Motståndarnas försvar ({n} spelare)",
+  "nowBatting": "Vid slag",
+  "changePlayer": "Byt spelare",
+  "leftHanded": "Vänsterhänt",
+  "rightHanded": "Högerhänt",
+  "onFieldPlayers": "Alla spelare på planen",
+  "versionUpdated": "Uppdaterad till senaste versionen"
 }

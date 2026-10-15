@@ -424,5 +424,21 @@
   "famousFor": "معروف به",
   "backToPicker": "بازگشت به ورزش‌ها",
   "startWithLineup": "شروع با این ترکیب",
-  "cameraFollow": "دنبال کردن ستاره"
+  "cameraFollow": "دنبال کردن ستاره",
+  "quitMatch": "پایان مسابقه",
+  "quitMatchHint": "این مسابقه را تمام کنید و به منوی ورزش‌ها برگردید (صفحه باز می‌ماند)",
+  "exitApp": "بستن برنامه",
+  "exitAppHint": "کل برنامه و این صفحهٔ وب را ببندید",
+  "leaveTitle": "این مسابقه را تمام می‌کنید یا کل برنامه را می‌بندید؟",
+  "quitConfirm": "پایان مسابقه، بازگشت به منوی ورزش‌ها",
+  "exitConfirm": "بستن کل برنامه و صفحه",
+  "orderN": "ضربه‌زن شمارهٔ {n}",
+  "battingOrder": "ترتیب ضربه‌زنان شما",
+  "defenseLineup": "دفاع حریف ({n} بازیکن)",
+  "nowBatting": "در حال ضربه",
+  "changePlayer": "تعویض بازیکن",
+  "leftHanded": "چپ‌دست",
+  "rightHanded": "راست‌دست",
+  "onFieldPlayers": "همهٔ بازیکنان داخل زمین",
+  "versionUpdated": "به آخرین نسخه به‌روزرسانی شد"
 }

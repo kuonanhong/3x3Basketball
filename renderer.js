@@ -788,15 +788,28 @@
         if (side === 1) equipmentHand = hand; else otherHand = hand;
       }
       // jersey number on the chest
+      let numbered = false;
       if (this.quality !== 'lite') {
         const chest = this.project(x + frontX * .16 * size, y + (waistY + shoulderY) / 2 + .05, z + frontZ * .16 * size);
-        if (chest && chest.scale * size > 36) {
+        if (chest && chest.scale * size > 36) { numbered = true;
           ctx.font = `800 ${Math.max(7, Math.min(26, chest.scale * .11 * size))}px system-ui, sans-serif`; ctx.fillStyle = 'rgba(255,255,255,.92)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
           ctx.fillText(String(look.jerseyNumber !== null ? look.jerseyNumber : (p.number === undefined ? Number(p.id) + 1 : p.number)), chest.x, chest.y);
         }
       }
       const head = this.project(x, y + headY, z);
-      if (head) {
+      /* where is the head looking, relative to the camera? (a batter looks at the pitcher, so from behind the plate we see the back of his helmet) */
+      const lookA = Number.isFinite(p.lookAngle) ? p.lookAngle : angle, cam = this._camera.eye || { x, z: z + 1 };
+      const cdx = cam.x - x, cdz = cam.z - z, cl = Math.hypot(cdx, cdz) || 1, towardCamera = (Math.sin(lookA) * cdx + Math.cos(lookA) * cdz) / cl;
+      if (head && towardCamera < -0.35 && this._camera.view !== 'first') {
+        const r = Math.min(76, Math.max(2.3, head.scale * .165 * size)), helmet = look.accessory === 'cap' || look.hairStyle === 'cap' || look.accessory === 'helmet' || snapshot.family === 'batting';
+        ctx.fillStyle = skin; ctx.beginPath(); ctx.arc(head.x, head.y, r, 0, TAU); ctx.fill();
+        if (helmet) {
+          // back of a batting helmet / cap: team-coloured shell, darker rim, ear flap on the pitcher-facing side
+          ctx.fillStyle = color; ctx.beginPath(); ctx.arc(head.x, head.y - r * .05, r * 1.06, Math.PI * .92, Math.PI * 2.08); ctx.lineTo(head.x + r * .9, head.y + r * .35); ctx.lineTo(head.x - r * .9, head.y + r * .35); ctx.closePath(); ctx.fill();
+          ctx.strokeStyle = TEAM_DARK[p.team === 1 ? 1 : 0]; ctx.lineWidth = Math.max(1, r * .14); ctx.beginPath(); ctx.arc(head.x, head.y - r * .05, r * 1.06, Math.PI * .95, Math.PI * 2.05); ctx.stroke();
+          ctx.fillStyle = 'rgba(255,255,255,.28)'; ctx.beginPath(); ctx.ellipse(head.x - r * .35, head.y - r * .55, r * .32, r * .14, -.4, 0, TAU); ctx.fill();
+        } else { ctx.fillStyle = look.hair; ctx.beginPath(); ctx.arc(head.x, head.y - r * .08, r * 1.02, Math.PI * .85, Math.PI * 2.15); ctx.closePath(); ctx.fill(); }
+      } else if (head) {
         const portrait = options.portraits && options.portraits[p.athleteId];
         const r = Math.min(76, Math.max(2.3, head.scale * (portrait ? .17 : .155) * size));
         // hair behind the head first (long/afro/braids)
@@ -822,7 +835,7 @@
         this._accessory(head, r, look, color);
       }
       if (equipmentHand) this._equipment(equipmentHand, armAngle, snapshot.sport, action, shoulderAngle, otherHand, snapshot, p);
-      if (options.labels !== false && this.quality !== 'lite') {
+      if (options.labels !== false && this.quality !== 'lite' && !numbered) {
         const label = this.project(x, y + 1.21 * size + waterY, z - .06);
         if (label && !swim) { ctx.font = `800 ${Math.max(8, Math.min(35, label.scale * .2))}px system-ui, sans-serif`; ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(p.number === undefined ? Number(p.id) + 1 : p.number), label.x, label.y); }
       }
@@ -830,7 +843,7 @@
         const tag = this.project(x, y + headY + .62, z);
         if (tag && tag.scale * size > 40) {
           const full = snapshot.family === 'batting' || !snapshot.sport || /basketball/.test(snapshot.sport) || tag.scale * size > 110;
-          const text = full ? String(p.displayName) : String(p.displayName).split(' ').slice(-1)[0];
+          const parts = String(p.displayName).split(' '), last = /^(jr\.?|sr\.?|ii|iii|iv)$/i.test(parts[parts.length - 1] || '') && parts.length > 2 ? parts.slice(-2).join(' ') : parts.slice(-1)[0], text = full ? String(p.displayName) : last;
           ctx.font = `700 ${Math.max(9, Math.min(16, tag.scale * .085))}px system-ui, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
           const w = ctx.measureText ? ctx.measureText(text).width : text.length * 7;
           ctx.fillStyle = 'rgba(8,18,24,.62)'; ctx.fillRect(tag.x - w / 2 - 5, tag.y - 15, w + 10, 17);

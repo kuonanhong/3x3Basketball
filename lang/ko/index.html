@@ -10,7 +10,7 @@
   <link rel="canonical" href="https://kuonanhong.github.io/3x3Basketball/lang/ko/">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="sports.css"><link rel="stylesheet" href="stage.css">
+  <link rel="stylesheet" href="styles.css?v=7.2.0"><link rel="stylesheet" href="sports.css?v=7.2.0"><link rel="stylesheet" href="stage.css?v=7.2.0">
   <title>SmartAction 월드 구기 스포츠 · SmartAction Sports</title>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"SmartAction Sports","description":"Free local practice for 30 Olympic / Asian Games ball sports with one-screen two-hand controls, 54 interface languages, licensed scene photos, athlete-based rosters, replays and an optional on-device generative coach.","url":"https://kuonanhong.github.io/3x3Basketball/","gamePlatform":["Web browser"],"playMode":"SinglePlayer","isAccessibleForFree":true,"genre":["Sports","Training"],"author":{"@type":"Organization","name":"SmartAction"}}</script>
   <link rel="alternate" hreflang="zh-Hant" href="https://kuonanhong.github.io/3x3Basketball/lang/zh-Hant/">
@@ -83,11 +83,15 @@
         <label class="hud-field"><span class="sr-only" data-i18n="sportPicker">종목 선택</span><select id="sportQuick" aria-label="Sport"></select></label>
         <label class="hud-field"><span class="sr-only" data-i18n="camera">시점</span><select id="cameraQuick" aria-label="Camera"><option value="wide" data-i18n="wideView">광각 (경기장 전체)</option><option value="third" data-i18n="thirdPerson">3인칭</option><option value="close" data-i18n="closePerson">가까이 따라가기</option><option value="first" data-i18n="firstPerson">1인칭</option></select></label>
         <button id="pause" data-i18n="pause">일시 정지</button><button id="replay" data-i18n="replay">하이라이트 다시 보기</button><button id="switchPlayer" data-i18n="switchPlayer">선수 전환</button><button id="sound" data-i18n="sound">소리</button><button id="fullscreen" data-i18n="fullscreen">전체 화면</button><button id="help" data-i18n="help">도움말</button><button id="dockToggle" aria-pressed="true" title="Touch controls">☷</button>
-        <button id="closeApp" class="close-button" aria-label="Close" title="Close"><span aria-hidden="true">✕</span></button>
+      </div>
+      <div class="hud-exit">
+        <button id="quitMatch" class="quit-button" data-i18n-title="quitMatchHint" title="結束本場比賽，回到運動選單（網頁不關閉）"><span class="ico" aria-hidden="true">⏹</span><span data-i18n="quitMatch">경기 종료</span></button>
+        <button id="closeApp" class="close-button" data-i18n-title="exitAppHint" aria-label="關閉整個應用程式與網頁" title="關閉整個應用程式與網頁"><span class="ico" aria-hidden="true">✕</span><span class="close-label" data-i18n="exitApp">앱 닫기</span></button>
       </div>
     </div>
     <div class="court-badge"><span id="sportBadge">3×3</span> <span id="venueBadge">WORLD</span> <i></i> <span id="qualityBadge">AUTO</span> <i></i> <span id="eventBadge"></span></div>
     <div class="count-hud" id="countHud" hidden><span class="count-group"><b data-i18n="balls">볼</b><i id="countBalls">0</i></span><span class="count-group"><b data-i18n="strikes">스트라이크</b><i id="countStrikes">0</i></span><span class="count-group"><b data-i18n="outs">아웃</b><i id="countOuts">0</i></span><span class="count-group"><b data-i18n="inning">이닝</b><i id="countInning">1</i></span><span id="countPitch" class="count-pitch"></span></div>
+    <div class="matchup-hud" id="matchupHud" hidden></div>
     <div class="metrics-hud" id="metricsHud" aria-live="off"></div>
     <div class="result-flash" id="resultFlash" hidden></div>
     <div class="scene-caption"><span id="sceneName"></span><a id="sceneCredit" target="_blank" rel="noopener noreferrer"></a></div>
@@ -98,7 +102,10 @@
     <div id="startOverlay" class="start-overlay" hidden><div class="start-card"><span class="ball-icon" aria-hidden="true">◉</span><p class="eyebrow">MOVE TOGETHER. PLAY ANYWHERE.</p><h2 id="startTitle"></h2><p id="startRule" class="start-rule"></p><div id="startLineup" class="start-lineup"></div><button id="start" class="primary" data-i18n="start">경기 시작</button><div class="start-actions"><button id="changeSport" data-i18n="changeSport">종목 변경</button><button id="editLineup" data-i18n="lineup">선발 라인업</button></div><small id="benchmarkStatus" data-i18n="benchmark">기기 성능 확인 중…</small></div></div>
     <div id="pauseOverlay" class="pause-overlay" hidden><button id="resume" class="primary" data-i18n="resume">계속하기</button></div>
     <div id="endOverlay" class="pause-overlay" hidden><div class="end-card"><h2 data-i18n="endGame">경기 종료</h2><p id="result"></p><button id="playAgain" class="primary" data-i18n="restart">다시 시작</button><button id="endChangeSport" data-i18n="changeSport">종목 변경</button></div></div>
-    <div id="closeOverlay" class="pause-overlay" hidden><div class="end-card"><h2 data-i18n="closeTitle">SmartAction 스포츠를 종료할까요?</h2><p data-i18n="closeBody">경기가 끝나고 이 페이지가 닫힙니다. 언어와 설정은 다음에도 그대로 유지됩니다.</p><button id="closeConfirm" class="primary" data-i18n="closeConfirm">페이지 닫기</button><button id="closeCancel" data-i18n="closeCancel">계속 플레이</button></div></div>
+    <div id="closeOverlay" class="pause-overlay" hidden><div class="end-card leave-card"><h2 data-i18n="leaveTitle">이 경기를 종료할까요, 아니면 앱 전체를 닫을까요?</h2>
+      <button id="quitConfirm" class="leave-option"><span class="ico" aria-hidden="true">⏹</span><span><strong data-i18n="quitConfirm">경기 종료 후 스포츠 메뉴로</strong><small data-i18n="quitMatchHint">이 경기를 종료하고 스포츠 메뉴로 돌아갑니다(페이지는 열린 상태로 유지)</small></span></button>
+      <button id="closeConfirm" class="leave-option danger"><span class="ico" aria-hidden="true">✕</span><span><strong data-i18n="exitConfirm">앱과 페이지 모두 닫기</strong><small data-i18n="closeBody">경기가 끝나고 이 페이지가 닫힙니다. 언어와 설정은 다음에도 그대로 유지됩니다.</small></span></button>
+      <button id="closeCancel" class="primary" data-i18n="closeCancel">계속 플레이</button></div></div>
     <div id="closedOverlay" class="pause-overlay" hidden><div class="end-card"><h2 data-i18n="closedTitle">종료됨</h2><p data-i18n="closedBody">이제 이 탭을 안전하게 닫아도 됩니다.</p><button id="reopen" class="primary" data-i18n="reopen">다시 열기</button></div></div>
     <div class="dock" id="touchControls">
       <div class="stick-area"><div class="stick-caption"><span>01</span> <span id="moveCaption" data-i18n="move">이동</span></div><div id="movePad" class="stick-pad" aria-label="Movement joystick"><span class="pad-arrows" aria-hidden="true">↑<br>←　→<br>↓</span><span class="stick-knob"></span></div></div>
@@ -156,9 +163,10 @@
     <div class="learning-grid">
       <section class="content-panel athlete-panel" id="lineupPanel"><div class="panel-heading"><div><p class="eyebrow">ATHLETE / LINE-UP</p><h2 data-i18n="lineup">선발 라인업</h2></div><button id="autoPick" data-i18n="autoPick">자동 라인업</button></div>
         <p class="fine-note" data-i18n="lineupHint">포지션마다 스타를 한 명씩 고르세요. 같은 경기에서 한 스타가 두 번 뛸 수는 없습니다. 상대 팀은 컴퓨터가 조작합니다.</p>
-        <div class="lineup-grid"><div><h3 class="roster-title" data-i18n="homeLineup">우리 팀 라인업</h3><div id="lineupHome" class="lineup-slots"></div></div><div><h3 class="roster-title away" data-i18n="awayLineup">상대 팀 라인업</h3><div id="lineupAway" class="lineup-slots"></div></div></div>
+        <div class="lineup-team"><h3 class="roster-title" id="homeLineupTitle" data-i18n="homeLineup">우리 팀 라인업</h3><div id="lineupHome" class="lineup-cards"></div></div>
+        <div class="lineup-team"><h3 class="roster-title away" id="awayLineupTitle" data-i18n="awayLineup">상대 팀 라인업</h3><div id="lineupAway" class="lineup-cards"></div></div>
         <div class="compare-selects" hidden><label class="field"><span data-i18n="selectHome">우리 선수 선택</span><select id="homeAthlete"></select></label><label class="field"><span data-i18n="selectAway">상대 선수 선택</span><select id="awayAthlete"></select></label></div>
-        <h3 class="roster-title" data-i18n="starCard">스타 카드</h3><div id="athleteCards" class="athlete-cards"></div><div id="teamRosters" class="roster-strip"></div><p class="fine-note" data-i18n="athleteLikenessNote">경기장의 각 인물은 실제 선수의 공개된 키, 체형, 스타일을 바탕으로 만들었습니다. 얼굴은 라이선스된 사진이 있는 경우에 사용합니다. 양식화된 근사치이며 공식 초상권 라이선스가 아닙니다.</p><p class="fine-note" data-i18n="gameRatingsNote">속도·기술·힘·수비는 게임 설계 값이며 실제 선수의 능력 측정값이 아닙니다.</p><p class="fine-note" data-i18n="photoRightsNote">사진 라이선스와 출처를 확인할 수 있습니다. 선수나 리그의 후원을 의미하지 않습니다.</p>
+        <div id="athleteCards" class="athlete-cards" hidden></div><div id="teamRosters" class="roster-strip"></div><p class="fine-note" data-i18n="athleteLikenessNote">경기장의 각 인물은 실제 선수의 공개된 키, 체형, 스타일을 바탕으로 만들었습니다. 얼굴은 라이선스된 사진이 있는 경우에 사용합니다. 양식화된 근사치이며 공식 초상권 라이선스가 아닙니다.</p><p class="fine-note" data-i18n="gameRatingsNote">속도·기술·힘·수비는 게임 설계 값이며 실제 선수의 능력 측정값이 아닙니다.</p><p class="fine-note" data-i18n="photoRightsNote">사진 라이선스와 출처를 확인할 수 있습니다. 선수나 리그의 후원을 의미하지 않습니다.</p>
       </section>
       <section class="content-panel coach-panel"><div class="panel-heading"><div><p class="eyebrow">CPU / COACH</p><h2 data-i18n="coach">코치</h2></div><span class="chip">Qwen 0.5B</span></div>
         <p class="fine-note" data-i18n="coachApprentice">코치에게 질문 (기기 내 생성형 AI)</p><p class="fine-note" data-i18n="coachLocalNotice">선택형 생성 AI는 모델을 수동으로 내려받은 뒤 기기 CPU에서 실행됩니다. 일부 휴대폰에서는 느리거나 사용할 수 없으며 답변이 틀릴 수 있습니다.</p><p class="fine-note"><span data-i18n="downloadModelSize">모델 다운로드 크기</span> ≈ 547 MB</p><div class="coach-buttons"><button id="loadCoach" data-i18n="loadCoach">AI 코치 불러오기</button><button id="unloadCoach" data-i18n="unloadCoach">모델 해제</button></div><progress id="coachProgress" max="1" value="0" hidden></progress><p id="coachStatus" role="status"></p>
@@ -171,6 +179,6 @@
   <dialog id="mapDialog"><button class="dialog-close" data-close data-i18n="close">닫기</button><h2 data-i18n="nearbyCourts">근처 농구장</h2><p data-i18n="mapPrivacy">위치 버튼을 누를 때만 위치를 요청합니다. 지도를 열면 좌표가 Google 지도에 전달됩니다.</p><button id="locate" class="primary" data-i18n="locate">내 위치 찾기</button><p id="mapStatus" role="status"></p><p id="coordinates"></p><div id="mapActions" hidden><a id="currentMap" class="button" target="_blank" rel="noopener noreferrer" data-i18n="latLon">위도 및 경도</a><a id="nearbyMap" class="button primary" target="_blank" rel="noopener noreferrer" data-i18n="openMaps">Google 지도 열기</a></div><iframe id="embeddedMap" title="Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" hidden></iframe></dialog>
   <div id="toast" class="toast" role="status" hidden></div>
   <noscript><p>請啟用 JavaScript 以執行本機運動遊戲。Enable JavaScript to play.</p></noscript>
-  <script src="locales.js"></script><script src="data/catalog.js"></script><script src="game-core.js"></script><script src="sports-engine.js"></script><script src="renderer.js"></script><script src="coach.js"></script><script src="app.js"></script><script src="sports-ui.js"></script>
+  <script src="locales.js?v=7.2.0"></script><script src="data/catalog.js?v=7.2.0"></script><script src="game-core.js?v=7.2.0"></script><script src="sports-engine.js?v=7.2.0"></script><script src="renderer.js?v=7.2.0"></script><script src="coach.js?v=7.2.0"></script><script src="app.js?v=7.2.0"></script><script src="sports-ui.js?v=7.2.0"></script>
 </body>
 </html>

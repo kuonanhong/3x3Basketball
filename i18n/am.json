@@ -424,5 +424,21 @@
   "famousFor": "የሚታወቅበት",
   "backToPicker": "ወደ ስፖርቶች ተመለስ",
   "startWithLineup": "በዚህ አሰላለፍ ጀምር",
-  "cameraFollow": "ኮከቡን ተከተል"
+  "cameraFollow": "ኮከቡን ተከተል",
+  "quitMatch": "ጨዋታ ጨርስ",
+  "quitMatchHint": "ይህን ጨዋታ ጨርሰው ወደ ስፖርት ምናሌ ይመለሱ (ገጹ ክፍት ይቆያል)",
+  "exitApp": "መተግበሪያ ዝጋ",
+  "exitAppHint": "መላውን መተግበሪያ እና ይህን ድረ-ገጽ ዝጋ",
+  "leaveTitle": "ይህን ጨዋታ ማጠናቀቅ ወይስ መላውን መተግበሪያ መዝጋት?",
+  "quitConfirm": "ጨዋታውን ጨርስ፣ ወደ ስፖርት ምናሌ ተመለስ",
+  "exitConfirm": "መላውን መተግበሪያ እና ገጹን ዝጋ",
+  "orderN": "{n}ኛ መቺ",
+  "battingOrder": "የእርስዎ የመቺዎች ቅደም ተከተል",
+  "defenseLineup": "የተቃራኒ ቡድን መከላከያ ({n} ተጫዋቾች)",
+  "nowBatting": "እየመታ ነው",
+  "changePlayer": "ተጫዋች ቀይር",
+  "leftHanded": "ግራኝ",
+  "rightHanded": "ቀኝ እጅ",
+  "onFieldPlayers": "በሜዳ ላይ ያሉ ሁሉም ተጫዋቾች",
+  "versionUpdated": "ወደ አዲሱ ስሪት ተዘምኗል"
 }

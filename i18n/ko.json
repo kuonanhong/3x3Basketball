@@ -424,5 +424,21 @@
   "famousFor": "대표 업적",
   "backToPicker": "종목 선택으로 돌아가기",
   "startWithLineup": "이 라인업으로 시작",
-  "cameraFollow": "스타 따라가기"
+  "cameraFollow": "스타 따라가기",
+  "quitMatch": "경기 종료",
+  "quitMatchHint": "이 경기를 종료하고 스포츠 메뉴로 돌아갑니다(페이지는 열린 상태로 유지)",
+  "exitApp": "앱 닫기",
+  "exitAppHint": "앱 전체와 이 웹페이지를 닫습니다",
+  "leaveTitle": "이 경기를 종료할까요, 아니면 앱 전체를 닫을까요?",
+  "quitConfirm": "경기 종료 후 스포츠 메뉴로",
+  "exitConfirm": "앱과 페이지 모두 닫기",
+  "orderN": "{n}번 타자",
+  "battingOrder": "우리 팀 타순",
+  "defenseLineup": "상대 수비 ({n}명)",
+  "nowBatting": "타격 중",
+  "changePlayer": "선수 교체",
+  "leftHanded": "왼손잡이",
+  "rightHanded": "오른손잡이",
+  "onFieldPlayers": "경기장의 모든 선수",
+  "versionUpdated": "최신 버전으로 업데이트되었습니다"
 }

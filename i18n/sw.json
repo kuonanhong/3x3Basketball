@@ -424,5 +424,21 @@
   "famousFor": "Anajulikana kwa",
   "backToPicker": "Rudi kwenye michezo",
   "startWithLineup": "Anza na kikosi hiki",
-  "cameraFollow": "Fuata nyota"
+  "cameraFollow": "Fuata nyota",
+  "quitMatch": "Maliza mechi",
+  "quitMatchHint": "Maliza mechi hii na urudi kwenye menyu ya michezo (ukurasa unabaki wazi)",
+  "exitApp": "Funga programu",
+  "exitAppHint": "Funga programu yote na ukurasa huu wa wavuti",
+  "leaveTitle": "Maliza mechi hii, au funga programu yote?",
+  "quitConfirm": "Maliza mechi, rudi kwenye menyu ya michezo",
+  "exitConfirm": "Funga programu yote na ukurasa",
+  "orderN": "Mpigaji nambari {n}",
+  "battingOrder": "Mpangilio wako wa wapigaji",
+  "defenseLineup": "Ulinzi wa wapinzani (wachezaji {n})",
+  "nowBatting": "Anapiga",
+  "changePlayer": "Badilisha mchezaji",
+  "leftHanded": "Mkono wa kushoto",
+  "rightHanded": "Mkono wa kulia",
+  "onFieldPlayers": "Wachezaji wote uwanjani",
+  "versionUpdated": "Imesasishwa hadi toleo jipya zaidi"
 }

@@ -424,5 +424,21 @@
   "famousFor": "ओळख",
   "backToPicker": "खेळांकडे परत",
   "startWithLineup": "या संघासह सुरू करा",
-  "cameraFollow": "स्टारला फॉलो करा"
+  "cameraFollow": "स्टारला फॉलो करा",
+  "quitMatch": "सामना संपवा",
+  "quitMatchHint": "हा सामना संपवून खेळ मेनूवर परत जा (पेज उघडेच राहील)",
+  "exitApp": "ॲप बंद करा",
+  "exitAppHint": "संपूर्ण ॲप आणि हे वेब पेज बंद करा",
+  "leaveTitle": "हा सामना संपवायचा, की संपूर्ण ॲप बंद करायचे?",
+  "quitConfirm": "सामना संपवा, खेळ मेनूवर परत जा",
+  "exitConfirm": "संपूर्ण ॲप आणि पेज बंद करा",
+  "orderN": "{n} क्रमांकाचा फलंदाज",
+  "battingOrder": "तुमचा फलंदाजी क्रम",
+  "defenseLineup": "प्रतिस्पर्धी क्षेत्ररक्षण ({n} खेळाडू)",
+  "nowBatting": "फलंदाजी करत आहे",
+  "changePlayer": "खेळाडू बदला",
+  "leftHanded": "डावखुरा",
+  "rightHanded": "उजव्या हाताचा",
+  "onFieldPlayers": "मैदानावरील सर्व खेळाडू",
+  "versionUpdated": "नवीनतम आवृत्तीवर अपडेट झाले"
 }

@@ -424,5 +424,21 @@
   "famousFor": "Tunnettu",
   "backToPicker": "Takaisin lajeihin",
   "startWithLineup": "Aloita tällä kokoonpanolla",
-  "cameraFollow": "Seuraa tähteä"
+  "cameraFollow": "Seuraa tähteä",
+  "quitMatch": "Lopeta ottelu",
+  "quitMatchHint": "Lopeta tämä ottelu ja palaa lajivalikkoon (sivu pysyy auki)",
+  "exitApp": "Sulje sovellus",
+  "exitAppHint": "Sulje koko sovellus ja tämä verkkosivu",
+  "leaveTitle": "Lopetetaanko tämä ottelu vai suljetaanko koko sovellus?",
+  "quitConfirm": "Lopeta ottelu, palaa lajivalikkoon",
+  "exitConfirm": "Sulje koko sovellus ja sivu",
+  "orderN": "{n}. lyöjä",
+  "battingOrder": "Oma lyöntijärjestys",
+  "defenseLineup": "Vastustajan puolustus ({n} pelaajaa)",
+  "nowBatting": "Lyömässä",
+  "changePlayer": "Vaihda pelaaja",
+  "leftHanded": "Vasenkätinen",
+  "rightHanded": "Oikeakätinen",
+  "onFieldPlayers": "Kaikki kentällä olevat pelaajat",
+  "versionUpdated": "Päivitetty uusimpaan versioon"
 }

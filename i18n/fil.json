@@ -424,5 +424,21 @@
   "famousFor": "Kilala sa",
   "backToPicker": "Bumalik sa mga isport",
   "startWithLineup": "Magsimula sa lineup na ito",
-  "cameraFollow": "Sundan ang star"
+  "cameraFollow": "Sundan ang star",
+  "quitMatch": "Tapusin ang laro",
+  "quitMatchHint": "Tapusin ang larong ito at bumalik sa menu ng sports (mananatiling bukas ang page)",
+  "exitApp": "Isara ang app",
+  "exitAppHint": "Isara ang buong app at ang web page na ito",
+  "leaveTitle": "Tapusin ang larong ito, o isara ang buong app?",
+  "quitConfirm": "Tapusin ang laro, bumalik sa menu ng sports",
+  "exitConfirm": "Isara ang buong app at page",
+  "orderN": "Ika-{n} na batter",
+  "battingOrder": "Batting order ninyo",
+  "defenseLineup": "Depensa ng kalaban ({n} manlalaro)",
+  "nowBatting": "Nasa bat",
+  "changePlayer": "Palitan ang manlalaro",
+  "leftHanded": "Kaliwete",
+  "rightHanded": "Kanang kamay",
+  "onFieldPlayers": "Lahat ng manlalaro sa field",
+  "versionUpdated": "Na-update na sa pinakabagong bersyon"
 }

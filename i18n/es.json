@@ -424,5 +424,21 @@
   "famousFor": "Conocido por",
   "backToPicker": "Volver a deportes",
   "startWithLineup": "Empezar con esta alineación",
-  "cameraFollow": "Seguir a la estrella"
+  "cameraFollow": "Seguir a la estrella",
+  "quitMatch": "Terminar partido",
+  "quitMatchHint": "Terminar este partido y volver al menú de deportes (la página sigue abierta)",
+  "exitApp": "Cerrar app",
+  "exitAppHint": "Cerrar toda la aplicación y esta página web",
+  "leaveTitle": "¿Terminar este partido o cerrar toda la aplicación?",
+  "quitConfirm": "Terminar partido, volver al menú de deportes",
+  "exitConfirm": "Cerrar toda la aplicación y la página",
+  "orderN": "{n}.º bateador",
+  "battingOrder": "Tu orden al bate",
+  "defenseLineup": "Defensa rival ({n} jugadores)",
+  "nowBatting": "Al bate",
+  "changePlayer": "Cambiar jugador",
+  "leftHanded": "Zurdo",
+  "rightHanded": "Diestro",
+  "onFieldPlayers": "Todos los jugadores en el campo",
+  "versionUpdated": "Actualizado a la última versión"
 }

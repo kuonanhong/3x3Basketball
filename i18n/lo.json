@@ -424,5 +424,21 @@
   "famousFor": "ມີຊື່ສຽງດ້ານ",
   "backToPicker": "ກັບໄປໜ້າກິລາ",
   "startWithLineup": "ເລີ່ມດ້ວຍຕັວຈິງຊຸດນີ້",
-  "cameraFollow": "ຕິດຕາມດາວເດັ່ນ"
+  "cameraFollow": "ຕິດຕາມດາວເດັ່ນ",
+  "quitMatch": "ຈົບການແຂ່ງ",
+  "quitMatchHint": "ຈົບການແຂ່ງຂັນນີ້ ແລະ ກັບໄປເມນູກິລາ (ໜ້າເວັບຍັງເປີດຢູ່)",
+  "exitApp": "ປິດແອັບ",
+  "exitAppHint": "ປິດແອັບທັງໝົດ ແລະ ໜ້າເວັບນີ້",
+  "leaveTitle": "ຈົບການແຂ່ງຂັນນີ້ ຫຼື ປິດແອັບທັງໝົດ?",
+  "quitConfirm": "ຈົບການແຂ່ງ, ກັບໄປເມນູກິລາ",
+  "exitConfirm": "ປິດແອັບ ແລະ ໜ້າເວັບທັງໝົດ",
+  "orderN": "ຜູ້ຕີຄົນທີ {n}",
+  "battingOrder": "ລຳດັບຜູ້ຕີຂອງທ່ານ",
+  "defenseLineup": "ຝ່າຍປ້ອງກັນຂອງຄູ່ແຂ່ງ ({n} ຄົນ)",
+  "nowBatting": "ກຳລັງຕີ",
+  "changePlayer": "ປ່ຽນຜູ້ຫຼິ້ນ",
+  "leftHanded": "ຖະໜັດຊ້າຍ",
+  "rightHanded": "ຖະໜັດຂວາ",
+  "onFieldPlayers": "ຜູ້ຫຼິ້ນທັງໝົດໃນສະໜາມ",
+  "versionUpdated": "ອັບເດດເປັນເວີຊັນລ່າສຸດແລ້ວ"
 }

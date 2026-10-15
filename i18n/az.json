@@ -424,5 +424,21 @@
   "famousFor": "Nə ilə tanınır",
   "backToPicker": "İdman növlərinə qayıt",
   "startWithLineup": "Bu heyətlə başla",
-  "cameraFollow": "Ulduzu izlə"
+  "cameraFollow": "Ulduzu izlə",
+  "quitMatch": "Oyunu bitir",
+  "quitMatchHint": "Bu oyunu bitir və idman menyusuna qayıt (səhifə açıq qalır)",
+  "exitApp": "Tətbiqi bağla",
+  "exitAppHint": "Bütün tətbiqi və bu veb-səhifəni bağla",
+  "leaveTitle": "Bu oyunu bitirmək, yoxsa bütün tətbiqi bağlamaq?",
+  "quitConfirm": "Oyunu bitir, idman menyusuna qayıt",
+  "exitConfirm": "Bütün tətbiqi və səhifəni bağla",
+  "orderN": "{n}. vuran",
+  "battingOrder": "Vuruş sıranız",
+  "defenseLineup": "Rəqib müdafiəsi ({n} oyunçu)",
+  "nowBatting": "Vuruşda",
+  "changePlayer": "Oyunçunu dəyiş",
+  "leftHanded": "Solaxay",
+  "rightHanded": "Sağaxay",
+  "onFieldPlayers": "Meydandakı bütün oyunçular",
+  "versionUpdated": "Ən son versiyaya yeniləndi"
 }

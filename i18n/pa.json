@@ -424,5 +424,21 @@
   "famousFor": "ਪਛਾਣ",
   "backToPicker": "ਖੇਡਾਂ 'ਤੇ ਵਾਪਸ",
   "startWithLineup": "ਇਸ ਟੀਮ ਨਾਲ ਸ਼ੁਰੂ ਕਰੋ",
-  "cameraFollow": "ਸਟਾਰ ਨੂੰ ਫਾਲੋ ਕਰੋ"
+  "cameraFollow": "ਸਟਾਰ ਨੂੰ ਫਾਲੋ ਕਰੋ",
+  "quitMatch": "ਮੈਚ ਖ਼ਤਮ ਕਰੋ",
+  "quitMatchHint": "ਇਹ ਮੈਚ ਖ਼ਤਮ ਕਰਕੇ ਖੇਡ ਮੀਨੂ 'ਤੇ ਵਾਪਸ ਜਾਓ (ਪੰਨਾ ਖੁੱਲ੍ਹਾ ਰਹੇਗਾ)",
+  "exitApp": "ਐਪ ਬੰਦ ਕਰੋ",
+  "exitAppHint": "ਪੂਰੀ ਐਪ ਅਤੇ ਇਹ ਵੈੱਬ ਪੰਨਾ ਬੰਦ ਕਰੋ",
+  "leaveTitle": "ਇਹ ਮੈਚ ਖ਼ਤਮ ਕਰਨਾ ਹੈ, ਜਾਂ ਪੂਰੀ ਐਪ ਬੰਦ ਕਰਨੀ ਹੈ?",
+  "quitConfirm": "ਮੈਚ ਖ਼ਤਮ ਕਰੋ, ਖੇਡ ਮੀਨੂ 'ਤੇ ਵਾਪਸ ਜਾਓ",
+  "exitConfirm": "ਪੂਰੀ ਐਪ ਅਤੇ ਪੰਨਾ ਬੰਦ ਕਰੋ",
+  "orderN": "{n}ਵਾਂ ਬੱਲੇਬਾਜ਼",
+  "battingOrder": "ਤੁਹਾਡਾ ਬੱਲੇਬਾਜ਼ੀ ਕ੍ਰਮ",
+  "defenseLineup": "ਵਿਰੋਧੀ ਫੀਲਡਿੰਗ ({n} ਖਿਡਾਰੀ)",
+  "nowBatting": "ਬੱਲੇਬਾਜ਼ੀ ਕਰ ਰਿਹਾ",
+  "changePlayer": "ਖਿਡਾਰੀ ਬਦਲੋ",
+  "leftHanded": "ਖੱਬੇ ਹੱਥ ਵਾਲਾ",
+  "rightHanded": "ਸੱਜੇ ਹੱਥ ਵਾਲਾ",
+  "onFieldPlayers": "ਮੈਦਾਨ 'ਤੇ ਸਾਰੇ ਖਿਡਾਰੀ",
+  "versionUpdated": "ਨਵੀਨਤਮ ਸੰਸਕਰਣ 'ਤੇ ਅੱਪਡੇਟ ਹੋ ਗਿਆ"
 }

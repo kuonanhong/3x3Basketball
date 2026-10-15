@@ -424,5 +424,21 @@
   "famousFor": "Kjent for",
   "backToPicker": "Tilbake til idretter",
   "startWithLineup": "Start med denne oppstillingen",
-  "cameraFollow": "Følg stjernen"
+  "cameraFollow": "Følg stjernen",
+  "quitMatch": "Avslutt kamp",
+  "quitMatchHint": "Avslutt denne kampen og gå tilbake til sportsmenyen (siden forblir åpen)",
+  "exitApp": "Lukk appen",
+  "exitAppHint": "Lukk hele appen og denne nettsiden",
+  "leaveTitle": "Vil du avslutte kampen eller lukke hele appen?",
+  "quitConfirm": "Avslutt kampen, tilbake til sportsmenyen",
+  "exitConfirm": "Lukk hele appen og siden",
+  "orderN": "{n}. slager",
+  "battingOrder": "Din slagrekkefølge",
+  "defenseLineup": "Motstanderens forsvar ({n} spillere)",
+  "nowBatting": "Slår nå",
+  "changePlayer": "Bytt spiller",
+  "leftHanded": "Venstrehendt",
+  "rightHanded": "Høyrehendt",
+  "onFieldPlayers": "Alle spillere på banen",
+  "versionUpdated": "Oppdatert til nyeste versjon"
 }

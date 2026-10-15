@@ -424,5 +424,21 @@
   "famousFor": "Bekannt für",
   "backToPicker": "Zurück zu den Sportarten",
   "startWithLineup": "Mit dieser Aufstellung starten",
-  "cameraFollow": "Dem Star folgen"
+  "cameraFollow": "Dem Star folgen",
+  "quitMatch": "Spiel beenden",
+  "quitMatchHint": "Dieses Spiel beenden und zum Sportmenü zurückkehren (die Seite bleibt geöffnet)",
+  "exitApp": "App schließen",
+  "exitAppHint": "Die gesamte App und diese Webseite schließen",
+  "leaveTitle": "Dieses Spiel beenden oder die gesamte App schließen?",
+  "quitConfirm": "Spiel beenden, zurück zum Sportmenü",
+  "exitConfirm": "Gesamte App und Seite schließen",
+  "orderN": "{n}. Schlagmann",
+  "battingOrder": "Deine Schlagreihenfolge",
+  "defenseLineup": "Gegnerische Verteidigung ({n} Spieler)",
+  "nowBatting": "Am Schlag",
+  "changePlayer": "Spieler wechseln",
+  "leftHanded": "Linkshänder",
+  "rightHanded": "Rechtshänder",
+  "onFieldPlayers": "Alle Spieler auf dem Feld",
+  "versionUpdated": "Auf die neueste Version aktualisiert"
 }
