@@ -13,13 +13,16 @@ const basketballDefs = [
 const sportDefinitions = ORDER.map(id => basketballDefs.find(d => d.id === id) || SASports.sports.find(s => s.id === id)).filter(Boolean);
 let currentSport = 'basketball', selectedVenue = null, sceneImage = null, photoRequest = 0, currentPosition = null, locationBusy = false, coachBusy = false;
 const imageCache = new Map(), portraits = {}, anonymous = { id: 'original', name: 'SmartAction', heightCm: 180, weightKg: 78, gameRatings: { speed: 60, skill: 60, power: 60, defense: 60, accuracy: 60 } };
-let homeProfile = anonymous, awayProfile = anonymous;
+let lineup = { home: [], away: [] }, focusSlot = { team: 0, index: 0 };
+const ICONS = { basketball: '🏀', basketball5: '🏀', soccer5: '⚽', baseball: '⚾', softball: '🥎', cricket: '🏏', badminton: '🏸', 'badminton-doubles': '🏸', tabletennis: '🏓', 'tabletennis-doubles': '🏓', tennis: '🎾', 'tennis-doubles': '🎾', 'soft-tennis': '🎾',
+  volleyball: '🏐', 'beach-volleyball': '🏖️', 'sepak-takraw': '🦶', handball: '🤾', 'field-hockey': '🏑', 'ice-hockey': '🏒', 'water-polo': '🤽', lacrosse: '🥍', rugby: '🏉', 'american-football': '🏈', 'flag-football': '🚩', squash: '🎾', golf: '⛳', bowling: '🎳', billiards: '🎱', sprint: '🏃', archery: '🏹' };
 function node(tag, text, cls) { const e = document.createElement(tag); if (text !== undefined) e.textContent = text; if (cls) e.className = cls; return e; }
 function url(path) { return new URL(path, assetBase).href; }
 function safeExternal(value) { try { const u = new URL(value); if (u.protocol === 'http:' && u.hostname === 'creativecommons.org') u.protocol = 'https:'; return u.protocol === 'https:' ? u.href : '#'; } catch { return '#'; } }
 function link(text, href) { const a = node('a', text); a.href = safeExternal(href); a.target = '_blank'; a.rel = 'noopener noreferrer'; return a; }
 function cleanText(value) { const d = new DOMParser().parseFromString(String(value || ''), 'text/html'); return (d.body.textContent || '').trim().slice(0, 280); }
 function localeName(item) { return app.getLanguage().startsWith('zh') && item.nameZh ? item.nameZh : item.name; }
+function athleteFor(id) { return catalog.athletes.find(a => a.id === id) || null; }
 function currentDefinition() { return sportDefinitions.find(s => s.id === currentSport) || sportDefinitions[0]; }
 /* which catalogue pools feed each mode (first pool preferred, later pools fill the bench) */
 function pools(sport) {
@@ -29,6 +32,7 @@ function pools(sport) {
   return map[base] || [base];
 }
 function athletePool() { const keys = pools(currentSport); return keys.flatMap(k => catalog.athletes.filter(a => a.sport === k)); }
+/* ---- positions per sport ---- */
 function mapsURL(query) { const u = new URL('https://www.google.com/maps/search/'); u.searchParams.set('api', '1'); u.searchParams.set('query', query); return u.href; }
 function configureMapLinks(lat, lon) { const p = lat.toFixed(6) + ',' + lon.toFixed(6); $('nearbyParksLink').href = mapsURL('parks near ' + p); $('nearbyCourtsLink').href = mapsURL(t(currentDefinition().key) + ' courts near ' + p); }
 function photo(path) { if (!path) return Promise.resolve(null); const key = url(path); if (imageCache.has(key)) return imageCache.get(key); const job = new Promise(resolve => { const img = new Image(); img.decoding = 'async'; if (!key.startsWith(assetBase.origin)) img.crossOrigin = 'anonymous'; img.onload = () => resolve(img); img.onerror = () => resolve(null); img.src = key; }); imageCache.set(key, job); return job; }
@@ -44,47 +48,87 @@ async function chooseVenue(venue) {
 }
 function updateDestinationNames() { const old = $('destination').value; $('destination').replaceChildren(); catalog.venues.forEach(v => { const o = node('option', localeName(v)); o.value = v.id; $('destination').append(o); }); if (old) $('destination').value = old; }
 function sportChanged(value) { currentSport = value || $('sport').value; $('sport').value = currentSport; $('sportQuick').value = currentSport; app.setSport(currentSport); populateAthletes(); refreshText(); }
-function profilesChanged() { const pool = athletePool(); homeProfile = pool.find(a => a.id === $('homeAthlete').value) || anonymous; awayProfile = pool.find(a => a.id === $('awayAthlete').value) || anonymous; applyRoster(); renderCards(); }
-function populateAthletes() {
-  const pool = athletePool();
-  for (const id of ['homeAthlete', 'awayAthlete']) {
-    const old = $(id).value; $(id).replaceChildren(); const values = pool.length ? pool : [anonymous];
-    values.forEach(a => { const o = node('option', localeName(a)); o.value = a.id; $(id).append(o); });
-    if (values.some(a => a.id === old)) $(id).value = old; else $(id).selectedIndex = id === 'awayAthlete' && values.length > 1 ? 1 : 0;
-  }
-  profilesChanged();
+const POS_GROUPS = { C: ['C'], F: ['PF', 'SF', 'F'], G: ['PG', 'SG', 'G'], PF: ['PF', 'F'], SF: ['SF', 'F'], SG: ['SG', 'G'], PG: ['PG', 'G'], P: ['P'], CA: ['CA'], SS: ['SS'], '2B': ['2B', '1B'], CF: ['CF', 'LF', 'RF'], BAT: ['BAT', 'DH', 'LF', 'CF', 'RF', 'SS', '1B', '2B', '3B'] };
+function slotPlan() {
+  const d = currentDefinition(), n = app.core.players.filter(p => p.team === 0).length;
+  if (d.id === 'basketball') return { home: ['C', 'F', 'G'], away: ['C', 'F', 'G'] };
+  if (d.id === 'basketball5') return { home: ['C', 'PF', 'SF', 'SG', 'PG'], away: ['C', 'PF', 'SF', 'SG', 'PG'] };
+  if (d.family === 'batting') return { home: Array(n).fill('BAT'), away: d.id === 'cricket' ? ['P', 'CA', 'player', 'player', 'player'] : ['P', 'CA', 'SS', '2B', 'CF'] };
+  const generic = Array(n).fill('player'); if (d.family === 'goal' && n > 1) generic[n - 1] = 'GK';
+  return { home: generic.slice(), away: generic.slice() };
 }
-/* Every on-field slot gets a distinct real athlete (when the pool is large enough): captain first, then the rest of the pool. */
-function applyRoster() {
-  const pool = athletePool(), n = app.core.players.filter(p => p.team === 0).length;
-  const awayCaptain = awayProfile === homeProfile && pool.length > 1 ? (pool.find(a => a.id !== homeProfile.id) || anonymous) : awayProfile;
-  const used = new Set([homeProfile.id, awayCaptain.id]);           // both captains are reserved before the benches fill
-  function pick(captain, count) {
-    const list = [];
-    if (captain !== anonymous) list.push(captain);
-    for (const a of pool) { if (list.length >= count) break; if (used.has(a.id)) continue; list.push(a); used.add(a.id); }
-    let i = 0; while (list.length < count) list.push(pool.length ? pool[i++ % pool.length] : anonymous);     // small pools: reuse rather than leave slots empty
-    return list;
+function fits(athlete, pos) { if (pos === 'player' || pos === 'GK') return true; const ok = POS_GROUPS[pos] || [pos]; return !athlete.position || ok.includes(athlete.position); }
+function storageKey() { return 'sa-lineup-' + currentSport; }
+const DEFAULT_LINEUPS = {
+  basketball: { home: ['yao-ming', 'lebron-james', 'stephen-curry'], away: ['kareem-abdul-jabbar', 'larry-bird', 'michael-jordan'] },
+  basketball5: { home: ['nikola-joki', 'giannis-antetokounmpo', 'lebron-james', 'stephen-curry', 'magic-johnson'], away: ['kareem-abdul-jabbar', 'tim-duncan', 'larry-bird', 'michael-jordan', 'tony-parker'] },
+  baseball: { home: ['shohei-ohtani', 'ichiro-suzuki', 'babe-ruth', 'ken-griffey-jr', 'derek-jeter'], away: ['chien-ming-wang', 'manny-ramirez', 'sadaharu-oh', 'peng-cheng-min', 'wang-po-jung'] }
+};
+function autoLineup(keep) {
+  if (!keep && DEFAULT_LINEUPS[currentSport]) keep = DEFAULT_LINEUPS[currentSport];
+  const pool = athletePool(), plan = slotPlan(), used = new Set(), out = { home: [], away: [] };
+  for (const team of ['home', 'away']) plan[team].forEach((pos, i) => {
+    const kept = keep && keep[team] && keep[team][i], keptA = kept && pool.find(a => a.id === kept && !used.has(a.id));
+    let pick = keptA || pool.find(a => !used.has(a.id) && fits(a, pos) && a.position) || pool.find(a => !used.has(a.id) && fits(a, pos)) || pool.find(a => !used.has(a.id)) || pool[i % Math.max(1, pool.length)] || anonymous;
+    used.add(pick.id); out[team].push(pick.id);
+  });
+  return out;
+}
+function loadLineup() {
+  let saved = null; try { saved = JSON.parse(localStorage.getItem(storageKey()) || 'null'); } catch (_) { saved = null; }
+  lineup = autoLineup(saved && saved.home && saved.away ? saved : null); focusSlot = { team: 0, index: 0 };
+}
+function saveLineup() { try { localStorage.setItem(storageKey(), JSON.stringify(lineup)); } catch (_) {} }
+function setSlot(team, index, id) {
+  const other = ['home', 'away'].find(t => lineup[t].includes(id) && !(t === team && lineup[t][index] === id));
+  if (other) { const j = lineup[other].indexOf(id); lineup[other][j] = lineup[team][index]; app.toast('swapNotice'); }
+  lineup[team][index] = id; focusSlot = { team: team === 'home' ? 0 : 1, index };
+  saveLineup(); applyRoster(); renderLineup(); renderCards(); renderStartLineup();
+}
+function renderLineup() {
+  const pool = athletePool(), plan = slotPlan();
+  for (const team of ['home', 'away']) {
+    const host = $(team === 'home' ? 'lineupHome' : 'lineupAway'); host.replaceChildren();
+    plan[team].forEach((pos, i) => {
+      const a = athleteFor(lineup[team][i]) || anonymous, row = node('div', undefined, 'lineup-slot' + (team === 'away' ? ' away' : ''));
+      if (a.photo) { const im = node('img'); im.src = url(a.photo); im.alt = a.name; im.loading = 'lazy'; row.append(im); } else row.append(node('div', '◉', 'slot-fallback'));
+      const label = node('label'); label.append(node('span', (pos === 'player' ? t('pos_player') + ' ' + (i + 1) : pos === 'BAT' ? t('pos_BAT') + ' ' + (i + 1) : t('pos_' + pos)) + (a.position ? ' · ' + a.position : '')));
+      const select = node('select'); select.setAttribute('aria-label', t('pos_' + (pos === 'player' || pos === 'BAT' ? pos : pos)));
+      const preferred = pool.filter(x => fits(x, pos) && x.position), rest = pool.filter(x => !preferred.includes(x));
+      [...preferred, ...rest].forEach(x => { const o = node('option', localeName(x) + (x.position ? ' (' + x.position + ')' : '') + (x.countryCode ? ' · ' + x.countryCode : '')); o.value = x.id; select.append(o); });
+      select.value = a.id; select.addEventListener('change', () => setSlot(team, i, select.value)); select.addEventListener('focus', () => { focusSlot = { team: team === 'home' ? 0 : 1, index: i }; renderCards(); });
+      label.append(select); row.append(label); host.append(row);
+    });
   }
-  const home = pick(homeProfile, n), away = pick(awayCaptain, n);
+  const strip = $('teamRosters'); strip.replaceChildren();
+  for (const team of ['home', 'away']) { const row = node('p'); row.append(node('span', (team === 'away' ? t('awayTeam') : t('homeTeam')) + ' · ')); lineup[team].forEach(id => { const a = athleteFor(id) || anonymous; row.append(node('span', localeName(a) + (a.countryCode ? ' ' + a.countryCode : ''), 'roster-chip' + (team === 'away' ? ' away' : ''))); }); strip.append(row); }
+  // legacy selects mirror slot 0 (kept for older integrations)
+  for (const [id, team] of [['homeAthlete', 'home'], ['awayAthlete', 'away']]) { const sel = $(id); if (!sel) continue; sel.replaceChildren(); pool.forEach(x => { const o = node('option', localeName(x)); o.value = x.id; sel.append(o); }); sel.value = lineup[team][0]; }
+}
+function renderStartLineup() {
+  const host = $('startLineup'); if (!host) return; host.replaceChildren();
+  for (const team of ['home', 'away']) lineup[team].forEach(id => { const a = athleteFor(id); if (!a) return; const chip = node('span', undefined, team === 'away' ? 'away' : ''); if (a.photo) { const im = node('img'); im.src = url(a.photo); im.alt = ''; chip.append(im); } chip.append(document.createTextNode(localeName(a))); host.append(chip); });
+}
+function populateAthletes() { loadLineup(); applyRoster(); renderLineup(); renderCards(); renderStartLineup(); }
+function profilesChanged() { setSlot('home', 0, $('homeAthlete').value); if ($('awayAthlete').value !== lineup.home[0]) setSlot('away', 0, $('awayAthlete').value); }
+/* Every on-field slot gets the athlete chosen for that position. */
+function applyRoster() {
+  const n = app.core.players.filter(p => p.team === 0).length;
+  if (lineup.home.length !== n) loadLineup();
   app.core.players.forEach(p => {
-    const slot = app.core.players.filter(x => x.team === p.team && x.id < p.id).length, profile = (p.team === 0 ? home : away)[slot] || anonymous;
+    const slot = app.core.players.filter(x => x.team === p.team && x.id < p.id).length, profile = athleteFor((p.team === 0 ? lineup.home : lineup.away)[slot]) || anonymous;
     p.athleteId = profile.id; p.heightCm = profile.heightCm || 180; p.weightKg = profile.weightKg || 78; p.handedness = profile.handedness || 'right';
-    p.gameRatings = Object.assign({ accuracy: profile.gameRatings?.skill || 60 }, profile.gameRatings); p.displayName = profile.name; p.appearance = profile.appearance ? Object.assign({}, profile.appearance) : null;
+    p.gameRatings = Object.assign({ accuracy: profile.gameRatings?.skill || 60 }, profile.gameRatings); p.displayName = profile.name; p.position = profile.position || null; p.appearance = profile.appearance ? Object.assign({}, profile.appearance) : null;
     if (profile.photo) photo(profile.photo).then(img => { if (img) portraits[profile.id] = img; });
   });
-  const strip = $('teamRosters'); strip.replaceChildren();
-  for (const [team, list] of [[0, home], [1, away]]) {
-    const row = node('p'); row.append(node('span', (team ? t('awayTeam') : t('homeTeam')) + ' · '));
-    list.forEach(a => row.append(node('span', localeName(a) + (a.countryCode ? ' ' + a.countryCode : ''), 'roster-chip' + (team ? ' away' : ''))));
-    strip.append(row);
-  }
 }
 function renderCards() {
-  $('athleteCards').replaceChildren(); [homeProfile, awayProfile].forEach((a, index) => {
+  const home = athleteFor(lineup.home[focusSlot.team === 0 ? focusSlot.index : 0]) || anonymous, away = athleteFor(lineup.away[focusSlot.team === 1 ? focusSlot.index : 0]) || anonymous;
+  $('athleteCards').replaceChildren(); [home, away].forEach((a, index) => {
     const card = node('article', undefined, 'athlete-card ' + (index ? 'away' : 'home')); const img = node('img'); img.alt = a.name; img.loading = 'lazy';
     if (a.photo) { img.src = url(a.photo); img.addEventListener('error', () => { img.hidden = true; }, { once: true }); card.append(img); } else card.append(node('div', '◉', 'portrait-fallback'));
-    card.append(node('h3', localeName(a) + (a.nameZh && !app.getLanguage().startsWith('zh') ? ' · ' + a.nameZh : '')), node('p', [a.country, a.era, a.notes].filter(Boolean).join(' · '), 'fine-note'));
+    card.append(node('h3', localeName(a) + (a.nameZh && !app.getLanguage().startsWith('zh') ? ' · ' + a.nameZh : '')), node('p', [a.position ? t('pos_' + (POS_GROUPS[a.position] ? a.position : 'player')) : '', a.country, a.era].filter(Boolean).join(' · '), 'fine-note'));
+    if (a.notes) card.append(node('p', t('famousFor') + ': ' + a.notes, 'fine-note'));
     card.append(node('p', t('height') + ': ' + (a.heightCm ? a.heightCm + ' cm' : t('notAvailable')) + ' · ' + t('weight') + ': ' + (a.weightKg ? a.weightKg + ' kg' : t('notAvailable')), 'dimensions'));
     for (const key of ['speed', 'skill', 'power', 'defense', 'accuracy']) { const raw = a.gameRatings?.[key] ?? (key === 'accuracy' ? a.gameRatings?.skill : undefined); if (raw === undefined) continue; const v = Math.max(1, Math.min(99, Number(raw) || 50)), row = node('div', undefined, 'rating-row'); row.append(node('span', t(key))); const bar = node('meter'); bar.min = 0; bar.max = 100; bar.value = v; bar.setAttribute('aria-label', t(key)); row.append(bar, node('b', String(v))); card.append(row); }
     if (a.traits?.length) card.append(node('p', a.traits.join(' · '), 'fine-note'));
@@ -92,6 +136,11 @@ function renderCards() {
     if (a.sources?.length) { const refs = node('div', undefined, 'source-links'); a.sources.slice(0, 2).forEach((source, i) => { const href = typeof source === 'string' ? source : source.url || source.href; if (href) refs.append(link('↗ ' + (i + 1), href)); }); card.append(refs); }
     $('athleteCards').append(card);
   });
+}
+/* ---- sport picker (first screen) ---- */
+function renderPicker() {
+  const grid = $('pickerGrid'); if (!grid) return; grid.replaceChildren();
+  sportDefinitions.forEach(s => { const b = node('button', undefined, s.id === currentSport ? 'current' : ''); b.type = 'button'; b.dataset.sport = s.id; b.setAttribute('role', 'listitem'); b.setAttribute('aria-pressed', s.id === currentSport ? 'true' : 'false'); b.append(node('span', ICONS[s.id] || '🎯', 'ico'), node('span', t(s.key)), node('span', eventTags(s), 'tag')); b.addEventListener('click', () => { sportChanged(s.id); app.hidePicker(); }); grid.append(b); });
 }
 /* ---- control labels per sport family ---- */
 function scheme() {
@@ -127,9 +176,8 @@ function refreshText() {
   $('countHud').hidden = def.family !== 'batting';
   $('coachQuestion').placeholder = t('coachPlaceholder'); $('zoom').setAttribute('aria-label', t('zoom'));
   updateDestinationNames(); if (selectedVenue) { $('venueTitle').textContent = localeName(selectedVenue); $('sceneName').textContent = localeName(selectedVenue); }
-  Array.from($('homeAthlete').options).forEach(o => { const a = catalog.athletes.find(x => x.id === o.value); if (a) o.textContent = localeName(a); });
-  Array.from($('awayAthlete').options).forEach(o => { const a = catalog.athletes.find(x => x.id === o.value); if (a) o.textContent = localeName(a); });
-  renderCards(); applyRoster(); updateCoachStatus(); updateMetrics(app.core);
+  renderLineup(); renderCards(); renderStartLineup(); renderPicker(); applyRoster(); updateCoachStatus(); updateMetrics(app.core);
+  $('helpZone').hidden = def.family !== 'batting'; $('helpDunk').hidden = def.family !== 'basketball';
 }
 function competitionChanged() { const d = { street: 'easy', professional: 'normal', elite: 'hard' }[$('competition').value]; $('difficulty').value = d; app.core.difficulty = d; if ($('competition').value !== 'street' && $('venueMode').value === 'park') $('venueMode').value = 'home'; }
 function updateCoachStatus(extra) { const st = window.SACoach?.status?.() || { state: 'unloaded' }; const map = { unloaded: 'coachIdle', loading: 'coachLoading', ready: 'coachReady', generating: 'coachThinking', error: 'coachError' }; $('coachStatus').textContent = t(map[st.state] || 'coachIdle') + ((extra || st.error) ? ' · ' + String(extra || st.error).slice(0, 180) : ''); $('loadCoach').disabled = st.state === 'loading' || st.state === 'generating'; }
@@ -138,7 +186,7 @@ async function askCoach() {
   const question = $('coachQuestion').value.trim(); if (!question || coachBusy) return; app.setPaused(true); line('user', question); const output = line('assistant', '');
   if (!window.SACoach || SACoach.status().state !== 'ready') { output.textContent = t('coachOffline') + ' · ' + t('rule_' + currentSport); return; }
   coachBusy = true; $('askCoach').disabled = true;
-  try { output.textContent = t('coachThinking'); const answer = await SACoach.ask(question, { language: app.getLanguage(), sport: currentSport, sportName: t('sport_' + currentSport), rule: t('rule_' + currentSport), level: $('competition').value, player: { name: homeProfile.name, gameRatings: homeProfile.gameRatings, traits: homeProfile.traits }, opponent: { name: awayProfile.name, gameRatings: awayProfile.gameRatings }, metrics: app.core.metrics || null, onToken: token => { if (output.textContent === t('coachThinking')) output.textContent = ''; output.textContent += token; } }); output.textContent = answer || t('coachError'); }
+  try { output.textContent = t('coachThinking'); const answer = await SACoach.ask(question, { language: app.getLanguage(), sport: currentSport, sportName: t('sport_' + currentSport), rule: t('rule_' + currentSport), level: $('competition').value, player: (a => ({ name: a.name, gameRatings: a.gameRatings, traits: a.traits }))(athleteFor(lineup.home[0]) || anonymous), opponent: (a => ({ name: a.name, gameRatings: a.gameRatings }))(athleteFor(lineup.away[0]) || anonymous), metrics: app.core.metrics || null, onToken: token => { if (output.textContent === t('coachThinking')) output.textContent = ''; output.textContent += token; } }); output.textContent = answer || t('coachError'); }
   catch (e) { output.textContent = t('coachError') + ' · ' + String(e.message || e).slice(0, 180); }
   finally { coachBusy = false; $('askCoach').disabled = false; updateCoachStatus(); }
 }
@@ -186,12 +234,15 @@ function updateMetrics(core) {
 window.SASportsUI = {
   renderOptions: () => ({ view: $('camera').value, zoom: Number($('zoom').value), cameraAngle: 0, playerScale: 1.18, names: true, environment: { time: $('timeOfDay').value, weather: $('weather').value, season: $('season').value, climate: $('climate').value, venue: $('venueMode').value, photo: sceneImage }, portraits }),
   updateMetrics,
-  getContext: () => ({ sport: currentSport, venue: selectedVenue?.id, language: app.getLanguage(), home: homeProfile.id, away: awayProfile.id }), applyRoster, selectVenue: chooseVenue, definitions: sportDefinitions, pools
+  getContext: () => ({ sport: currentSport, venue: selectedVenue?.id, language: app.getLanguage(), home: lineup.home[0], away: lineup.away[0], lineup }), applyRoster, selectVenue: chooseVenue, definitions: sportDefinitions, pools, athleteFor, localeName, setSlot, getLineup: () => lineup
 };
 for (const select of [$('sport'), $('sportQuick')]) sportDefinitions.forEach(s => { const o = node('option', t(s.key)); o.value = s.id; select.append(o); });
 $('sport').addEventListener('change', () => sportChanged($('sport').value)); $('sportQuick').addEventListener('change', () => sportChanged($('sportQuick').value));
 $('camera').addEventListener('change', () => { $('cameraQuick').value = $('camera').value; }); $('cameraQuick').addEventListener('change', () => { $('camera').value = $('cameraQuick').value; });
 $('competition').addEventListener('change', competitionChanged); $('homeAthlete').addEventListener('change', profilesChanged); $('awayAthlete').addEventListener('change', profilesChanged);
+$('autoPick').addEventListener('click', () => { lineup = autoLineup(null); saveLineup(); applyRoster(); renderLineup(); renderCards(); renderStartLineup(); });
+$('editLineup').addEventListener('click', () => { $('lineupPanel').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+window.addEventListener('sa-picker-open', renderPicker);
 $('destination').addEventListener('change', () => { const v = catalog.venues.find(v => v.id === $('destination').value); if (v) chooseVenue(v); });
 $('locateWorld').addEventListener('click', locate); $('searchNearby').addEventListener('click', searchNearby); $('applyLocation').addEventListener('click', () => { const lat = Number($('customLat').value), lon = Number($('customLon').value); if (!Number.isFinite(lat) || !Number.isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180 || !$('customLat').value.trim() || !$('customLon').value.trim()) { $('worldStatus').textContent = t('locationError'); return; } usePosition(lat, lon); });
 $('court').addEventListener('wheel', e => { if (!e.ctrlKey && !e.metaKey) { e.preventDefault(); $('zoom').value = String(Math.max(.6, Math.min(1.8, Number($('zoom').value) - Math.sign(e.deltaY) * .05))); } }, { passive: false });
@@ -202,5 +253,5 @@ $('unloadCoach').addEventListener('click', () => { SACoach?.unload(); updateCoac
 $('offlinePrepare').addEventListener('click', async () => { const b = $('offlinePrepare'); b.disabled = true; b.textContent = t('offlinePreparing'); try { if (!('serviceWorker' in navigator) || location.protocol === 'file:') throw Error('HTTPS or localhost required'); let readyTimer; const reg = await Promise.race([navigator.serviceWorker.ready, new Promise((_, reject) => { readyTimer = setTimeout(() => reject(Error('Service Worker unavailable')), 30000); })]).finally(() => clearTimeout(readyTimer)); const channel = new MessageChannel(); await new Promise((resolve, reject) => { const timeout = setTimeout(() => reject(Error('timeout')), 90000); channel.port1.onmessage = e => { if (e.data.done || e.data.ok) { clearTimeout(timeout); resolve(); } if (e.data.error) { clearTimeout(timeout); reject(Error(e.data.error)); } }; reg.active.postMessage({ type: 'CACHE_SPORTS' }, [channel.port2]); }); b.textContent = t('offlineReady'); } catch (e) { b.textContent = t('offlineError'); } finally { b.disabled = false; } });
 const initialSport = new URLSearchParams(location.search).get('sport');
 updateDestinationNames(); populateAthletes(); refreshText(); if (catalog.venues[0]) chooseVenue(catalog.venues[0]);
-if (initialSport && sportDefinitions.some(s => s.id === initialSport)) sportChanged(initialSport);
+if (initialSport && sportDefinitions.some(s => s.id === initialSport)) { sportChanged(initialSport); app.hidePicker(); } else app.showPicker();
 })();

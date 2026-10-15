@@ -936,7 +936,9 @@
     "accessory": "wristband",
     "jerseyNumber": 23
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "SG",
+   "notes": "6× NBA champion, 5× MVP"
   },
   {
    "type": "athlete",
@@ -1004,7 +1006,9 @@
     "accessory": "none",
     "jerseyNumber": 24
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "SG",
+   "notes": "5× NBA champion, 18× All-Star"
   },
   {
    "type": "athlete",
@@ -1066,7 +1070,9 @@
     "accessory": "headband",
     "jerseyNumber": 23
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "SF",
+   "notes": "4× NBA champion, all-time scoring leader"
   },
   {
    "type": "athlete",
@@ -1128,7 +1134,9 @@
     "accessory": "none",
     "jerseyNumber": 30
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "PG",
+   "notes": "4× NBA champion, greatest 3-point shooter"
   },
   {
    "type": "athlete",
@@ -1196,7 +1204,9 @@
     "accessory": "none",
     "jerseyNumber": 11
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "C",
+   "notes": "8× All-Star centre, Hall of Fame"
   },
   {
    "type": "athlete",
@@ -1258,7 +1268,9 @@
     "accessory": "none",
     "jerseyNumber": 17
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "PG",
+   "notes": "Linsanity 2012, NBA champion 2019"
   },
   {
    "type": "athlete",
@@ -1326,7 +1338,9 @@
     "accessory": "none",
     "jerseyNumber": 21
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "PF",
+   "notes": "5× NBA champion, 2× MVP"
   },
   {
    "type": "athlete",
@@ -1388,7 +1402,9 @@
     "accessory": "goggles",
     "jerseyNumber": 33
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "C",
+   "notes": "6× MVP, skyhook"
   },
   {
    "type": "athlete",
@@ -1450,7 +1466,9 @@
     "accessory": "none",
     "jerseyNumber": 33
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "SF",
+   "notes": "3× champion, 3× MVP"
   },
   {
    "type": "athlete",
@@ -1512,7 +1530,9 @@
     "accessory": "none",
     "jerseyNumber": 32
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "PG",
+   "notes": "5× champion, 3× MVP"
   },
   {
    "type": "athlete",
@@ -1580,7 +1600,9 @@
     "accessory": "none",
     "jerseyNumber": 41
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "PF",
+   "notes": "2011 champion & Finals MVP"
   },
   {
    "type": "athlete",
@@ -1642,7 +1664,9 @@
     "accessory": "none",
     "jerseyNumber": 34
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "PF",
+   "notes": "2021 champion, 2× MVP"
   },
   {
    "type": "athlete",
@@ -1704,7 +1728,9 @@
     "accessory": "none",
     "jerseyNumber": 15
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "C",
+   "notes": "3× MVP, 2023 champion"
   },
   {
    "type": "athlete",
@@ -1766,7 +1792,9 @@
     "accessory": "none",
     "jerseyNumber": 9
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "C",
+   "notes": "4× Olympic gold, first WNBA dunk"
   },
   {
    "type": "athlete",
@@ -1828,7 +1856,9 @@
     "accessory": "none",
     "jerseyNumber": 3
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "SG",
+   "notes": "WNBA all-time scoring leader"
   },
   {
    "type": "athlete",
@@ -1890,7 +1920,9 @@
     "accessory": "none",
     "jerseyNumber": 28
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "SF",
+   "notes": "First Japanese first-round NBA pick"
   },
   {
    "type": "athlete",
@@ -1958,7 +1990,9 @@
     "accessory": "none",
     "jerseyNumber": 16
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "C",
+   "notes": "2× NBA champion, 2 Olympic silvers"
   },
   {
    "type": "athlete",
@@ -2026,7 +2060,9 @@
     "accessory": "none",
     "jerseyNumber": 9
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "PG",
+   "notes": "4× NBA champion, 2007 Finals MVP"
   },
   {
    "type": "athlete",
@@ -2460,7 +2496,9 @@
     "accessory": "cap",
     "jerseyNumber": 17
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "DH",
+   "notes": "Two-way superstar, MVP"
   },
   {
    "type": "athlete",
@@ -2522,7 +2560,9 @@
     "accessory": "cap",
     "jerseyNumber": 51
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "RF",
+   "notes": "262 hits in 2004, 10 Gold Gloves"
   },
   {
    "type": "athlete",
@@ -2584,7 +2624,9 @@
     "accessory": "cap",
     "jerseyNumber": 3
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "RF",
+   "notes": "714 home runs, 7 World Series"
   },
   {
    "type": "athlete",
@@ -2646,7 +2688,9 @@
     "accessory": "cap",
     "jerseyNumber": 40
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "P",
+   "notes": "19-game winner 2006 & 2007"
   },
   {
    "type": "athlete",
@@ -2708,7 +2752,9 @@
     "accessory": "cap",
     "jerseyNumber": 42
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "P",
+   "notes": "652 saves, unanimous Hall of Famer"
   },
   {
    "type": "athlete",
@@ -2770,7 +2816,9 @@
     "accessory": "helmet",
     "jerseyNumber": 24
    },
-   "appearanceBasis": "stylized-approximation"
+   "appearanceBasis": "stylized-approximation",
+   "position": "LF",
+   "notes": "555 home runs, 2004 WS MVP"
   },
   {
    "type": "athlete",
@@ -5136,7 +5184,8 @@
    "credit": null,
    "notes": "New York Yankees captain with five World Series titles, 3,465 career hits and a 2020 Hall of Fame induction.",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "SS"
   },
   {
    "type": "athlete",
@@ -5182,7 +5231,8 @@
    "credit": null,
    "notes": "Hit 630 career home runs with 10 Gold Gloves and the 1997 AL MVP, entering the Hall of Fame in 2016 with a then-record 99.3% of the vote.",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "CF"
   },
   {
    "type": "athlete",
@@ -5228,7 +5278,8 @@
    "credit": null,
    "notes": "Hit a world professional record 868 home runs for the Yomiuri Giants, winning 15 home-run titles and 11 Japan Series championships.",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "1B"
   },
   {
    "type": "athlete",
@@ -5274,7 +5325,8 @@
    "credit": null,
    "notes": "Brothers franchise icon nicknamed 'Chia-Chia' who won three CPBL batting titles and had his No. 23 retired after 19 seasons with the club.",
    "measurementsNote": "Height/weight not recorded in this catalogue; the game uses a neutral default body.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "1B"
   },
   {
    "type": "athlete",
@@ -5320,7 +5372,8 @@
    "credit": null,
    "notes": "Hit .414 in 2016, the first .400 season in CPBL history, before spending four seasons with NPB's Hokkaido Nippon-Ham Fighters.",
    "measurementsNote": "Height/weight not recorded in this catalogue; the game uses a neutral default body.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "LF"
   },
   {
    "type": "athlete",
@@ -5366,7 +5419,8 @@
    "credit": null,
    "notes": "Taiwanese left-hander who won 59 MLB games for the Orioles and Marlins after taking the 2009 Central League ERA title with Chunichi.",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "P"
   },
   {
    "type": "athlete",
@@ -5412,7 +5466,8 @@
    "credit": null,
    "notes": "2004 Olympic gold and 2008 silver medallist whose record 60-game winning streak carried Arizona to the 2001 NCAA title.",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "P"
   },
   {
    "type": "athlete",
@@ -5458,7 +5513,8 @@
    "credit": null,
    "notes": "Left-handed strikeout ace with Olympic gold in 2004 and silvers in 2008 and 2020, a three-time USA Softball Player of the Year.",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "P"
   },
   {
    "type": "athlete",
@@ -5504,7 +5560,8 @@
    "credit": null,
    "notes": "Three-time Olympic gold medallist (1996, 2000, 2004) and UCLA legend who dominated both as a pitcher and as a hitter.",
    "measurementsNote": "Height/weight not recorded in this catalogue; the game uses a neutral default body.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "P"
   },
   {
    "type": "athlete",
@@ -5550,7 +5607,8 @@
    "credit": null,
    "notes": "Japan's ace who threw 413 pitches in two days to win 2008 Olympic gold and repeated as Olympic champion at Tokyo 2020.",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "P"
   },
   {
    "type": "athlete",
@@ -5596,7 +5654,8 @@
    "credit": null,
    "notes": "Towering left-hander with Olympic silvers in 2008 and 2020, the NCAA career strikeout record at Tennessee and the first million-dollar contract in women's pro softball.",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "P"
   },
   {
    "type": "athlete",
@@ -5642,7 +5701,8 @@
    "credit": null,
    "notes": "Power-hitting third baseman with Olympic golds in 2000 and 2004 and silver in 2008, when she set the Olympic record for career home runs.",
    "measurementsNote": "Height/weight not recorded in this catalogue; the game uses a neutral default body.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "3B"
   },
   {
    "type": "athlete",
@@ -5688,7 +5748,8 @@
    "credit": null,
    "notes": "Shortstop who hit the first home run in Olympic softball history and won gold in 1996 and 2000 while training as an orthopedic surgeon.",
    "measurementsNote": "Height/weight not recorded in this catalogue; the game uses a neutral default body.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "SS"
   },
   {
    "type": "athlete",
@@ -5734,7 +5795,8 @@
    "credit": null,
    "notes": "Japan's long-time captain and cleanup hitter who won Olympic gold in 2008 and 2020 and bronze in 2004.",
    "measurementsNote": "Height/weight not recorded in this catalogue; the game uses a neutral default body.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "CF"
   },
   {
    "type": "athlete",
@@ -5780,7 +5842,8 @@
    "credit": null,
    "notes": "Only cricketer with 100 international centuries and the all-time leading run-scorer in both Tests and ODIs, a 2011 World Cup winner.",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "BAT"
   },
   {
    "type": "athlete",
@@ -5826,7 +5889,8 @@
    "credit": null,
    "notes": "Run-chase master with more than 80 international centuries who won the 2011 World Cup and the 2024 T20 World Cup with India.",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "BAT"
   },
   {
    "type": "athlete",
@@ -5872,7 +5936,8 @@
    "credit": null,
    "notes": "Retired with a Test batting average of 99.94 and is widely regarded as the greatest batsman in cricket history.",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "BAT"
   },
   {
    "type": "athlete",
@@ -5918,7 +5983,8 @@
    "credit": null,
    "notes": "Leg-spin genius with 708 Test wickets who bowled the 1993 'Ball of the Century' and won the 1999 World Cup with Australia.",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "P"
   },
   {
    "type": "athlete",
@@ -5964,7 +6030,8 @@
    "credit": null,
    "notes": "Captain who led India to the 2007 T20 World Cup, 2011 World Cup and 2013 Champions Trophy, famed as a calm finisher and lightning-fast wicketkeeper.",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "CA"
   },
   {
    "type": "athlete",
@@ -6010,7 +6077,8 @@
    "credit": null,
    "notes": "South Africa's complete all-rounder with more than 13,000 Test runs and 290 Test wickets, often rated the best all-rounder since Garry Sobers.",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "BAT"
   },
   {
    "type": "athlete",
@@ -6056,7 +6124,8 @@
    "credit": null,
    "notes": "West Indies left-hander who holds the record Test score of 400 not out and the first-class record of 501 not out.",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "BAT"
   },
   {
    "type": "athlete",
@@ -6102,7 +6171,8 @@
    "credit": null,
    "notes": "All-rounder who played World Cups in both cricket and football for Australia and was named ICC Women's Cricketer of the Decade (2011-2020).",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "BAT"
   },
   {
    "type": "athlete",
@@ -6148,7 +6218,8 @@
    "credit": null,
    "notes": "Pakistan's elegant top-order batsman and former captain who has topped the ICC batting rankings in both ODIs and T20Is.",
    "measurementsNote": "Height/weight not recorded in this catalogue; the game uses a neutral default body.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "BAT"
   },
   {
    "type": "athlete",
@@ -6194,7 +6265,8 @@
    "credit": null,
    "notes": "England's Test captain and all-rounder, hero of the 2019 World Cup final and the Headingley Ashes miracle, and a 2022 T20 World Cup winner.",
    "measurementsNote": "Commonly listed biographical figure; may vary by source or season. Not a measurement by this project.",
-   "attributionRequired": false
+   "attributionRequired": false,
+   "position": "BAT"
   },
   {
    "type": "athlete",

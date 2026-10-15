@@ -107,8 +107,8 @@
           eye = { x: ball.x - (ball.vx || 0) / speed * 6 / zoom, y: Math.max(2.2, (ball.y || 0) + 2.4), z: ball.z - (ball.vz || 0) / speed * 6 / zoom };
           target = { x: ball.x + (ball.vx || 0) / speed * 4, y: Math.max(0.3, ball.y || 0), z: ball.z + (ball.vz || 0) / speed * 4 };
         } else {
-          eye = { x: 0, y: 3.9 / Math.sqrt(zoom), z: plateZ + 7.6 / zoom };
-          target = { x: 0, y: 0.9, z: plateZ - 10 };
+          eye = { x: 0, y: 3.1 / Math.sqrt(zoom), z: plateZ + 6.0 / zoom };
+          target = { x: 0, y: 0.95, z: plateZ - 9 };
         }
         wide = true;
       } else if (view === 'follow') {
@@ -139,7 +139,7 @@
           : { x: (b.minX + b.maxX) / 2, y: 0.4, z: (b.minZ + b.maxZ) / 2 - 0.5 });
         const fieldScale = Math.max((b.maxX - b.minX) / 15, (b.maxZ - b.minZ) / 13.6);
         const radius = (Number.isFinite(options.cameraDistance) ? options.cameraDistance :
-          (options.replay ? 18.5 : 22.5 * Math.max(0.62, fieldScale))) / zoom;
+          (options.replay ? 18.5 / Math.max(1, Number(options.replayZoom) || 1) : 22.5 * Math.max(0.62, fieldScale))) / zoom;
         eye = { x: target.x + Math.sin(angle) * radius,
           y: target.y + radius * (options.replay ? 0.6 : 0.65), z: target.z + Math.cos(angle) * radius };
       }
@@ -155,7 +155,9 @@
         : Math.min(this.cssHeight * 1.35, this.cssWidth * 1.3);
       const cy = view === 'third' ? (aspect < 0.9 ? 0.43 : 0.47) : view === 'batter' || view === 'follow' ? 0.5 : view === 'wide' ? (aspect < 0.9 ? 0.46 : 0.44) : 0.48;
       this._camera = { eye, target, view, focusId: focus && focus.id, fx, fy, fz, rx, rz, ux, uy, uz, focal, wide,
-        cx: this.cssWidth / 2, cy: this.cssHeight * cy, playerScale: Math.max(0.8, Math.min(1.6, Number(options.playerScale) || 1.18)) };
+        cx: this.cssWidth / 2, cy: this.cssHeight * cy,
+        // portrait phones fit the whole arena into a narrow frame, so the athletes get a little extra size there
+        playerScale: Math.max(0.8, Math.min(1.7, (Number(options.playerScale) || 1.18) * (aspect < 0.8 ? 1.16 : 1))) };
     }
 
     _depth(p) {
@@ -196,6 +198,30 @@
         }
       }
       return { x: c.cx + sx, y: c.cy + sy, depth, scale };
+    }
+
+    /* Inverse of project() for the vertical strike-zone plane (z = plateZ - 0.05). Returns {x, y} in zone units or null. */
+    zoneFromScreen(sx, sy, snapshot) {
+      const c = this._camera, bt = snapshot && snapshot.batting;
+      if (!c || !bt) return null;
+      let dx = sx - c.cx, dy = sy - c.cy;
+      if (c.wide) {
+        // undo the lens pull numerically (three fixed-point steps are plenty for on-screen points)
+        const target = Math.hypot(dx / this.cssWidth, dy / this.cssHeight) * 2;
+        let norm = target;
+        for (let i = 0; i < 3; i++) { let pulled = norm / (1 - WIDE_K * norm * norm); if (norm > 1.15) pulled = Math.max(pulled, 1.15); norm = norm - (pulled - target); }
+        if (target > 1e-6) { const k = norm / target; dx *= k; dy *= k; }
+      }
+      // ray through the pixel: forward + right * dx/focal + up * (-dy)/focal
+      const rx = c.rx, rz = c.rz, ux = c.ux, uy = c.uy, uz = c.uz;
+      const dirx = c.fx + rx * dx / c.focal + ux * -dy / c.focal, diry = c.fy + uy * -dy / c.focal, dirz = c.fz + rz * dx / c.focal + uz * -dy / c.focal;
+      const planeZ = bt.plateZ - 0.05;
+      if (Math.abs(dirz) < 1e-6) return null;
+      const tHit = (planeZ - c.eye.z) / dirz;
+      if (tHit <= 0) return null;
+      const x = c.eye.x + dirx * tHit, y = c.eye.y + diry * tHit, zone = bt.zone || { halfWidth: 0.32, bottom: 0.45, top: 1.15 };
+      if (x < -zone.halfWidth - 0.45 || x > zone.halfWidth + 0.45 || y < zone.bottom - 0.45 || y > zone.top + 0.45) return null;
+      return { x: Math.max(-zone.halfWidth - 0.3, Math.min(zone.halfWidth + 0.3, x)), y: Math.max(zone.bottom - 0.3, Math.min(zone.top + 0.3, y)) };
     }
 
     _polygon(points, fill, stroke, width) {
@@ -662,7 +688,8 @@
       const x = hoop.x || 0, z = hoop.z === undefined ? -6 : hoop.z, y = hoop.y || 3.05, s = z < 0 ? -1 : 1;
       this._line([[x, 0, z + s * 0.9], [x, 4.15, z + s * 0.9], [x, 4.15, z + s * 0.23]], '#495d63', 7);
       const bz = z + s * 0.25;
-      this._polygon([[x - 0.92, y - 0.11, bz], [x + 0.92, y - 0.11, bz], [x + 0.92, y + 1.12, bz], [x - 0.92, y + 1.12, bz]], 'rgba(250,255,255,0.83)', '#61787d', 2);
+      // tempered-glass backboard: translucent so a star behind it stays visible during the 360° replay orbit
+      this._polygon([[x - 0.92, y - 0.11, bz], [x + 0.92, y - 0.11, bz], [x + 0.92, y + 1.12, bz], [x - 0.92, y + 1.12, bz]], 'rgba(236,248,250,0.34)', 'rgba(97,120,125,0.9)', 2);
       this._line([[x - 0.31, y + 0.08, bz - s * 0.008], [x - 0.31, y + 0.51, bz - s * 0.008], [x + 0.31, y + 0.51, bz - s * 0.008], [x + 0.31, y + 0.08, bz - s * 0.008], [x - 0.31, y + 0.08, bz - s * 0.008]], '#e77b59', 1.6);
       const count = this.quality === 'lite' ? 6 : 9;
       for (let i = 0; i < count; i++) {
@@ -721,6 +748,13 @@
           if (marker) { ctx.fillStyle = color; ctx.beginPath(); ctx.moveTo(marker.x - 5, marker.y - 3); ctx.lineTo(marker.x + 5, marker.y - 3); ctx.lineTo(marker.x, marker.y + 4); ctx.closePath(); ctx.fill(); }
         }
       }
+      const translucent = snapshot.family === 'batting' && this._camera.view === 'batter' && p.team === 1 && p.action === 'crouch';
+      if (translucent) ctx.globalAlpha = 0.42;
+      if (options.spotlight && highlighted) {
+        const spot = this.project(x, y + size * .9, z);
+        if (spot) { const g = ctx.createRadialGradient(spot.x, spot.y, spot.scale * .3, spot.x, spot.y, spot.scale * 2.4); g.addColorStop(0, 'rgba(255,250,210,.28)'); g.addColorStop(1, 'rgba(255,250,210,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, this.cssWidth, this.cssHeight); }
+      }
+      const dark = TEAM_DARK[p.team === 1 ? 1 : 0], shoe = p.team === 1 ? '#f4efe6' : '#ffffff';
       if (swim) {
         // swimmers: body below the water line is hidden; a splash ring marks the surface
         this._circle(x, 0.03, z, .55 * size, 'rgba(230,245,255,.35)', 'rgba(255,255,255,.55)', 1.2);
@@ -729,12 +763,19 @@
           const hip = [x + sideX * .115 * side * size, y + waistY, z + sideZ * .115 * side * size];
           const knee = [x + sideX * .13 * side * size + frontX * stride * side, y + waistY * .52, z + sideZ * .13 * side * size + frontZ * stride * side];
           const foot = [x + sideX * .13 * side * size - frontX * stride * side, y + .08, z + sideZ * .13 * side * size - frontZ * stride * side];
-          this._line([hip, knee, foot], skin, clothWidth); this._line([hip, knee], TEAM_DARK[p.team === 1 ? 1 : 0], clothWidth * 1.23);
-          this._line([foot, [foot[0] + frontX * .16, foot[1], foot[2] + frontZ * .16]], '#fff9ef', clothWidth * .9);
+          const sock = [foot[0] + (knee[0] - foot[0]) * .3, foot[1] + (knee[1] - foot[1]) * .3, foot[2] + (knee[2] - foot[2]) * .3];
+          this._line([hip, knee, foot], skin, clothWidth);
+          this._line([hip, [hip[0] + (knee[0] - hip[0]) * .78, hip[1] + (knee[1] - hip[1]) * .78, hip[2] + (knee[2] - hip[2]) * .78]], dark, clothWidth * 1.3);   // shorts
+          this._line([sock, foot], '#f7f7f2', clothWidth * .9);                                                                           // socks
+          this._line([foot, [foot[0] + frontX * .19, foot[1], foot[2] + frontZ * .19]], shoe, clothWidth * 1.05);                            // shoes
+          this._line([[foot[0] + frontX * .06, foot[1] - .02, foot[2] + frontZ * .06], [foot[0] + frontX * .17, foot[1] - .02, foot[2] + frontZ * .17]], p.team === 1 ? '#c94f3a' : '#13baad', clothWidth * .35); // shoe accent
         }
       }
       const sw = .19 * size * weight, left = [x - sideX * sw, y + shoulderY, z - sideZ * sw], right = [x + sideX * sw, y + shoulderY, z + sideZ * sw];
       this._polygon([left, right, [x + sideX * .14 * size, y + waistY, z + sideZ * .14 * size], [x - sideX * .14 * size, y + waistY, z - sideZ * .14 * size]], color);
+      // shaded side of the jersey + side stripe give the body volume
+      this._polygon([right, [x + sideX * .14 * size, y + waistY, z + sideZ * .14 * size], [x + sideX * .07 * size, y + waistY, z + sideZ * .07 * size], [x + sideX * .1 * size * weight, y + shoulderY, z + sideZ * .1 * size * weight]], 'rgba(0,0,0,.14)');
+      this._line([[x - sideX * sw * .98, y + shoulderY - .02, z - sideZ * sw * .98], [x - sideX * .14 * size, y + waistY + .02, z - sideZ * .14 * size]], 'rgba(255,255,255,.35)', Math.max(1, clothWidth * .25));
       this._line([[x, y + waistY + .12 * size, z], [x, y + shoulderY - .04 * size, z]], color, Math.max(4, pivot.scale * .29 * size * weight));
       let equipmentHand, otherHand;
       for (const side of [-1, 1]) {
@@ -756,8 +797,8 @@
       }
       const head = this.project(x, y + headY, z);
       if (head) {
-        const r = Math.min(70, Math.max(2.3, head.scale * .155 * size));
         const portrait = options.portraits && options.portraits[p.athleteId];
+        const r = Math.min(76, Math.max(2.3, head.scale * (portrait ? .17 : .155) * size));
         // hair behind the head first (long/afro/braids)
         this._hairBack(head, r, look, frontX);
         ctx.fillStyle = skin; ctx.beginPath(); ctx.arc(head.x, head.y, r, 0, TAU); ctx.fill();
@@ -787,8 +828,16 @@
       }
       if (options.names && p.displayName && this.quality !== 'lite') {
         const tag = this.project(x, y + headY + .62, z);
-        if (tag && tag.scale * size > 40) { ctx.font = `700 ${Math.max(9, Math.min(15, tag.scale * .085))}px system-ui, sans-serif`; ctx.fillStyle = 'rgba(255,255,255,.9)'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'; ctx.fillText(String(p.displayName).split(' ').slice(-1)[0], tag.x, tag.y); }
+        if (tag && tag.scale * size > 40) {
+          const full = snapshot.family === 'batting' || !snapshot.sport || /basketball/.test(snapshot.sport) || tag.scale * size > 110;
+          const text = full ? String(p.displayName) : String(p.displayName).split(' ').slice(-1)[0];
+          ctx.font = `700 ${Math.max(9, Math.min(16, tag.scale * .085))}px system-ui, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+          const w = ctx.measureText ? ctx.measureText(text).width : text.length * 7;
+          ctx.fillStyle = 'rgba(8,18,24,.62)'; ctx.fillRect(tag.x - w / 2 - 5, tag.y - 15, w + 10, 17);
+          ctx.fillStyle = p.id === selectedId ? '#daef90' : 'rgba(255,255,255,.95)'; ctx.fillText(text, tag.x, tag.y - 1);
+        }
       }
+      if (translucent) ctx.globalAlpha = 1;
     }
 
     _hairBack(head, r, look) {
@@ -827,6 +876,23 @@
     _equipment(hand, angle, sport, action, shoulderAngle = 0, otherHand, snapshot, p) {
       const dx = Math.sin(angle), dz = Math.cos(angle);
       if ((sport === 'baseball' || sport === 'softball' || sport === 'cricket') && p && p.id !== 0) return;   // only the batter carries a bat
+      const bt = snapshot && snapshot.batting;
+      if (bt && p && p.id === 0 && Number.isFinite(bt.cursorX)) {
+        /* the bat head sits exactly where the contact cursor is, so lining the bat up over the plate is visible;
+           during the swing the barrel sweeps through the zone at that height */
+        const planeZ = bt.plateZ - 0.05, swinging = /swing|bunt/.test(action), phase = swinging ? 1 - Math.min(1, (p.actionTime || 0) / 0.42) : 0;
+        const sweep = swinging ? (phase - 0.5) * 1.6 * (p.handedness === 'left' ? -1 : 1) : 0;
+        const tip = [bt.cursorX + sweep, bt.cursorY + (sport === 'cricket' ? 0.05 : 0.08) + Math.sin(shoulderAngle) * .15, planeZ - (swinging ? Math.abs(sweep) * .25 : 0)];
+        const grip = [hand[0] + (otherHand ? (otherHand[0] - hand[0]) * .3 : 0), hand[1] + (otherHand ? (otherHand[1] - hand[1]) * .3 : 0), hand[2] + (otherHand ? (otherHand[2] - hand[2]) * .3 : 0)];
+        const colour = sport === 'softball' ? '#c9c9c4' : sport === 'cricket' ? '#e8d6a8' : '#d7b77e';
+        const knob = this.project(tip[0], tip[1], tip[2]), scale = knob ? knob.scale : 60;
+        // tapered bat: taped handle for the first third, then the thick barrel (cricket: a flat willow blade)
+        const mid = [grip[0] + (tip[0] - grip[0]) * .36, grip[1] + (tip[1] - grip[1]) * .36, grip[2] + (tip[2] - grip[2]) * .36];
+        this._line([grip, mid], sport === 'cricket' ? '#2d2a28' : '#3b2d22', Math.max(2, scale * .028));
+        this._line([mid, tip], colour, Math.max(3, scale * (sport === 'cricket' ? .11 : .062)));
+        if (knob) { this.ctx.fillStyle = sport === 'cricket' ? '#f1e4bd' : '#e9d3a2'; this.ctx.beginPath(); this.ctx.arc(knob.x, knob.y, Math.max(2, scale * (sport === 'cricket' ? .055 : .031)), 0, TAU); this.ctx.fill(); }
+        return;
+      }
       if (sport === 'baseball' || sport === 'softball') {
         const lift = (/swing/.test(action) ? 0.05 : .7) + Math.sin(shoulderAngle) * .8;
         const reach = .95 * Math.cos(shoulderAngle);
@@ -914,12 +980,16 @@
         if (ring) { const rr = Math.max(8, ring.scale * (0.1 + (1 - bt.pitch.progress) * 0.9)); ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 5]); ctx.beginPath(); ctx.arc(ring.x, ring.y, rr, 0, TAU); ctx.stroke(); ctx.setLineDash([]); }
       }
       // bat contact cursor
+      // the bat itself now reaches this point, so the marker is a light crosshair (gold once the swing is loaded)
       const cursor = this.project(bt.cursorX, bt.cursorY, z - 0.05);
       if (cursor) {
-        const w = Math.max(10, cursor.scale * .34), h = Math.max(5, cursor.scale * .11);
-        ctx.save(); ctx.translate(cursor.x, cursor.y); ctx.rotate(-0.35);
-        ctx.fillStyle = bt.loaded ? 'rgba(255,220,90,.85)' : 'rgba(255,255,255,.7)'; ctx.beginPath(); ctx.ellipse(0, 0, w, h, 0, 0, TAU); ctx.fill();
-        ctx.strokeStyle = '#2a2a2a'; ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore();
+        const r = Math.max(6, cursor.scale * .07);
+        ctx.strokeStyle = bt.loaded ? 'rgba(255,220,90,.95)' : 'rgba(255,255,255,.85)'; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.arc(cursor.x, cursor.y, r, 0, TAU); ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(cursor.x - r * 1.7, cursor.y); ctx.lineTo(cursor.x - r * .6, cursor.y); ctx.moveTo(cursor.x + r * .6, cursor.y); ctx.lineTo(cursor.x + r * 1.7, cursor.y);
+        ctx.moveTo(cursor.x, cursor.y - r * 1.7); ctx.lineTo(cursor.x, cursor.y - r * .6); ctx.moveTo(cursor.x, cursor.y + r * .6); ctx.lineTo(cursor.x, cursor.y + r * 1.7);
+        ctx.stroke();
       }
       if (bt.lastContact && bt.state === 'hit') { const c = this.project(bt.lastContact.x, bt.lastContact.y, z); if (c) { ctx.fillStyle = 'rgba(255,240,150,.8)'; ctx.beginPath(); ctx.arc(c.x, c.y, Math.max(3, c.scale * .05), 0, TAU); ctx.fill(); } }
     }
@@ -950,6 +1020,12 @@
         if (snapshot.target) objects.push({ type: 'target', value: snapshot.target, depth: this.project(snapshot.target.x, snapshot.target.y, snapshot.target.z)?.depth || 0 });
       }
       if (snapshot.ball) objects.push({ type: 'ball', value: snapshot.ball, depth: this.project(snapshot.ball.x, snapshot.ball.y, snapshot.ball.z)?.depth || 0 });
+      if (options.trail && snapshot.ball) {
+        this._trail = this._trail || []; const last = this._trail[this._trail.length - 1];
+        if (!last || Math.hypot(last[0] - snapshot.ball.x, last[2] - snapshot.ball.z) > 0.02 || Math.abs(last[1] - (snapshot.ball.y || 0)) > 0.02) this._trail.push([snapshot.ball.x, snapshot.ball.y || 0, snapshot.ball.z]);
+        if (this._trail.length > 18) this._trail.shift();
+        this._trail.forEach((pt, i) => { const q = this.project(pt[0], pt[1], pt[2]); if (!q) return; const a = (i + 1) / this._trail.length; ctx.fillStyle = `rgba(255,214,107,${0.08 + a * 0.4})`; ctx.beginPath(); ctx.arc(q.x, q.y, Math.max(1.5, q.scale * .1 * a), 0, TAU); ctx.fill(); });
+      } else this._trail = null;
       objects.sort((a, b) => b.depth - a.depth);
       for (const item of objects) {
         if (item.type === 'player') this._player(item.value, snapshot, options);

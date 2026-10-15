@@ -120,8 +120,8 @@
     if (!soundChosen) { muted = false; $('sound').textContent = message('mute'); }
     playSound('pass');
     latestClip = null; replayState = null; pendingHighlight = null; tickAccumulator = captureAccumulator = 0;
-    lastHighlightAt = -30; playing = true; paused = false; clearInput();
-    $('startOverlay').hidden = true; $('pauseOverlay').hidden = true; $('endOverlay').hidden = true; $('highlightBanner').hidden = true;
+    lastHighlightAt = -30; playing = true; paused = false; clearInput(); $('pickerOverlay').hidden = true;
+    $('startOverlay').hidden = true; $('pauseOverlay').hidden = true; $('endOverlay').hidden = true; $('highlightBanner').hidden = true; $('pickerOverlay').hidden = true; $('starCard').hidden = true;
     $('pause').textContent = message('pause'); canvas.focus({ preventScroll: true }); updateHud();
     stage.scrollIntoView?.({ block: 'start', behavior: 'smooth' });
   }
@@ -139,7 +139,7 @@
   window.addEventListener('blur', clearInput);
   const keyActions = { KeyQ: 'jump', KeyE: 'crouch', KeyJ: 'pass', KeyK: 'shootHeld', Tab: 'switchPlayer' };
   const gameKeys = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ...Object.keys(keyActions)];
-  function allowsKeys(e) { return playing && !paused && !replayState && !core.ended && !/INPUT|SELECT|TEXTAREA|BUTTON/.test(e.target.tagName) && !document.querySelector('dialog[open]'); }
+  function allowsKeys(e) { return playing && !paused && !replayState && !core.ended && $('pickerOverlay').hidden && $('closeOverlay').hidden && !/INPUT|SELECT|TEXTAREA|BUTTON/.test(e.target.tagName) && !document.querySelector('dialog[open]'); }
   document.addEventListener('keydown', e => {
     if (e.code === 'Escape' && playing && !document.querySelector('dialog[open]')) { finishReplay(); setPaused(!paused); return; }
     if (!allowsKeys(e) || !gameKeys.includes(e.code)) return;
@@ -187,6 +187,24 @@
     $('dockToggle').setAttribute('aria-pressed', String(!hidden)); save('sa-dock', hidden ? 'hidden' : 'shown'); clearInput(); renderer.resize();
   });
   if (stored('sa-dock', 'shown') === 'hidden' && matchMedia('(pointer:fine)').matches) { stage.classList.add('dock-hidden'); $('dockToggle').setAttribute('aria-pressed', 'false'); }
+  /* ---- first screen: sport picker; ✕ closes the page ---- */
+  function showPicker() {
+    finishReplay(); if (playing && !core.ended) setPaused(true);
+    $('pickerOverlay').hidden = false; $('startOverlay').hidden = true; $('endOverlay').hidden = true; $('closeOverlay').hidden = true;
+    window.dispatchEvent(new CustomEvent('sa-picker-open'));
+  }
+  function hidePicker() { $('pickerOverlay').hidden = true; if (!playing) $('startOverlay').hidden = false; }
+  $('changeSport').addEventListener('click', showPicker); $('endChangeSport').addEventListener('click', showPicker);
+  $('closeApp').addEventListener('click', () => { finishReplay(); if (playing && !core.ended) setPaused(true); $('closeOverlay').hidden = false; });
+  $('closeCancel').addEventListener('click', () => { $('closeOverlay').hidden = true; });
+  $('closeConfirm').addEventListener('click', async () => {
+    playing = false; clearInput(); $('closeOverlay').hidden = true; $('closedOverlay').hidden = false;
+    try { if (document.fullscreenElement) await document.exitFullscreen(); } catch (_) {}
+    try { window.close(); } catch (_) {}
+    // A page that was not opened by script cannot close itself: leave a blank page instead so nothing keeps running.
+    setTimeout(() => { if (!document.hidden && !window.closed) { try { location.replace('about:blank'); } catch (_) {} } }, 350);
+  });
+  $('reopen').addEventListener('click', () => location.reload());
   function input() {
     return Object.assign({}, actions, {
       moveX: sticks.moveX + (keys.has('KeyD') ? 1 : 0) - (keys.has('KeyA') ? 1 : 0),
@@ -223,12 +241,34 @@
     latestClip = clip; replayState = { event: clip.event, frames: clip.frames, elapsed: 0, manualAngle: 0,
       duration: Math.max(0.5, clip.frames[clip.frames.length - 1].clock - clip.frames[0].clock) / 0.45 };
     clearInput(); canvas.style.touchAction = 'none'; $('pauseOverlay').hidden = true; $('highlightTitle').textContent = highlightText(clip.event); $('highlightBanner').hidden = false;
+    // star card: who made the play
+    const star = core.players.find(p => p.id === clip.event.playerId);
+    const info = star && window.SASportsUI && SASportsUI.athleteFor ? SASportsUI.athleteFor(star.athleteId) : null;
+    if (star) {
+      $('starName').textContent = (info ? (window.SASportsUI.localeName ? SASportsUI.localeName(info) : info.name) : star.displayName || '#' + (star.number || star.id + 1));
+      $('starMeta').textContent = [highlightText(clip.event), info && info.position ? message('pos_' + info.position) : '', info && info.country ? info.country : '', info && info.notes ? info.notes : ''].filter(Boolean).join(' · ');
+      if (info && info.photo) { $('starPhoto').src = new URL(info.photo, assetBase).href; $('starPhoto').hidden = false; } else $('starPhoto').hidden = true;
+      $('starCard').hidden = false;
+    }
   }
-  function finishReplay() { if (!replayState) return; replayState = null; canvas.style.touchAction = ''; $('highlightBanner').hidden = true; tickAccumulator = 0; clearInput(); $('pauseOverlay').hidden = !paused; }
-  let orbitPointer = null, orbitX = 0;
-  canvas.addEventListener('pointerdown', e => { if (!replayState) return; e.preventDefault(); orbitPointer = e.pointerId; orbitX = e.clientX; canvas.setPointerCapture(e.pointerId); });
-  canvas.addEventListener('pointermove', e => { if (!replayState || e.pointerId !== orbitPointer) return; replayState.manualAngle += (e.clientX - orbitX) / Math.max(1, canvas.clientWidth) * Math.PI * 2; orbitX = e.clientX; });
-  function endOrbit(e) { if (e.pointerId === orbitPointer) orbitPointer = null; }
+  function finishReplay() { if (!replayState) return; replayState = null; canvas.style.touchAction = ''; $('highlightBanner').hidden = true; $('starCard').hidden = true; tickAccumulator = 0; clearInput(); $('pauseOverlay').hidden = !paused; }
+  let orbitPointer = null, orbitX = 0, zonePointer = null;
+  function zoneTouch(e) {
+    // batting: a tap or drag inside the strike zone moves the bat straight to that spot
+    if (!playing || paused || replayState || core.ended || !core.batter || !renderer.zoneFromScreen) return false;
+    const rect = canvas.getBoundingClientRect(), hit = renderer.zoneFromScreen(e.clientX - rect.left, e.clientY - rect.top, core.getSnapshot());
+    if (!hit) return false;
+    core.batter.cursorX = hit.x; core.batter.cursorY = hit.y; return true;
+  }
+  canvas.addEventListener('pointerdown', e => {
+    if (replayState) { e.preventDefault(); orbitPointer = e.pointerId; orbitX = e.clientX; canvas.setPointerCapture(e.pointerId); return; }
+    if (zoneTouch(e)) { e.preventDefault(); zonePointer = e.pointerId; canvas.setPointerCapture(e.pointerId); }
+  });
+  canvas.addEventListener('pointermove', e => {
+    if (replayState && e.pointerId === orbitPointer) { replayState.manualAngle += (e.clientX - orbitX) / Math.max(1, canvas.clientWidth) * Math.PI * 2; orbitX = e.clientX; return; }
+    if (e.pointerId === zonePointer) zoneTouch(e);
+  });
+  function endOrbit(e) { if (e.pointerId === orbitPointer) orbitPointer = null; if (e.pointerId === zonePointer) zonePointer = null; }
   canvas.addEventListener('pointerup', endOrbit); canvas.addEventListener('pointercancel', endOrbit); canvas.addEventListener('lostpointercapture', endOrbit);
   $('skipReplay').addEventListener('click', finishReplay);
   $('replay').addEventListener('click', () => beginReplay(latestClip));
@@ -352,7 +392,14 @@
       if (now - lastRender >= renderInterval - 1) {
         const snapshot = replayState ? replaySnapshot() : core.getSnapshot();
         const viewOptions = window.SASportsUI ? window.SASportsUI.renderOptions(snapshot) : { cameraAngle: 0, view: 'wide' };
-        renderer.render(snapshot, Object.assign({}, viewOptions, replayState ? { replay: true, cameraAngle: replayState.elapsed / replayState.duration * Math.PI * 2 + replayState.manualAngle, focusId: replayState.event.playerId } : {}));
+        let replayOptions = {};
+        if (replayState) {
+          const t = replayState.elapsed / replayState.duration;           // 0..1 over the slow-motion clip
+          const closeUp = t < 0.35 ? 1 : t < 0.8 ? 1 - (t - 0.35) / 0.45 : 0;  // start tight on the star, pull back while orbiting
+          replayOptions = { replay: true, cameraAngle: t * Math.PI * 2 + replayState.manualAngle, focusId: replayState.event.playerId,
+            replayZoom: 1 + closeUp * 1.1, playerScale: (viewOptions.playerScale || 1.18) * (1 + closeUp * 0.25), trail: true, spotlight: true };
+        }
+        renderer.render(snapshot, Object.assign({}, viewOptions, replayOptions));
         lastRender = now; frameCount++; updateHud();
       }
       if (now - fpsStart > 3000) {
@@ -368,13 +415,13 @@
   window.SAHoopsApp = {
     get core() { return core; }, renderer,
     getLanguage: () => language, message, setLanguage, loadDictionary,
-    setPaused, toast, flash,
+    setPaused, toast, flash, showPicker, hidePicker,
     setSport: (sport) => {
       finishReplay(); clearInput(); history.length = 0; latestClip = null; pendingHighlight = null; playing = false; paused = false;
       core = sport === 'basketball' ? new SAHoopsCore.Core({ difficulty: $('difficulty').value, seed: 971031 })
         : sport === 'basketball5' ? new SAHoopsCore.Core({ difficulty: $('difficulty').value, seed: 971031, fullCourt: true })
         : new SASports.Core({ sport, difficulty: $('difficulty').value, seed: 971031 });
-      $('startOverlay').hidden = false; $('endOverlay').hidden = true; $('pauseOverlay').hidden = true; $('pause').textContent = message('pause');
+      $('startOverlay').hidden = !$('pickerOverlay').hidden; $('endOverlay').hidden = true; $('pauseOverlay').hidden = true; $('pause').textContent = message('pause'); $('starCard').hidden = true;
       tickAccumulator = captureAccumulator = 0; updateHud(); window.dispatchEvent(new CustomEvent('sa-match-reset')); return core;
     },
     diagnostics: () => ({ language, playing, paused, replay: !!replayState, quality: activeQuality, recommended, benchmarkCost, historyFrames: history.length, clipFrames: latestClip ? latestClip.frames.length : 0, liveClock: core.clock, canvasPixels: canvas.width * canvas.height, localAI: true, networkMultiplayer: false, languages: supported.length }),
