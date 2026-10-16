@@ -112,6 +112,7 @@ function playerCard(team, i, pos, pool) {
   ratingRows(card, a);
   if (a.traits?.length) card.append(node('p', a.traits.join(' · '), 'fine-note'));
   if (a.credit) { const credits = node('p', undefined, 'photo-credit'); creditNodes(credits, a.credit); card.append(credits); }
+  if (a.sport === 'basketball' || a.sport === 'baseball') { const l = node('a', '🎬 ' + t('s3d_open'), 's3d-link'); l.href = url('athletes3d.html') + '?id=' + encodeURIComponent(a.id) + '&lang=' + encodeURIComponent(app.getLanguage()); card.append(l); }
   if (a.sources?.length) { const refs = node('div', undefined, 'source-links'); a.sources.slice(0, 2).forEach((source, k) => { const href = typeof source === 'string' ? source : source.url || source.href; if (href) refs.append(link('↗ ' + (k + 1), href)); }); card.append(refs); }
   return card;
 }

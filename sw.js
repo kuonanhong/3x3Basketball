@@ -1,7 +1,7 @@
 /* Scope-isolated shell. Large AI weights are opt-in, cached by coach-worker. */
 const ROOT=self.registration.scope;
 const PREFIX='sa-sports-'+encodeURIComponent(new URL(ROOT).pathname)+'-';
-const CACHE=PREFIX+'v7.2-20261015';
+const CACHE=PREFIX+'v7.3-20261016';
 const CORE=['index.html','styles.css','sports.css','stage.css','locales.js','i18n/en.json','i18n/zh-Hant.json','data/catalog.js','game-core.js','sports-engine.js','renderer.js','coach.js','coach-worker.js','app.js','sports-ui.js','icon.svg','manifest.webmanifest','offline-manifest.json'];
 const local=p=>new URL(p,ROOT).href;
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE.map(local))).then(()=>self.skipWaiting())));

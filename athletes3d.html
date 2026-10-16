@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>3D 明星招牌動作 · SmartAction Sports</title>
+  <meta name="description" content="Stylized 3D basketball and baseball stars performing their signature moves — 360° view, slow motion and video recording, in 54 languages.">
+  <meta name="theme-color" content="#0b1418">
+  <link rel="icon" href="icon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="athletes3d/studio.css?v=7.3.0">
+</head>
+<body>
+  <header class="s3d-top">
+    <a class="brand" href="https://kuonanhong.github.io/SmartAction/"><span class="mark" aria-hidden="true">S</span></a>
+    <h1 data-i18n="s3d_title">3D 明星招牌動作</h1>
+    <label><span class="sr-only" hidden>Language</span><select id="lang" aria-label="Language"></select></label>
+    <a class="back" href="index.html">← <span data-i18n="s3d_back">回到比賽</span></a>
+  </header>
+  <main class="s3d">
+    <section class="viewport" id="viewport">
+      <canvas id="view" aria-label="3D"></canvas>
+      <p class="hint" data-i18n="s3d_dragHint">拖曳旋轉、滾輪或雙指縮放</p>
+      <div class="namecard" id="namecard"></div>
+      <div class="timeline"><i id="progress"></i></div>
+      <div class="controls">
+        <button id="play" aria-pressed="true" data-i18n="pause">暫停</button>
+        <button id="restart" data-i18n="s3d_replay">從頭播放</button>
+        <select id="speed" aria-label="Speed"><option value="1">1×</option><option value="0.5">0.5×</option><option value="0.25">0.25×</option></select>
+        <button id="orbit" aria-pressed="true" data-i18n="s3d_orbit">自動 360° 環繞</button>
+        <button id="record" class="rec" data-i18n="s3d_record">錄成影片</button>
+      </div>
+    </section>
+    <aside class="panel">
+      <div class="tabs" role="tablist">
+        <button id="tabBasketball" role="tab" data-i18n="sport_basketball">3×3 籃球</button>
+        <button id="tabBaseball" role="tab" data-i18n="sport_baseball">棒球打擊</button>
+      </div>
+      <div id="list" class="list"></div>
+      <label class="field"><span data-i18n="s3d_move">招牌動作</span><select id="move"></select></label>
+      <label class="field"><span data-i18n="s3d_uniform">球衣顏色</span><select id="uniform"><option value="teal">teal</option><option value="coral">coral</option><option value="navy">navy</option><option value="white">white</option></select></label>
+      <article id="card" class="card"></article>
+      <p class="disclaimer" data-i18n="s3d_disclaimer">風格化 3D 示意，依公開的身高、體重、體型、慣用手與背號建模；不是本人肖像，也不代表球員或聯盟授權。照片只用於資料卡並標示授權。</p>
+    </aside>
+  </main>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <noscript><p>請啟用 JavaScript。Enable JavaScript to view the 3D studio.</p></noscript>
+  <script src="locales.js?v=7.3.0"></script>
+  <script src="data/catalog.js?v=7.3.0"></script>
+  <script type="module" src="athletes3d/studio.js?v=7.3.0"></script>
+</body>
+</html>

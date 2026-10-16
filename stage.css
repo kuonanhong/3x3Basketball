@@ -221,3 +221,5 @@ html[dir=rtl] .hud-top{direction:rtl}
 .player-card .rating-row{font-size:11px}
 @media(max-width:780px){.count-hud{top:136px}.matchup-hud{top:166px}}
 @media(max-height:520px) and (orientation:landscape){.count-hud{top:46px}.matchup-hud{top:74px}}
+.s3d-link{display:inline-flex;align-items:center;gap:6px;margin:8px 0 4px;padding:8px 12px;border-radius:10px;background:#daef90;color:#12272b!important;font-weight:800;text-decoration:none;font-size:13px}
+.nav-links .nav-3d{background:#daef90;color:#12272b!important;border-radius:16px;padding:4px 12px;font-weight:800}
