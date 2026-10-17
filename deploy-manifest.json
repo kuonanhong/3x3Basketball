@@ -5,6 +5,11 @@
   "layout": "repository-root",
   "files": [
     {
+      "path": ".nojekyll",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
       "path": "LICENSE",
       "bytes": 1394,
       "sha256": "85a12a50797ee7f79d21c180dba6f47eb4531c0590cbcd1f86ca7ac381caa95e"
@@ -2247,7 +2252,7 @@
     {
       "path": "offline-manifest.json",
       "bytes": 75308,
-      "sha256": "0dc7a5a64bc0699f01807fc29460f547e1b5fa74c2f559eca21f425174c15e74"
+      "sha256": "bfdd77a8a58327e08ebd4dfe28c286cd7019ec644c80d6601b2bb16c5ab1e263"
     },
     {
       "path": "renderer.js",
