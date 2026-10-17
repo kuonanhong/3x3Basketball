@@ -8,6 +8,7 @@
   if (root) root.SASports = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
+  var PITCH_PACE = { slow: 0.62, normal: 0.82, fast: 1 };
   var DIFFICULTY = {
     easy:   { speed: 3.1, accuracy: 0.62, defense: 0.20, reaction: 0.24, zoneRate: 0.74, pitchSpeed: 0.78, window: 0.15, reach: 0.34 },
     normal: { speed: 3.9, accuracy: 0.79, defense: 0.38, reaction: 0.14, zoneRate: 0.64, pitchSpeed: 0.90, window: 0.11, reach: 0.30 },
@@ -34,8 +35,8 @@
         pitches: [['fastball', 1.0, 0, 0], ['curveball', 0.84, 0.05, -0.42], ['slider', 0.92, 0.36, -0.1], ['changeup', 0.78, -0.08, -0.16]] } },
     { id: 'badminton', family: 'net', teamSize: 1, fieldType: 'net', bounds: bounds(3.05, 6.7), kind: 'shuttle', radius: 0.12, netHeight: 1.55, bounces: 0, events: [EV.O, EV.A, EV.E] },
     { id: 'badminton-doubles', family: 'net', teamSize: 2, fieldType: 'net', bounds: bounds(3.05, 6.7), kind: 'shuttle', radius: 0.12, netHeight: 1.55, bounces: 0, events: [EV.O, EV.A, EV.E] },
-    { id: 'tabletennis', family: 'net', teamSize: 1, fieldType: 'net', bounds: bounds(2.2, 4), kind: 'tabletennis', radius: 0.10, netHeight: 0.9, bounces: 1, events: [EV.O, EV.A, EV.E] },
-    { id: 'tabletennis-doubles', family: 'net', teamSize: 2, fieldType: 'net', bounds: bounds(2.2, 4), kind: 'tabletennis', radius: 0.10, netHeight: 0.9, bounces: 1, events: [EV.O, EV.A, EV.E] },
+    { id: 'tabletennis', family: 'net', teamSize: 1, fieldType: 'net', bounds: bounds(2.2, 4), kind: 'tabletennis', radius: 0.10, netHeight: 0.1525, table: { hw: 0.7625, hl: 1.37, h: 0.76 }, bounces: 1, events: [EV.O, EV.A, EV.E] },
+    { id: 'tabletennis-doubles', family: 'net', teamSize: 2, fieldType: 'net', bounds: bounds(2.2, 4), kind: 'tabletennis', radius: 0.10, netHeight: 0.1525, table: { hw: 0.7625, hl: 1.37, h: 0.76 }, bounces: 1, events: [EV.O, EV.A, EV.E] },
     { id: 'tennis', family: 'net', teamSize: 1, fieldType: 'net', bounds: bounds(5.5, 11), kind: 'tennis', radius: 0.13, netHeight: 1, bounces: 1, events: [EV.O, EV.A, EV.E] },
     { id: 'tennis-doubles', family: 'net', teamSize: 2, fieldType: 'net', bounds: bounds(5.5, 11), kind: 'tennis', radius: 0.13, netHeight: 1, bounces: 1, events: [EV.O, EV.A, EV.E] },
     { id: 'american-football', family: 'carry', teamSize: 5, fieldType: 'touchdown', bounds: bounds(10, 20), kind: 'oval', radius: 0.24, events: [EV.P] },
@@ -71,6 +72,7 @@
     this.spec = sports.find(function (s) { return s.id === options.sport; }) || sports[0];
     this.sport = this.spec.id;
     this.difficulty = DIFFICULTY[options.difficulty] ? options.difficulty : 'easy';
+    this.pitchPace = PITCH_PACE[options.pitchPace] ? options.pitchPace : 'slow';
     this.seed = (Number(options.seed) >>> 0) || 531923;
     this.duration = clamp(finite(options.duration, 180), 10, 900);
     this.rosters = copy(options.rosters || []);
@@ -123,7 +125,7 @@
       p.aiTimer = 0.35 + this._random() * 0.4; p.angle = p.armAngle = p.team === 0 ? Math.PI : 0; p.torsoAngle = 0; p.shoulderAngle = 0;
     }
     if (s.family === 'net') {
-      this.players.forEach(function (p) { p.z = (p.team === 0 ? 1 : -1) * b.maxZ * 0.69; p.x = n === 1 ? 0 : (p.id % n - (n - 1) / 2) * b.maxX; });
+      this.players.forEach(function (p) { p.z = (p.team === 0 ? 1 : -1) * (s.table ? s.table.hl + 0.75 : b.maxZ * 0.69); p.x = n === 1 ? 0 : (p.id % n - (n - 1) / 2) * (s.table ? s.table.hw * 0.9 : b.maxX); });
       this.metrics.rally = 0; this._take(this.players[team * n]);
       this._rally = { bounces: 0, lastTeam: team, lastId: team * n, crossed: false, lastBounceTeam: null };
     } else if (s.family === 'batting') this._battingRestart();
@@ -164,6 +166,7 @@
     p.vx += (dx * speed - p.vx) * k; p.vz += (dz * speed - p.vz) * k;
     p.x = clamp(p.x + p.vx * dt, b.minX + 0.2, b.maxX - 0.2); p.z = clamp(p.z + p.vz * dt, b.minZ + 0.2, b.maxZ - 0.2);
     if (this.spec.family === 'net') p.z = p.team === 0 ? Math.max(0.65, p.z) : Math.min(-0.65, p.z);
+    var T = this.spec.table; if (T) { var edge = T.hl + 0.28; if (Math.abs(p.x) < T.hw + 0.2 || Math.abs(p.z) < edge) p.z = p.team === 0 ? Math.max(edge, p.z) : Math.min(-edge, p.z); }
     if (this.spec.family === 'wall') p.z = Math.max(b.minZ + 0.9, p.z);
     if (Math.abs(p.vx) + Math.abs(p.vz) > 0.2) { p.angle = Math.atan2(p.vx, p.vz); if (!p.actionTime) p.action = this.spec.swim ? 'swim' : 'run'; }
     else if (!p.actionTime) p.action = 'idle';
@@ -284,27 +287,66 @@
   };
 
   /* ---- Net family (badminton, table tennis, tennis, soft tennis, volleyball, beach, takraw) -- */
+  /* Racket-sport positioning assist for the human player (only while the movement stick is idle): glide toward where the ball will be. */
+  Core.prototype._assistMove = function (p, dt) {
+    var b = this.ball, s = this.spec, r = this._rally, bd = s.bounds;
+    if (b.holder !== null || !r || r.lastTeam === p.team) return;
+    if (s.family === 'wall' && !r.hitWall) return;
+    var t = clamp(0.32 + Math.abs(b.z - p.z) / Math.max(3, Math.abs(b.vz)) * 0.4, 0.2, 0.7);
+    var x = b.x + b.vx * t, z = b.z + b.vz * t, behind = s.table ? s.table.hl + 0.45 : 0;
+    if (s.family === 'net') { if (p.team === 0) z = Math.max(z + 0.35, 0.6, behind); else z = Math.min(z - 0.35, -0.6, -behind); }
+    x = clamp(x - Math.sin(p.angle || 0) * 0.3, bd.minX + 0.3, bd.maxX - 0.3); z = clamp(z, bd.minZ + 0.3, bd.maxZ - 0.3);
+    if (Math.hypot(x - p.x, z - p.z) > 0.2) this._toward(p, x, z, DIFFICULTY[this.difficulty].speed * 1.25 * (0.85 + rating(p, 'speed') / 400), dt);
+  };
+  Core.prototype._switchToBall = function () {
+    var s = this.spec, b = this.ball, best = null, bd = Infinity;
+    for (var i = 0; i < s.teamSize; i++) { var q = this.players[i]; if (q.id === this.selectedId) continue; var d = dist(q, b); if (d < bd) { bd = d; best = q; } }
+    if (best) { this.selectedId = best.id; this.shotCharge = 0; this._event('switch', { playerId: best.id }); }
+  };
+  Core.prototype._lunge = function (p) {
+    if (p.cooldown > 0) return;
+    var b = this.ball, target = b.holder !== null ? this.players[b.holder] : b, d = dist(p, target);
+    p.action = 'lunge'; p.actionTime = 0.35; p.cooldown = 0.6;
+    if (d > 2.4 || (b.holder !== null && this.players[b.holder].team === p.team)) { this._event('whiff', { playerId: p.id, reason: 'tooFar' }); this.shotCharge = 0; return; }
+    var k = Math.min(1, 1.1 / Math.max(0.3, d)); p.x += (target.x - p.x) * k * 0.6; p.z += (target.z - p.z) * k * 0.6;
+    if (b.holder === null) { this._take(p); this.shotCharge = 0; return; }
+    var q = this.players[b.holder], chance = (0.42 + rating(p, 'defense') / 400) * (this.difficulty === 'hard' ? 0.75 : this.difficulty === 'normal' ? 0.9 : 1.05) * (d < 1.2 ? 1 : 0.6);
+    if (this._random() < chance) {
+      q.cooldown = 0.6;
+      if (this.spec.family === 'carry') { this._event(this.spec.flag ? 'flagPull' : 'tackle', { team: p.team, playerId: p.id }); this._nextTeam = p.team; this._resetDelay = 0.55; }
+      else { this._take(p); this.shotClock = 40; this._event('steal', { team: p.team, playerId: p.id }); }
+    } else this._event('whiff', { playerId: p.id, reason: 'missed' });
+    this.shotCharge = 0;
+  };
+  /* kind: 'drive' (K), 'lob' (J), 'smash' (Q, needs a high ball), 'drop' (E, short and soft). Humans get a longer reach than the AI. */
   Core.prototype._netHit = function (p, charge, lob, isAI) {
+    var kind = typeof lob === 'string' ? lob : lob ? 'lob' : 'drive';
     var ball = this.ball, s = this.spec, r = this._rally, serve = ball.holder === p.id, tall = s.kind === 'volleyball' || s.kind === 'rattan';
-    if (!serve && (ball.holder !== null || p.cooldown > 0 || !r || r.lastTeam === p.team || (p.team === 0 ? ball.z < 0 : ball.z > 0) || dist(p, ball) > (tall ? 2.2 : 1.9) || ball.y > p.y + (tall ? 3.2 : 2.7))) return false;
+    var reach = isAI ? (tall ? 2.2 : 1.9) : (tall ? 2.8 : s.kind === 'tabletennis' ? 2.3 : 2.5), high = isAI ? (tall ? 3.2 : 2.7) : (tall ? 3.6 : 3.1);
+    if (!serve && (ball.holder !== null || p.cooldown > 0 || !r || r.lastTeam === p.team || (p.team === 0 ? ball.z < 0 : ball.z > 0) || dist(p, ball) > reach || ball.y > p.y + high)) return false;
     if (!serve && s.bounces === 1 && (r.bounces < 1 || r.lastBounceTeam !== p.team)) return false;
-    var b = s.bounds, dir = p.team === 0 ? -1 : 1;
-    var t = s.kind === 'shuttle' ? 1.7 : tall ? 1.6 : s.kind === 'tabletennis' ? 1.03 : s.slow ? 1.55 : 1.35; t += lob ? 0.45 : 0;
-    var targetX = isAI ? (this._random() - 0.5) * b.maxX * 1.4 : clamp(p.aimX * b.maxX * 0.85, -b.maxX * 0.95, b.maxX * 0.95);
-    var targetZ = dir * b.maxZ * (0.55 + clamp(charge, 0, 1) * 0.23);
+    if (kind === 'smash' && !serve && ball.y < (tall ? 2.2 : s.kind === 'tabletennis' ? 1.0 : 1.5)) kind = 'drive';
+    var b = s.bounds, dir = p.team === 0 ? -1 : 1, tt = s.table;
+    var t = s.kind === 'shuttle' ? 1.7 : tall ? 1.6 : s.kind === 'tabletennis' ? 0.8 : s.slow ? 1.55 : 1.35;
+    t *= kind === 'lob' ? 1.35 : kind === 'smash' ? 0.62 : kind === 'drop' ? 1.08 : 1;
+    var hx = tt ? tt.hw : b.maxX, hz = tt ? tt.hl : b.maxZ;
+    var targetX = isAI ? (this._random() - 0.5) * hx * 1.4 : clamp(p.aimX * hx * 0.85, -hx * 0.95, hx * 0.95);
+    var targetZ = dir * hz * (kind === 'drop' ? 0.22 : kind === 'smash' ? 0.62 : 0.55 + clamp(charge, 0, 1) * 0.23);
     if (isAI) {
       targetX += (this._random() - 0.5) * (1 - DIFFICULTY[this.difficulty].accuracy) * (1.3 - rating(p, 'accuracy') / 200) * b.maxX;
       var cleanChance = clamp(0.8 + DIFFICULTY[this.difficulty].accuracy * 0.18 + (rating(p, 'accuracy') - 70) / 1000, 0.65, 0.985);
       if (this._random() > cleanChance) targetX = (this._random() < 0.5 ? -1 : 1) * b.maxX * 1.35;
     }
     ball.holder = null; ball.state = 'rally'; ball.lastTeam = p.team;
-    if (serve) { ball.x = p.x; ball.z = p.z; ball.y = tall ? 2.8 : 1.0; }
-    ball.y = Math.max(ball.y, tall ? 2.5 : 0.6);
-    ball.vx = (targetX - ball.x) / t; ball.vz = (targetZ - ball.z) / t; ball.vy = (s.radius - ball.y + 0.5 * GRAVITY * t * t) / t;
+    var floorY = tt ? tt.h : 0;
+    if (serve) { ball.x = p.x; ball.z = p.z + (tt ? -dir * 0.0 : 0); ball.y = tall ? 2.8 : tt ? tt.h + 0.3 : 1.0; if (tt) ball.z = clamp(p.z, -tt.hl - 0.4, tt.hl + 0.4); }
+    ball.y = Math.max(ball.y, tall ? 2.5 : tt ? tt.h + 0.12 : 0.6);
+    var gy = GRAVITY * (s.kind === 'shuttle' ? 1.15 : s.slow ? 0.8 : 1);
+    ball.vx = (targetX - ball.x) / t; ball.vz = (targetZ - ball.z) / t; ball.vy = (floorY + s.radius - ball.y + 0.5 * gy * t * t) / t;
     this._rally = { lastTeam: p.team, lastId: p.id, bounces: 0, lastBounceTeam: null, crossed: false };
     this.metrics.rally++; this.metrics.longestRally = Math.max(this.metrics.longestRally, this.metrics.rally);
-    this.possessionTeam = 1 - p.team; p.action = s.kick ? 'kick' : 'racket'; p.actionTime = 0.4; p.cooldown = 0.28; this.shotCharge = 0;
-    this._event(serve ? 'serve' : 'rally', { team: p.team, playerId: p.id, count: this.metrics.rally });
+    this.possessionTeam = 1 - p.team; p.action = s.kick ? 'kick' : kind === 'smash' ? 'smash' : 'racket'; p.actionTime = 0.4; p.cooldown = 0.28; this.shotCharge = 0;
+    this._event(serve ? 'serve' : 'rally', { team: p.team, playerId: p.id, count: this.metrics.rally, shot: kind, highlight: kind === 'smash' && !serve && !isAI });
     return true;
   };
   Core.prototype._netAI = function (p, dt) {
@@ -320,8 +362,32 @@
     this._toward(p, desiredX, desiredZ, c.speed * (s.kind === 'tennis' || s.kind === 'softtennis' ? 1.3 : 1), dt); p.armAngle = p.team === 0 ? Math.PI : 0;
     if (expected && (p.team === 0 ? b.z > 0 : b.z < 0) && p.cooldown <= 0) { p.aiTimer -= dt; if (p.aiTimer <= 0) { this._netHit(p, 0.65, this._random() < 0.14, true); p.aiTimer = c.reaction; } }
   };
+  /* Table tennis: the ball bounces on a 2.74 × 1.525 m table 0.76 m above the floor; the floor ends the rally. */
+  Core.prototype._ttBall = function (dt) {
+    var b = this.ball, s = this.spec, r = this._rally, T = s.table;
+    if (b.holder !== null) { this._syncBall(); if (b.y < T.h + 0.2) b.y = T.h + 0.25; return; }
+    if (!r) return;
+    var prevZ = b.z, prevY = b.y;
+    b.vy -= GRAVITY * dt; b.x += b.vx * dt; b.z += b.vz * dt; b.y += b.vy * dt;
+    if ((prevZ < 0 && b.z >= 0) || (prevZ > 0 && b.z <= 0)) {
+      var ratio = Math.abs(prevZ) / (Math.abs(prevZ) + Math.abs(b.z)), crossY = prevY + (b.y - prevY) * ratio;
+      if (crossY < T.h + s.netHeight + s.radius && Math.abs(b.x) < T.hw + 0.15) { this._point(1 - r.lastTeam, 1, 'netFault', r.lastId); return; }
+      r.crossed = true;
+    }
+    if (b.vy < 0 && b.y <= T.h + s.radius && prevY > T.h + s.radius - 0.05 && Math.abs(b.x) <= T.hw && Math.abs(b.z) <= T.hl) {
+      var side = b.z >= 0 ? 0 : 1;
+      if (side === r.lastTeam || !r.crossed) { this._point(1 - r.lastTeam, 1, 'short', r.lastId); return; }
+      r.bounces++; r.lastBounceTeam = side;
+      if (r.bounces > 1) { this._point(r.lastTeam, 1, 'doubleBounce', r.lastId); return; }
+      b.y = T.h + s.radius; b.vy = Math.max(2.4, Math.abs(b.vy) * 0.86); this._event('bounce', { team: side, count: r.bounces });
+    }
+    if (b.y <= s.radius || Math.abs(b.x) > s.bounds.maxX + 1 || Math.abs(b.z) > s.bounds.maxZ + 1.5) {
+      var winner = r.bounces > 0 ? r.lastTeam : 1 - r.lastTeam; this._point(winner, 1, r.bounces > 0 ? 'doubleBounce' : 'out', winner * s.teamSize);
+    }
+  };
   Core.prototype._netBall = function (dt) {
     var b = this.ball, s = this.spec, r = this._rally;
+    if (s.table) return this._ttBall(dt);
     if (b.holder !== null) { this._syncBall(); return; }
     if (!r) return;
     var prevZ = b.z, prevY = b.y;
@@ -373,7 +439,7 @@
     var targetY = inZone ? zone.bottom + 0.08 + this._random() * (zone.top - zone.bottom - 0.16) : (this._random() < 0.5 ? zone.bottom - 0.1 - this._random() * 0.2 : zone.top + 0.1 + this._random() * 0.25);
     targetX = clamp(targetX, -1.1, 1.1); targetY = clamp(targetY, 0.1, 1.9);
     var distance = Math.abs(bt.plateZ - bt.moundZ), speedScale = pick[1] * c.pitchSpeed * (0.92 + rating(pitcher, 'power') / 800);
-    var baseSpeed = bt.underhand ? 15 : bt.bounce ? 20 : 20.5, speed = baseSpeed * speedScale;
+    var baseSpeed = bt.underhand ? 15 : bt.bounce ? 20 : 20.5, speed = baseSpeed * speedScale * (PITCH_PACE[this.pitchPace] || PITCH_PACE.slow);
     var duration = distance / speed;
     var release = { x: pitcher.x + (pitcher.handedness === 'left' ? 0.35 : -0.35), y: bt.releaseY, z: bt.moundZ + 0.6 };
     var flight = { type: 'pitch', elapsed: 0, duration: duration, pitch: pick[0], speed: speed, release: release, target: { x: targetX, y: targetY, z: bt.plateZ },
@@ -618,8 +684,10 @@
 
   /* ---- Wall family (squash) ---------------------------------------------------------------- */
   Core.prototype._wallHit = function (p, charge, lob, isAI) {
+    var kind = typeof lob === 'string' ? lob : lob ? 'lob' : 'drive'; lob = kind === 'lob';
+    if (kind === 'smash') charge = 1; else if (kind === 'drop') charge = 0.15;
     var b = this.ball, s = this.spec, r = this._rally, serve = b.holder === p.id;
-    if (!serve && (b.holder !== null || p.cooldown > 0 || !r || r.lastTeam === p.team || !r.hitWall || dist(p, b) > 1.7 || b.y > p.y + 2.4)) return false;
+    if (!serve && (b.holder !== null || p.cooldown > 0 || !r || r.lastTeam === p.team || !r.hitWall || dist(p, b) > (isAI ? 1.7 : 2.3) || b.y > p.y + (isAI ? 2.4 : 2.9))) return false;
     var bd = s.bounds, c = DIFFICULTY[this.difficulty];
     var targetX = isAI ? (this._random() - 0.5) * bd.maxX * 1.3 : clamp(p.aimX * bd.maxX * 0.9, bd.minX + 0.2, bd.maxX - 0.2);
     var wallY = (lob ? 2.6 : 0.95) + clamp(charge, 0, 1) * 0.9;                 // where it meets the front wall
@@ -957,11 +1025,24 @@
     for (var j = 0; j < this.players.length; j++) if (j !== this.selectedId) {
       if (s.family === 'net') this._netAI(this.players[j], dt); else if (s.family === 'wall') this._wallAI(this.players[j], dt); else this._goalAI(this.players[j], dt);
     }
-    if (s.family === 'net') { if (actions.shootReleased || actions.pass) this._netHit(selected, this.shotCharge || 0.65, !!actions.pass, false); this._netBall(dt); return; }
-    if (s.family === 'wall') { if (actions.shootReleased || actions.pass) this._wallHit(selected, this.shotCharge || 0.65, !!actions.pass, false); this._wallBall(dt); return; }
+    if (s.family === 'net' || s.family === 'wall') {
+      var steering = Math.hypot(finite(input.moveX, 0), finite(input.moveZ, 0)) > 0.15;
+      if (!steering && this.assist !== false) this._assistMove(selected, dt);
+      /* every button hits: K drive, J lob, Q smash, E drop. A press is remembered for a short moment so an early press still connects. */
+      var req = actions.shootReleased ? 'drive' : actions.pass ? 'lob' : actions.jump ? 'smash' : actions.crouchPressed ? 'drop' : null;
+      if (req) this._hitBuffer = { kind: req, t: 0.5, charge: this.shotCharge || 0.65 };
+      if (this._hitBuffer) {
+        var hb = this._hitBuffer, ok = s.family === 'net' ? this._netHit(selected, hb.charge, hb.kind, false) : this._wallHit(selected, hb.charge, hb.kind, false);
+        if (ok) this._hitBuffer = null; else { hb.t -= dt; if (hb.t <= 0) { this._hitBuffer = null; this._event('whiff', { playerId: selected.id, reason: this.ball.holder !== null ? 'wait' : 'tooFar' }); } }
+      }
+      if (s.family === 'net') this._netBall(dt); else this._wallBall(dt); return;
+    }
     if (input.crouch) this._defend(selected, dt);
-    if (actions.pass) this._pass(selected, selected.aimX, selected.aimZ);
-    if (actions.shootReleased) {
+    var holding = this.ball.holder === selected.id;
+    if (!holding && actions.pass) this._switchToBall();                 // J without the ball: take control of the team-mate nearest to it
+    if (!holding && actions.shootReleased) this._lunge(selected);         // K without the ball: tackle / steal attempt or dive for a loose ball
+    if (actions.pass && holding) this._pass(selected, selected.aimX, selected.aimZ);
+    if (actions.shootReleased && holding) {
       if (s.family === 'goal') this._goalShot(selected, this.shotCharge || 0.65, false, selected.aimX, selected.aimZ);
       else if (this.ball.holder === selected.id) {
         if (s.id === 'american-football' || s.id === 'flag-football') this._pass(selected, selected.aimX, selected.aimZ || -1);
@@ -977,10 +1058,10 @@
     dt = clamp(finite(dt, 0), 0, 0.25); input = input || {};
     if (!dt || this.ended) return;
     var actions = { jump: !!input.jump && !this._lastInput.jump, pass: !!input.pass && !this._lastInput.pass, switchPlayer: !!input.switchPlayer && !this._lastInput.switchPlayer,
-      shootReleased: !!input.shootReleased || (!!this._lastInput.shootHeld && !input.shootHeld) };
+      shootReleased: !!input.shootReleased || (!!this._lastInput.shootHeld && !input.shootHeld), crouchPressed: !!input.crouch && !this._lastInput.crouch };
     var count = Math.ceil(dt * 60);
     for (var i = 0; i < count; i++) this._substep(dt / count, input, i === 0 ? actions : {});
-    this._lastInput = { jump: !!input.jump, pass: !!input.pass, shootHeld: !!input.shootHeld, switchPlayer: !!input.switchPlayer };
+    this._lastInput = { jump: !!input.jump, pass: !!input.pass, shootHeld: !!input.shootHeld, switchPlayer: !!input.switchPlayer, crouch: !!input.crouch };
   };
 
   /* ---- Snapshots --------------------------------------------------------------------------- */
@@ -995,7 +1076,7 @@
         lastContact: this.batter.lastContact, state: this.ball.state };
     }
     return copy({ version: 7, sport: this.sport, family: s.family, fieldType: s.fieldType, practiceRules: true, difficulty: this.difficulty, seed: this.seed, duration: this.duration,
-      players: this.players, ball: this.ball, bounds: s.bounds, net: s.netHeight ? { z: 0, height: s.netHeight } : null, goals: goals,
+      players: this.players, ball: this.ball, bounds: s.bounds, net: s.netHeight ? { z: 0, height: s.netHeight, table: s.table || null } : null, table: s.table || null, goals: goals,
       target: s.family === 'target' ? { x: 0, y: 1.7, z: -12, radius: 1.2 } : null, finishZ: s.family === 'race' ? -14 : null,
       wall: s.family === 'wall' ? { z: s.bounds.minZ, tin: s.tin, outLine: s.outLine } : null,
       golf: s.family === 'golf' ? { hole: s.hole, tee: s.tee, windX: this.metrics.windX, aimX: this.metrics.aimX, aimY: this.metrics.aimY, strokes: this.metrics.holeStrokes } : null,
@@ -1017,6 +1098,7 @@
       ![s.clock, s.timeRemaining, s.shotClock, s.shotCharge, s.duration, s.ball.x, s.ball.y, s.ball.z].every(Number.isFinite)) throw new Error('Invalid sports state');
     if (s.players.some(function (p, i) { return p.id !== i || p.team !== (i < spec.teamSize ? 0 : 1) || ![p.x, p.y, p.z, p.vx, p.vz, p.angle].every(Number.isFinite); }) ||
       (s.ball.holder !== null && (!Number.isInteger(s.ball.holder) || s.ball.holder < 0 || s.ball.holder >= s.players.length))) throw new Error('Invalid sports player');
+    if (PITCH_PACE[s.pitchPace]) this.pitchPace = s.pitchPace;
     this.spec = spec; this.sport = s.sport; this.difficulty = DIFFICULTY[s.difficulty] ? s.difficulty : 'easy'; this.seed = s.seed >>> 0; this.duration = s.duration;
     this.players = s.players; this.ball = s.ball; this.clock = s.clock; this.timeRemaining = s.timeRemaining; this.shotClock = s.shotClock; this.score = s.score; this.shotCharge = s.shotCharge;
     this.selectedId = s.selectedId; this.possessionTeam = s.possessionTeam; this.ended = !!s.ended; this.metrics = s.metrics;

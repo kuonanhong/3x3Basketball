@@ -12,14 +12,14 @@ export function drawOverlay(x, w, h, info, alpha = 1) {
   const g = x.createLinearGradient(24 * s, 0, 24 * s + W, 0); g.addColorStop(0, 'rgba(11,22,28,.9)'); g.addColorStop(1, 'rgba(11,22,28,.55)');
   x.fillStyle = g; round(x, 24 * s, y0, W, 112 * s, 16 * s); x.fill();
   x.fillStyle = '#daef90'; x.fillRect(24 * s, y0 + 14 * s, 6 * s, 84 * s);
-  x.fillStyle = '#ffffff'; x.font = `900 ${34 * s}px "Noto Sans CJK TC", Arial, sans-serif`; x.textBaseline = 'alphabetic';
+  x.fillStyle = '#ffffff'; x.font = `900 ${34 * s}px Arial, "Noto Sans CJK TC", sans-serif`; x.textBaseline = 'alphabetic';
   x.fillText(info.title, 46 * s, y0 + 46 * s);
   const tw = x.measureText(info.title).width;
   if (info.number) { x.fillStyle = '#13baad'; x.font = `900 ${30 * s}px Arial, sans-serif`; x.fillText('#' + info.number, 46 * s + tw + 14 * s, y0 + 45 * s); }
-  x.fillStyle = '#cfe0dc'; x.font = `600 ${17 * s}px "Noto Sans CJK TC", Arial, sans-serif`; x.fillText(info.sub, 46 * s, y0 + 72 * s);
-  x.fillStyle = '#daef90'; x.font = `800 ${18 * s}px "Noto Sans CJK TC", Arial, sans-serif`; x.fillText(info.move, 46 * s, y0 + 98 * s);
+  x.fillStyle = '#cfe0dc'; x.font = `600 ${17 * s}px Arial, "Noto Sans CJK TC", sans-serif`; x.fillText(info.sub, 46 * s, y0 + 72 * s);
+  x.fillStyle = '#daef90'; x.font = `800 ${18 * s}px Arial, "Noto Sans CJK TC", sans-serif`; x.fillText(info.move, 46 * s, y0 + 98 * s);
   // disclaimer
-  x.fillStyle = 'rgba(232,241,236,.75)'; x.font = `500 ${12 * s}px "Noto Sans CJK TC", Arial, sans-serif`; x.textAlign = 'right';
+  x.fillStyle = 'rgba(232,241,236,.75)'; x.font = `500 ${12 * s}px Arial, "Noto Sans CJK TC", sans-serif`; x.textAlign = 'right';
   x.fillText(info.note, w - 24 * s, h - 20 * s);
   x.restore();
 }

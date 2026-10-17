@@ -2,7 +2,7 @@
    slow it down, drag to look around, record it to a video file. Runs entirely in the browser. MIT. */
 import * as THREE from '../vendor/three/three.module.min.js';
 import { OrbitControls } from '../vendor/three/OrbitControls.js';
-import { Stage3D, signatureMove, movesFor } from './stage3d.js';
+import { Stage3D, signatureMove, movesFor, hasLibrary } from './stage3d.js';
 import { drawOverlay } from './overlay.js';
 import { bodyProfile } from './rig.js';
 
@@ -32,7 +32,10 @@ async function setLanguage(code) {
 /* ------------------------------------------------------------------ state */
 const params = new URLSearchParams(location.search);
 const pool = s => catalog.athletes.filter(a => a.sport === s);
-let athlete = catalog.athletes.find(a => a.id === params.get('id') && (a.sport === 'basketball' || a.sport === 'baseball')) || catalog.athletes.find(a => a.id === 'michael-jordan');
+const SPORT_ORDER = ['basketball', 'soccer', 'baseball', 'softball', 'cricket', 'badminton', 'tabletennis', 'tennis', 'soft-tennis', 'volleyball', 'beach-volleyball', 'sepak-takraw', 'handball', 'field-hockey', 'ice-hockey', 'water-polo', 'lacrosse', 'rugby', 'american-football', 'flag-football', 'squash', 'golf', 'bowling', 'billiards', 'sprint', 'archery'];
+const SPORTS3D = SPORT_ORDER.filter(sp => hasLibrary(sp) && catalog.athletes.some(a => a.sport === sp));
+const sportLabel = sp => t('sport_' + sp);
+let athlete = catalog.athletes.find(a => a.id === params.get('id') && hasLibrary(a.sport)) || catalog.athletes.find(a => a.id === 'michael-jordan');
 let sport = athlete.sport, moveId = params.get('move') || signatureMove(athlete), uniform = store.get('sa-3d-uniform', 'teal');
 let time = 0, playing = true, speed = 1, autoOrbit = true, angle = 35, zoom = 1, last = performance.now(), recording = null;
 const localName = a => (lang.startsWith('zh') && a.nameZh) ? a.nameZh : a.name;
@@ -109,7 +112,8 @@ function toast(msg) { const el = $('toast'); el.textContent = msg; el.hidden = f
 
 /* ------------------------------------------------------------------ panel */
 function renderList() {
-  $('tabBasketball').setAttribute('aria-selected', sport === 'basketball' ? 'true' : 'false'); $('tabBaseball').setAttribute('aria-selected', sport === 'baseball' ? 'true' : 'false');
+  const ss = $('sportSel'); if (ss.options.length !== SPORTS3D.length || ss.dataset.lang !== lang) { ss.replaceChildren(); for (const sp of SPORTS3D) { const o = document.createElement('option'); o.value = sp; o.textContent = sportLabel(sp) + ' (' + pool(sp).length + ')'; ss.append(o); } ss.dataset.lang = lang; }
+  ss.value = sport;
   const host = $('list'); host.replaceChildren();
   for (const a of pool(sport)) {
     const b = document.createElement('button'); b.type = 'button'; if (a.id === athlete.id) b.setAttribute('aria-current', 'true');
@@ -134,6 +138,8 @@ function renderCard() {
   card.append(el('p', t('height') + ': ' + (a.heightCm ? a.heightCm + ' cm' : t('notAvailable')) + ' · ' + t('weight') + ': ' + (a.weightKg ? a.weightKg + ' kg' : t('notAvailable')) + (sport === 'baseball' ? ' · ' + t('bats') + ' ' + p.bats + ' / ' + t('throws') + ' ' + p.throws : '')));
   card.append(el('p', t('s3d_move') + ': ' + t('mv_' + signatureMove(a)), 'mv'));
   if (a.notes) card.append(el('p', t('famousFor') + ': ' + a.notes));
+  const clip = videoIndex && videoIndex.find(r => r.id === a.id);
+  if (clip) { const v = el('a', '🎞 MP4 · ' + t('mv_' + clip.move), 'mp4'); v.href = new URL('../videos3d/' + clip.file, import.meta.url).href; v.target = '_blank'; v.rel = 'noopener'; card.append(v); }
   for (const k of ['speed', 'skill', 'power', 'defense', 'accuracy']) { const v = a.gameRatings && a.gameRatings[k]; if (v == null) continue; const r = el('div', undefined, 'rating'); r.append(el('span', t(k))); const m = el('meter'); m.min = 0; m.max = 100; m.value = v; r.append(m, el('b', String(v))); card.append(r); }
   if (a.credit) { const c = el('p', undefined, 'fine'); c.append(document.createTextNode('📷 ' + (a.credit.author || '') + ' · ')); const l = el('a', a.credit.license || 'license'); l.href = a.credit.licenseUrl || a.credit.sourceUrl || '#'; l.target = '_blank'; l.rel = 'noopener noreferrer'; c.append(l); card.append(c); }
   // name card on the stage
@@ -143,8 +149,7 @@ function renderCard() {
 }
 
 /* ------------------------------------------------------------------ wiring */
-$('tabBasketball').addEventListener('click', () => { if (sport === 'basketball') return; sport = 'basketball'; athlete = pool(sport).find(a => a.id === 'michael-jordan') || pool(sport)[0]; moveId = signatureMove(athlete); load(); });
-$('tabBaseball').addEventListener('click', () => { if (sport === 'baseball') return; sport = 'baseball'; athlete = pool(sport).find(a => a.id === 'shohei-ohtani') || pool(sport)[0]; moveId = signatureMove(athlete); load(); });
+$('sportSel').addEventListener('change', e => { sport = e.target.value; athlete = pool(sport)[0]; moveId = signatureMove(athlete); load(); });
 $('move').addEventListener('change', e => { moveId = e.target.value; load(); });
 $('uniform').addEventListener('change', e => { uniform = e.target.value; store.set('sa-3d-uniform', uniform); load(); });
 $('play').addEventListener('click', () => { playing = !playing; $('play').setAttribute('aria-pressed', playing ? 'true' : 'false'); $('play').textContent = t(playing ? 'pause' : 's3d_play'); });
@@ -160,6 +165,8 @@ const preferred = params.get('lang') || store.get('sa-court-language', '') || (n
 lang = chooseLanguage(preferred) || 'en'; langSel.value = lang;
 // "Back to the game": when this page is hosted on its own, point to the public game instead of a missing index.html
 fetch(new URL('../index.html', import.meta.url), { method: 'HEAD' }).then(r => { if (!r.ok) throw 0; }).catch(() => { document.querySelector('.back').href = 'https://kuonanhong.github.io/3x3Basketball/'; });
+let videoIndex = null;   // pre-rendered clips (videos3d/index.json), optional
+fetch(new URL('../videos3d/index.json', import.meta.url)).then(r => r.ok ? r.json() : null).then(j => { videoIndex = Array.isArray(j) ? j : null; renderCard(); }).catch(() => {});
 resize(); load(); setLanguage(lang).then(() => { $('play').textContent = t('pause'); });
 requestAnimationFrame(loop);
 window.SAStudio = { stage: st, get time() { return time; }, set time(v) { time = v; }, load: (id, mv) => { athlete = catalog.athletes.find(a => a.id === id) || athlete; sport = athlete.sport; moveId = mv || signatureMove(athlete); load(); } };

@@ -1,18 +1,18 @@
 /* SmartAction Sports — 3D venues and props for the athlete studio (procedural, no external assets). MIT. */
 import * as THREE from '../vendor/three/three.module.min.js';
 
-function canvasTex(w, h, draw, repeat) {
+export function canvasTex(w, h, draw, repeat) {
   const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
   if (repeat) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(repeat[0], repeat[1]); }
   return t;
 }
-function add(parent, geo, material, pos, rot, shadow = true) {
+export function add(parent, geo, material, pos, rot, shadow = true) {
   const m = new THREE.Mesh(geo, material); if (pos) m.position.set(...pos); if (rot) m.rotation.set(...rot);
   m.castShadow = shadow; m.receiveShadow = true; parent.add(m); return m;
 }
-function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
-function crowd(w, h, seed, base) {
+export function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+export function crowd(w, h, seed, base) {
   return canvasTex(w, h, (x) => {
     x.fillStyle = base; x.fillRect(0, 0, w, h); const r = rng(seed);
     const cols = ['#d8c6b2', '#b98a68', '#6e4a30', '#e6c3a2', '#3b2a1e', '#2f6f6a', '#9c4a3c', '#d9d9d2', '#2a3550', '#b59a52'];

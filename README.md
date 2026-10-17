@@ -1,6 +1,6 @@
-# SmartAction Sports v7.3 — 聰動運動場・世界球類
+# SmartAction Sports v7.4 — 聰動運動場・世界球類
 
-免費靜態網頁運動練習：**30 種奧運／亞運／東亞運球類練習模式**、單一畫面雙手操控、廣角全場鏡頭、**225 位真實運動明星資料**（場上每個位置對應一位明星）、**54 種介面語言**（依瀏覽器與所在地區自動選擇）、24 個世界場景與選配的本機 CPU 生成式 AI 教練。原創練習遊戲，不是官方聯盟遊戲，也不是網路真人同步對戰。
+免費靜態網頁運動練習：**30 種奧運／亞運／東亞運球類練習模式**、單一畫面雙手操控、廣角全場鏡頭、**241 位真實運動明星資料**（場上每個位置對應一位明星，每位都有 3D 招牌動作）、**74 種介面語言**（依瀏覽器與所在地區自動選擇）、24 個世界場景與選配的本機 CPU 生成式 AI 教練。原創練習遊戲，不是官方聯盟遊戲，也不是網路真人同步對戰。
 
 本版以 v6 套件為基礎重構。v6 README 中提及的 ChatGPT 參考連結在本次製作時無法讀取（需登入或分享頁無內容），未將未讀對話當成已驗證規格；所有需求以使用者說明（2.1–2.4 與第三項）為準。
 
@@ -19,6 +19,27 @@ bash Start_Local.sh          # Mac / Linux；Windows 用 Start_Local.bat（需 P
 - [SSH 上傳與根目錄部署](docs/DEPLOY.html)
 - [AI 模型、論文、授權與離線](docs/AI_COACH_MODEL.html)
 - [全部照片來源、授權與運動員資料來源](data/ASSET_CREDITS.html)
+
+## v7.4 新增：遊戲中的 3D 招牌動作、30 種運動全部明星 3D、按鍵修正、桌球球桌
+
+> **問：`bash Upload_SmartAction_Sports.sh --build --push`（或加 `--fetch-photos`）會把 3D 招牌動作放進遊戲嗎？**
+> v7.3 的上傳只會部署 `athletes3d.html` 3D 頁面與球員卡上的連結；遊戲畫面本身還沒有 3D。**v7.4 起，上傳後遊戲內就有 3D 招牌動作**（下方第 1 點）。`--fetch-photos` 只是先擷取開放授權肖像，與 3D 無關；3D 影片若要重新輸出，加 `--render-videos`。
+
+1. **遊戲中直接看 3D 招牌動作**：
+   - HUD 新增「**3D**」鍵：暫停比賽、全畫面播放目前操控球員的 3D 招牌動作（360° 環繞、進度條），按「回到比賽」或 Esc 繼續。
+   - **精彩重播時**右上角自動出現**子母畫面（PiP）**，播放做出這次精彩動作的明星 3D 招牌動作一次。
+   - 先發名單每張球員卡新增「▶ 3D 招牌動作」（在遊戲中播放），原本的「🎬 3D 招牌動作 ↗」仍開啟 3D 頁面。
+   - Three.js 只在第一次需要時才載入；手機與 4 核以下的裝置自動用輕量畫質（無陰影、較低解析度）。
+2. **30 種運動、241 位明星全部都有 3D 招牌動作**（籃球 18、棒球 28 之外再加 28 種運動 195 位，130 種新動作、24 個 3D 場地）：足球、橄欖球、美式足球、腰旗美式足球、曲棍球、袋棍球、網球、軟式網球、羽球、桌球、壁球、排球、沙灘排球、藤球、手球、冰球、水球、板球、壘球、短跑、射箭、高爾夫、保齡球、撞球。每種運動有自己的服裝（護具、頭盔、泳帽、冰刀、遮陽帽、護目鏡…）與器材（球拍、球棒、球桿、弓箭、保齡球瓶、撞球桿…）。`athletes3d.html` 改為運動下拉選單，可看全部 30 種。
+3. **場上人物縮小一半**，名牌與號碼仍清楚；**情緒表情**：得分、好球、殺球得分時頭上出現開心泡泡，失誤或揮空時出現沮喪泡泡，專注時出現專注泡泡；3D 人物準備時表情專注、完成動作後露出笑容（眉毛、嘴型）。
+4. **打擊球速可調、預設慢速**：開始卡新增「球速：慢／一般／快」（棒球、壘球、板球），預設「慢」（約一般的 62%），會記住選擇。
+5. **強力／穩定揮棒鍵修正**：Q（強力揮棒）與 E（穩定揮棒）改為和 K 一樣的**獨立揮棒鍵**——按住、球到本壘時放開就揮棒，不必再同時按 K。
+6. **羽球、桌球、網球、排球等按鍵失靈修正**：每個鍵都會擊球——K 抽球（按住加力）、J 挑高球、Q 殺球、E 放短球；**按早一點會先記住，球到時自動擊出**；放開左搖桿時球員會**自動滑向來球**；離球太遠時畫面會提示原因。足球、手球、冰球等團隊運動：沒有球時 K＝搶斷／擒抱，J＝切換到最靠近球的隊友。
+7. **桌球場景改為真正的球桌**：2.74 m × 1.525 m、高 0.76 m 的藍色球桌（白邊線、中線、15.25 cm 球網、桌腳）與場館地板；球必須彈在桌面上，掛網、出界、落地都會判定；球員站在球桌兩端後方。
+8. **語言 74 種**：新增古吉拉特、卡納達、馬拉雅拉姆、普什圖、塔吉克、吉爾吉斯、喬治亞、亞美尼亞、冰島、立陶宛、拉脫維亞、愛沙尼亞、斯洛維尼亞、阿爾巴尼亞、馬其頓、索馬利、豪薩、約魯巴、祖魯、南非語（20 種）；每語 656 鍵（含全部 3D 動作名稱），依網址、曾選語言、瀏覽器語言與時區所在地區自動選擇。
+9. **上傳腳本**：`--render-videos`（上傳前用無頭 Chromium＋ffmpeg 重新輸出 3D 影片，只補缺少的）、`--video-size 960x540`、`--no-videos`（不上傳影片）；照樣會沿用遠端已有的 AI 教練權重分塊，或用 `--fetch-model`／`--download-model` 上傳權重。
+
+**界線（重要）**：遊戲中的「擬真臉蛋、身材與情緒」沒有用真人照片合成或重建明星臉部，也沒有讓真人照片做出他沒做過的表情——那屬於以真人肖像生成的合成影像，本套件不做。改為：資料卡上顯示**未經修改**的開放授權照片（標示作者與授權）、3D／2D 人物依公開身高體重體型做**風格化**身材，表情以風格化方式呈現。3D 動作是依公開打法特徵手工設計的關鍵影格動畫，不是動作捕捉，也沒有下載比賽照片或轉播影片。
 
 ## v7.3 新增：3D 明星招牌動作（籃球 18 位＋棒球 28 位）
 
@@ -103,11 +124,11 @@ bash Start_Local.sh          # Mac / Linux；Windows 用 Start_Local.bat（需 P
 
 ## 語言
 
-54 種語言：繁中、簡中、英、日、韓、阿拉伯、馬來、泰、越、印尼、菲律賓、德、波蘭、捷克、葡、芬、瑞典、俄、法、西、義、印地、荷、土、希臘、烏克蘭（v6 26 種）+ 孟加拉、烏爾都、波斯、希伯來、泰米爾、泰盧固、馬拉地、旁遮普、緬甸、高棉、寮、尼泊爾、僧伽羅、蒙古、哈薩克、烏茲別克、亞塞拜然、斯瓦希里、阿姆哈拉、匈牙利、羅馬尼亞、丹麥、挪威、保加利亞、克羅埃西亞、塞爾維亞、斯洛伐克、加泰隆尼亞（新增 28 種）。阿拉伯、希伯來、波斯、烏爾都為右至左版面。
+74 種語言：繁中、簡中、英、日、韓、阿拉伯、馬來、泰、越、印尼、菲律賓、德、波蘭、捷克、葡、芬、瑞典、俄、法、西、義、印地、荷、土、希臘、烏克蘭、孟加拉、烏爾都、波斯、希伯來、泰米爾、泰盧固、馬拉地、旁遮普、緬甸、高棉、寮、尼泊爾、僧伽羅、蒙古、哈薩克、烏茲別克、亞塞拜然、斯瓦希里、阿姆哈拉、匈牙利、羅馬尼亞、丹麥、挪威、保加利亞、克羅埃西亞、塞爾維亞、斯洛伐克、加泰隆尼亞（v7 的 54 種）＋ **v7.4 新增 20 種**：古吉拉特、卡納達、馬拉雅拉姆、普什圖、塔吉克、吉爾吉斯、喬治亞、亞美尼亞、冰島、立陶宛、拉脫維亞、愛沙尼亞、斯洛維尼亞、阿爾巴尼亞、馬其頓、索馬利、豪薩、約魯巴、祖魯、南非語。阿拉伯、希伯來、波斯、烏爾都、普什圖為右至左版面。
 
-- 來源：`i18n/<code>.json`（每語 505 鍵，英文為主鍵集）；`tools/build_i18n.cjs` 產生 `locales.js`（內嵌繁中與英文，其餘語言按需載入並由 Service Worker 快取）；`tools/build_languages.cjs` 產生 54 個 `lang/<code>/index.html` 可被搜尋引擎索引的預翻譯入口頁。
-- 選擇順序：網址 `?lang=` → 預翻譯入口頁 → 使用者曾選過的語言 → 瀏覽器語言清單 → **IANA 時區推測所在地區的主要語言** → 英文。不使用 GPS 推測國籍。
-- 翻譯由生成式模型依英文主鍵產生並做鍵值完整性驗證；棒球／板球等術語在部分語言以慣用外來語呈現，歡迎母語者修正 JSON 後重新建置。
+- 來源：`i18n/<code>.json`（每語 656 鍵，英文為主鍵集，含 172 種 3D 動作名稱）；`tools/build_i18n.cjs` 產生 `locales.js`（內嵌繁中與英文，其餘語言按需載入並由 Service Worker 快取）；`tools/build_languages.cjs` 產生 74 個 `lang/<code>/index.html` 可被搜尋引擎索引的預翻譯入口頁。
+- 選擇順序：網址 `?lang=` → 預翻譯入口頁 → 使用者曾選過的語言 → 瀏覽器語言清單 → **IANA 時區推測所在地區的主要語言**（例：Asia/Tbilisi → 喬治亞語、Europe/Vilnius → 立陶宛語、Africa/Mogadishu → 索馬利語）→ 英文。不使用 GPS 推測國籍。
+- 翻譯由生成式模型依英文主鍵產生，並做鍵值完整性、按鍵字母（W/A/S/D、K、J、Q、E）、佔位符與文字系統混用檢查；未經母語者審閱，棒球／板球等術語在部分語言以慣用外來語呈現，歡迎修正 JSON 後重新建置。
 
 ## 檔案結構
 
@@ -120,9 +141,12 @@ sports-ui.js          運動選單、名單、頭像、控制標籤、世界場�
 game-core.js          籃球 3×3 半場 / 5×5 全場模擬
 sports-engine.js      其餘 28 種模式（球門／網類／持球／打擊 v2／壁球／高爾夫／保齡球／撞球／短跑／射箭）
 renderer.js           Canvas 2D 渲染：廣角鏡頭、場地、器材、人物外觀、打擊 HUD
-locales.js i18n/      54 語字典與語言註冊表（含時區提示）
-data/catalog.json     場景與 225 位運動員（editable source）→ tools/build_catalog.cjs → data/catalog.js
+locales.js i18n/      74 語字典與語言註冊表（含時區提示）
+data/catalog.json     場景與 241 位運動員（editable source）→ tools/build_catalog.cjs → data/catalog.js
 coach.js coach-worker.js vendor/ models/   選配 CPU 生成式 AI 教練（Qwen2.5-0.5B-Instruct ONNX q8）
+athletes3d/           3D 明星（rig 人物、motion 動作工具、stage3d 舞台、ingame 遊戲內子母畫面、sports/ 28 種運動動作庫、studio 3D 頁面、capture 影片輸出）
+videos3d/             預先輸出的 241 支 360° 環繞 MP4＋index.json
+vendor/three/         Three.js r170（MIT）
 tools/                build_catalog / build_i18n / build_languages / build_credits / build_manifest / fetch_athlete_photos / fetch_model
 tests/                Node 與 Python 測試（引擎、渲染、整合契約、離線、部署）
 Upload_SmartAction_Sports.sh   一鍵重建＋驗證＋備份＋上傳到 kuonanhong/3x3Basketball
@@ -146,15 +170,17 @@ bash Upload_SmartAction_Sports.sh --build --dry-run     # 重建資料／字典�
 bash Upload_SmartAction_Sports.sh --build --push        # 備份遠端 main → 分批上傳 → 驗證 → fast-forward main
 ```
 
-其他選項：`--fetch-photos`（先擷取開放授權肖像）、`--fetch-model --models-from DIR` 或 `--download-model`（準備權重）、`--stage-only`、`--batch-mib`、`--no-keep-remote-models`。完整說明見 `--help` 與 [docs/DEPLOY.html](docs/DEPLOY.html)。GitHub → Settings → Pages → Deploy from a branch → **main → /(root)**。
+其他選項：`--render-videos`（重新輸出缺少的 3D 影片，需 Node＋playwright＋ffmpeg）、`--video-size`、`--no-videos`、`--fetch-photos`（先擷取開放授權肖像）、`--fetch-model --models-from DIR` 或 `--download-model`（準備權重）、`--stage-only`、`--batch-mib`、`--no-keep-remote-models`。完整說明見 `--help` 與 [docs/DEPLOY.html](docs/DEPLOY.html)。GitHub → Settings → Pages → Deploy from a branch → **main → /(root)**。
 
 ## 測試
 
 ```bash
-for f in tests/*.cjs; do node --test "$f"; done; node tests/core.test.cjs
+for f in tests/*.cjs; do node --test "$f"; done; node --test tests/athletes3d.test.mjs; node tests/core.test.cjs
 python3 -m unittest tests.test_build_manifest tests.test_deploy
 ```
 
 ## English quick start
 
 Serve the folder over HTTP (`python3 -m http.server 8080 --bind 127.0.0.1`) and open <http://127.0.0.1:8080/>. Pick any of the 30 Olympic / Asian Games ball-sport practice modes from the picker on the stage; the whole arena and both-hand controls fit on one screen (keyboard: WASD move, arrows aim, Q/E, J, hold-and-release K). Batting modes (baseball, softball, cricket) use a new pitch/zone/timing engine. Every on-field figure is built from a real athlete's catalogue entry (height, build, stylized look, licensed portrait where available); ratings are fictional presets. 54 interface languages are picked from the browser language or the device's region. Deploy with `bash Upload_SmartAction_Sports.sh --build --push`; the optional 546 MB on-device coach model is kept on GitHub from v6 or fetched with `tools/fetch_model.py`.
+
+**v7.4 (English summary).** The 3D signature moves now play *inside the game*: a "3D" HUD button pauses the match and shows the controlled player's move full-stage (Esc / "Back to the match" resumes), highlight replays open a picture-in-picture clip of the star who made the play, and every line-up card has "▶ 3D". All 241 catalogue stars across the 30 sports have a stylized 3D signature move (172 moves, 26 venues), with pre-rendered 360° MP4s in `videos3d/`. On-field figures are half the previous size and show stylized emotion bubbles; racket-sport buttons all hit (drive / lob / smash / drop, buffered early presses, auto-positioning), Q/E are standalone power / contact swings, practice pitches default to a slower pace (selectable), and table tennis is played on a real 2.74 m table. 74 interface languages (20 added). Faces are never photo-reconstructed or synthesized: licensed, unaltered portraits appear only on data cards; bodies and expressions are stylized.

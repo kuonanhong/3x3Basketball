@@ -19,6 +19,18 @@
   const keys = new Set();
   const sticks = { moveX: 0, moveZ: 0, aimX: 0, aimZ: 0 };
   const actions = { jump: false, crouch: false, pass: false, shootHeld: false, shootReleased: false, switchPlayer: false };
+  let swingMod = null;   // batting: which button loaded the swing (Q power, E contact, K normal)
+  const family = () => (core && core.spec && core.spec.family) || 'basketball';
+  let lastWhiff = 0;
+  const emotes = {};   // playerId -> { kind: 'joy' | 'focus' | 'sad', until }
+  function emote(id, kind, seconds) { if (id === undefined || id === null) return; emotes[id] = { kind, until: core.clock + (seconds || 1.6) }; }
+  function liveEmotes() {
+    const out = {}, now = core.clock;
+    for (const id in emotes) { const e = emotes[id]; if (e.until > now) out[id] = { kind: e.kind, alpha: Math.min(1, (e.until - now) / 0.35) }; else delete emotes[id]; }
+    const sel = core.selectedId !== undefined ? core.selectedId : core.selectedPlayer && core.selectedPlayer.id;
+    if (!out[sel] && core.shotCharge > 0.15) out[sel] = { kind: 'focus', alpha: Math.min(1, core.shotCharge * 2) };
+    return out;
+  }
   const heldTouches = new Set();
   const languageLoads = new Map();
   function stored(name, fallback) { try { return localStorage.getItem(name) || fallback; } catch (_) { return fallback; } }
@@ -100,6 +112,8 @@
   }
   $('quality').addEventListener('change', () => { setQuality($('quality').value === 'auto' ? recommended : $('quality').value); });
   $('difficulty').addEventListener('change', () => { core.difficulty = $('difficulty').value; });
+  $('pitchPace').value = stored('sa-pitch-pace', 'slow');
+  $('pitchPace').addEventListener('change', () => { save('sa-pitch-pace', $('pitchPace').value); core.pitchPace = $('pitchPace').value; });
   function toast(key) {
     clearTimeout(toastTimer); $('toast').textContent = message(key); $('toast').hidden = false;
     toastTimer = setTimeout(() => { $('toast').hidden = true; }, 3200);
@@ -110,13 +124,13 @@
     flashTimer = setTimeout(() => { el.hidden = true; }, 1700);
   }
   function clearInput() {
-    keys.clear(); heldTouches.clear(); Object.keys(actions).forEach(key => { actions[key] = false; });
+    keys.clear(); heldTouches.clear(); swingMod = null; Object.keys(actions).forEach(key => { actions[key] = false; });
     Object.keys(sticks).forEach(key => { sticks[key] = 0; });
     document.querySelectorAll('.stick-knob').forEach(el => { el.style.transform = ''; });
     document.querySelectorAll('[data-action]').forEach(el => el.classList.remove('active'));
   }
   function startMatch() {
-    core.difficulty = $('difficulty').value; core.reset(); history.length = 0;
+    core.difficulty = $('difficulty').value; core.pitchPace = $('pitchPace').value; core.reset(); history.length = 0;
     window.dispatchEvent(new CustomEvent('sa-match-reset'));
     if (!soundChosen) { muted = false; $('sound').textContent = message('mute'); }
     playSound('pass');
@@ -142,14 +156,19 @@
   const gameKeys = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ...Object.keys(keyActions)];
   function allowsKeys(e) { return playing && !paused && !replayState && !core.ended && $('pickerOverlay').hidden && $('closeOverlay').hidden && !/INPUT|SELECT|TEXTAREA|BUTTON/.test(e.target.tagName) && !document.querySelector('dialog[open]'); }
   document.addEventListener('keydown', e => {
+    if (e.code === 'Escape' && ingame && ingame.isOpen() && ingame.mode() === 'full') { ingame.stop('esc'); return; }
     if (e.code === 'Escape' && playing && !document.querySelector('dialog[open]')) { finishReplay(); setPaused(!paused); return; }
     if (!allowsKeys(e) || !gameKeys.includes(e.code)) return;
     e.preventDefault(); if (e.repeat) return; keys.add(e.code);
+    // batting: Q (power) and E (contact) are swing buttons of their own — hold to load, release to swing
+    if (family() === 'batting' && (e.code === 'KeyQ' || e.code === 'KeyE')) { actions.shootHeld = true; swingMod = e.code === 'KeyQ' ? 'power' : 'contact'; return; }
+    if (family() === 'batting' && e.code === 'KeyK') swingMod = keys.has('KeyQ') ? 'power' : keys.has('KeyE') ? 'contact' : null;
     const action = keyActions[e.code]; if (action) actions[action] = true;
   });
   document.addEventListener('keyup', e => {
     const wasHeld = keys.has(e.code); keys.delete(e.code);
     if (e.code === 'KeyK' && wasHeld) { actions.shootHeld = false; actions.shootReleased = true; }
+    if (family() === 'batting' && (e.code === 'KeyQ' || e.code === 'KeyE') && wasHeld && actions.shootHeld && !keys.has('KeyK')) { actions.shootHeld = false; actions.shootReleased = true; }
     if (e.code === 'KeyE') actions.crouch = false;
   });
   function installPad(id, prefix) {
@@ -173,12 +192,18 @@
     const action = button.dataset.action; let pointer = null;
     button.addEventListener('pointerdown', e => {
       if (!playing || paused || replayState || core.ended || pointer !== null) return;
-      e.preventDefault(); pointer = e.pointerId; button.setPointerCapture(pointer); heldTouches.add(action); button.classList.add('active');
-      if (action === 'shoot') actions.shootHeld = true; else actions[action] = true;
+      e.preventDefault(); pointer = e.pointerId; try { button.setPointerCapture(pointer); } catch (_) {} heldTouches.add(action); button.classList.add('active');
+      if (navigator.vibrate) try { navigator.vibrate(8); } catch (_) {}
+      const swingButton = family() === 'batting' && (action === 'jump' || action === 'crouch');
+      if (swingButton) { actions.shootHeld = true; swingMod = action === 'jump' ? 'power' : 'contact'; }
+      else if (action === 'shoot') { actions.shootHeld = true; if (family() === 'batting') swingMod = heldTouches.has('jump') ? 'power' : heldTouches.has('crouch') ? 'contact' : null; }
+      else actions[action] = true;
     });
     function release(e) {
       if (e.pointerId !== pointer) return; pointer = null; heldTouches.delete(action); button.classList.remove('active');
-      if (action === 'shoot') { actions.shootHeld = keys.has('KeyK'); actions.shootReleased = !actions.shootHeld; }
+      if (action === 'shoot' || (family() === 'batting' && (action === 'jump' || action === 'crouch'))) {
+        if (actions.shootHeld) { actions.shootHeld = keys.has('KeyK') || heldTouches.has('shoot'); actions.shootReleased = !actions.shootHeld; }
+      }
       if (action === 'crouch') actions.crouch = keys.has('KeyE');
     }
     button.addEventListener('pointerup', release); button.addEventListener('pointercancel', release); button.addEventListener('lostpointercapture', release);
@@ -227,8 +252,8 @@
       moveZ: sticks.moveZ + (keys.has('KeyS') ? 1 : 0) - (keys.has('KeyW') ? 1 : 0),
       aimX: sticks.aimX + (keys.has('ArrowRight') ? 1 : 0) - (keys.has('ArrowLeft') ? 1 : 0),
       aimZ: sticks.aimZ + (keys.has('ArrowDown') ? 1 : 0) - (keys.has('ArrowUp') ? 1 : 0),
-      crouch: actions.crouch || heldTouches.has('crouch'),
-      power: keys.has('KeyQ') || heldTouches.has('jump')
+      crouch: family() === 'batting' ? swingMod === 'contact' : actions.crouch || heldTouches.has('crouch'),
+      power: family() === 'batting' ? swingMod === 'power' : keys.has('KeyQ') || heldTouches.has('jump')
     });
   }
   function updateHud() {
@@ -260,6 +285,7 @@
     // star card: who made the play
     const star = core.players.find(p => p.id === clip.event.playerId);
     const info = star && window.SASportsUI && SASportsUI.athleteFor ? SASportsUI.athleteFor(star.athleteId) : null;
+    if (star && !window.SA_NO_3D) show3D(star, 'pip');
     if (star) {
       $('starName').textContent = (info ? (window.SASportsUI.localeName ? SASportsUI.localeName(info) : info.name) : star.displayName || '#' + (star.number || star.id + 1));
       $('starMeta').textContent = [highlightText(clip.event), info && info.position ? message('pos_' + info.position) : '', info && info.country ? info.country : '', info && info.notes ? info.notes : ''].filter(Boolean).join(' · ');
@@ -267,7 +293,27 @@
       $('starCard').hidden = false;
     }
   }
-  function finishReplay() { if (!replayState) return; replayState = null; canvas.style.touchAction = ''; $('highlightBanner').hidden = true; $('starCard').hidden = true; tickAccumulator = 0; clearInput(); $('pauseOverlay').hidden = !paused; }
+  /* ---- 3D signature moves inside the game (Three.js loaded only when first needed) ---- */
+  let ingame = null, ingameJob = null, pausedFor3D = false;
+  function load3D() {
+    if (ingame) return Promise.resolve(ingame);
+    if (!ingameJob) ingameJob = import(new URL('athletes3d/ingame.js?v=7.4.0', assetBase).href).then(m => (ingame = m)).catch(err => { ingameJob = null; throw err; });
+    return ingameJob;
+  }
+  function athleteOf(player) { const id = player && player.athleteId; return id && window.SASportsData ? window.SASportsData.athletes.find(a => a.id === id) || null : null; }
+  function show3D(player, mode) {
+    const a = athleteOf(player); if (!a) return;
+    load3D().then(m => {
+      if (!m.available(a)) { if (mode === 'full') toast('s3d_noRecord'); return; }
+      const name = language.startsWith('zh') && a.nameZh ? a.nameZh + ' ' + a.name : a.name, mv = m.signatureMove(a);
+      if (mode === 'full' && playing && !paused && !core.ended) { setPaused(true); pausedFor3D = true; $('pauseOverlay').hidden = true; }
+      stage.classList.add('with3d');
+      m.play(stage, a, { mode, uniform: player.team === 1 ? 'coral' : 'teal', title: name + (a.appearance && a.appearance.jerseyNumber != null ? '  #' + a.appearance.jerseyNumber : ''), subtitle: message('mv_' + mv),
+        onEnd: () => { stage.classList.remove('with3d'); if (pausedFor3D) { pausedFor3D = false; setPaused(false); } } });
+    }).catch(() => {});
+  }
+  window.addEventListener('sa-show3d', e => { const d = e.detail || {}; const player = core.players.find(p => p.athleteId === d.athleteId) || { athleteId: d.athleteId, team: d.team || 0 }; show3D(player, d.mode || 'full'); });
+  function finishReplay() { if (!replayState) return; replayState = null; if (ingame && ingame.isOpen() && ingame.mode() === 'pip') ingame.stop('replayEnd'); canvas.style.touchAction = ''; $('highlightBanner').hidden = true; $('starCard').hidden = true; tickAccumulator = 0; clearInput(); $('pauseOverlay').hidden = !paused; }
   let orbitPointer = null, orbitX = 0, zonePointer = null;
   function zoneTouch(e) {
     // batting: a tap or drag inside the strike zone moves the bat straight to that spot
@@ -288,6 +334,7 @@
   canvas.addEventListener('pointerup', endOrbit); canvas.addEventListener('pointercancel', endOrbit); canvas.addEventListener('lostpointercapture', endOrbit);
   $('skipReplay').addEventListener('click', finishReplay);
   $('replay').addEventListener('click', () => beginReplay(latestClip));
+  $('play3d').addEventListener('click', () => { finishReplay(); const p = core.selectedPlayer || core.players[core.selectedId || 0]; show3D(p, 'full'); });
   function lerpSnapshot(a, b, t) {
     const out = Object.assign({}, a, { clock: a.clock + (b.clock - a.clock) * t,
       players: a.players.map((p, i) => { const q = b.players[i] || p; return Object.assign({}, p, { x: p.x + (q.x - p.x) * t, y: p.y + (q.y - p.y) * t, z: p.z + (q.z - p.z) * t }); }),
@@ -368,6 +415,17 @@
     const rank = { dunk: 6, three: 5, layup: 4, block: 3, steal: 2, score: 1, goal: 5, homeRun: 6, hit: 3, touchdown: 6, try: 5, point: 4, bullseye: 6, finish: 5, wicket: 5, boundary: 5, holed: 6, pinsDown: 2, pocketed: 3, catch: 4 };
     window.dispatchEvent(new CustomEvent('sa-game-events', { detail: events }));
     for (const e of events) {
+      if (e.type === 'score' || e.type === 'goal' || e.type === 'homeRun' || e.type === 'touchdown' || e.type === 'try' || e.type === 'boundary' || e.type === 'wicket') {
+        const scorer = e.playerId !== undefined ? e.playerId : e.shooterId; emote(scorer, 'joy', 1.8);
+        const team = e.team !== undefined ? e.team : core.players[scorer] && core.players[scorer].team;
+        const rival = core.players.filter(p => p.team !== team).sort((a, b) => Math.hypot(a.x - core.ball.x, a.z - core.ball.z) - Math.hypot(b.x - core.ball.x, b.z - core.ball.z))[0];
+        if (rival) emote(rival.id, 'sad', 1.6);
+      }
+      if (e.type === 'steal' || e.type === 'block' || e.type === 'save' || e.type === 'catch' || e.type === 'tackle') emote(e.playerId, 'joy', 1.2);
+      if (e.type === 'whiff') emote(e.playerId, 'sad', 0.9);
+      if (e.type === 'whiff' && core.clock - lastWhiff > 1.2) { lastWhiff = core.clock; toast(e.reason === 'wait' ? 'hintWait' : e.reason === 'missed' ? 'hintMissed' : 'hintTooFar'); }
+      if (e.type === 'switch') toast('hintSwitched');
+      if (e.type === 'rally' && e.shot === 'smash' && e.playerId === 0) flash(message('shotSmash'));
       if (e.type === 'out' && RESULT_KEYS[e.style]) flash(message(RESULT_KEYS[e.style]));
       else if (e.type === 'hit' && e.bases) flash(message(RESULT_KEYS[['', 'single', 'double', 'triple'][e.bases]]));
       else if (e.type === 'homeRun') flash(message('result_homeRun'));
@@ -397,7 +455,8 @@
       else if (playing && !paused && !core.ended) {
         tickAccumulator += dt; let steps = 0;
         while (tickAccumulator >= STEP && steps++ < 6) {
-          core.step(STEP, input()); actions.jump = actions.pass = actions.shootReleased = actions.switchPlayer = false;
+          const released = actions.shootReleased;
+          core.step(STEP, input()); actions.jump = actions.pass = actions.shootReleased = actions.switchPlayer = false; if (released) swingMod = null;
           tickAccumulator -= STEP; capture(STEP); onEvents(core.consumeEvents());
           if (pendingHighlight && core.clock >= pendingHighlight.until) {
             const clip = { event: pendingHighlight.event, frames: history.filter(s => s.clock >= pendingHighlight.event.time - 2.8) };
@@ -414,9 +473,9 @@
           const t = replayState.elapsed / replayState.duration;           // 0..1 over the slow-motion clip
           const closeUp = t < 0.35 ? 1 : t < 0.8 ? 1 - (t - 0.35) / 0.45 : 0;  // start tight on the star, pull back while orbiting
           replayOptions = { replay: true, cameraAngle: t * Math.PI * 2 + replayState.manualAngle, focusId: replayState.event.playerId,
-            replayZoom: 1 + closeUp * 1.1, playerScale: (viewOptions.playerScale || 1.18) * (1 + closeUp * 0.25), trail: true, spotlight: true };
+            replayZoom: 1 + closeUp * 1.1, playerScale: (viewOptions.playerScale || 0.59) * (1 + closeUp * 0.9), trail: true, spotlight: true };
         }
-        renderer.render(snapshot, Object.assign({}, viewOptions, replayOptions));
+        renderer.render(snapshot, Object.assign({}, viewOptions, replayOptions, { emotes: replayState ? {} : liveEmotes() }));
         lastRender = now; frameCount++; updateHud();
       }
       if (now - fpsStart > 3000) {
@@ -437,7 +496,7 @@
       finishReplay(); clearInput(); history.length = 0; latestClip = null; pendingHighlight = null; playing = false; paused = false;
       core = sport === 'basketball' ? new SAHoopsCore.Core({ difficulty: $('difficulty').value, seed: 971031 })
         : sport === 'basketball5' ? new SAHoopsCore.Core({ difficulty: $('difficulty').value, seed: 971031, fullCourt: true })
-        : new SASports.Core({ sport, difficulty: $('difficulty').value, seed: 971031 });
+        : new SASports.Core({ sport, difficulty: $('difficulty').value, seed: 971031, pitchPace: $('pitchPace').value });
       $('startOverlay').hidden = !$('pickerOverlay').hidden; $('endOverlay').hidden = true; $('pauseOverlay').hidden = true; $('pause').textContent = message('pause'); $('starCard').hidden = true;
       tickAccumulator = captureAccumulator = 0; updateHud(); window.dispatchEvent(new CustomEvent('sa-match-reset')); return core;
     },

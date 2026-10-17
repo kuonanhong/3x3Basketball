@@ -10,9 +10,9 @@
   <link rel="canonical" href="https://kuonanhong.github.io/3x3Basketball/lang/ta/">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css?v=7.3.0"><link rel="stylesheet" href="sports.css?v=7.3.0"><link rel="stylesheet" href="stage.css?v=7.3.0">
+  <link rel="stylesheet" href="styles.css?v=7.4.0"><link rel="stylesheet" href="sports.css?v=7.4.0"><link rel="stylesheet" href="stage.css?v=7.4.0">
   <title>SmartAction உலகப் பந்து விளையாட்டுகள் · SmartAction Sports</title>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"SmartAction Sports","description":"Free local practice for 30 Olympic / Asian Games ball sports with one-screen two-hand controls, 54 interface languages, licensed scene photos, athlete-based rosters, replays and an optional on-device generative coach.","url":"https://kuonanhong.github.io/3x3Basketball/","gamePlatform":["Web browser"],"playMode":"SinglePlayer","isAccessibleForFree":true,"genre":["Sports","Training"],"author":{"@type":"Organization","name":"SmartAction"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"SmartAction Sports","description":"Free local practice for 30 Olympic / Asian Games ball sports with one-screen two-hand controls, 74 interface languages, 3D signature moves for 241 stars, licensed scene photos, athlete-based rosters, replays and an optional on-device generative coach.","url":"https://kuonanhong.github.io/3x3Basketball/","gamePlatform":["Web browser"],"playMode":"SinglePlayer","isAccessibleForFree":true,"genre":["Sports","Training"],"author":{"@type":"Organization","name":"SmartAction"}}</script>
   <link rel="alternate" hreflang="zh-Hant" href="https://kuonanhong.github.io/3x3Basketball/lang/zh-Hant/">
   <link rel="alternate" hreflang="zh-Hans" href="https://kuonanhong.github.io/3x3Basketball/lang/zh-Hans/">
   <link rel="alternate" hreflang="en" href="https://kuonanhong.github.io/3x3Basketball/lang/en/">
@@ -67,6 +67,26 @@
   <link rel="alternate" hreflang="sr" href="https://kuonanhong.github.io/3x3Basketball/lang/sr/">
   <link rel="alternate" hreflang="sk" href="https://kuonanhong.github.io/3x3Basketball/lang/sk/">
   <link rel="alternate" hreflang="ca" href="https://kuonanhong.github.io/3x3Basketball/lang/ca/">
+  <link rel="alternate" hreflang="gu" href="https://kuonanhong.github.io/3x3Basketball/lang/gu/">
+  <link rel="alternate" hreflang="kn" href="https://kuonanhong.github.io/3x3Basketball/lang/kn/">
+  <link rel="alternate" hreflang="ml" href="https://kuonanhong.github.io/3x3Basketball/lang/ml/">
+  <link rel="alternate" hreflang="ps" href="https://kuonanhong.github.io/3x3Basketball/lang/ps/">
+  <link rel="alternate" hreflang="tg" href="https://kuonanhong.github.io/3x3Basketball/lang/tg/">
+  <link rel="alternate" hreflang="ky" href="https://kuonanhong.github.io/3x3Basketball/lang/ky/">
+  <link rel="alternate" hreflang="ka" href="https://kuonanhong.github.io/3x3Basketball/lang/ka/">
+  <link rel="alternate" hreflang="hy" href="https://kuonanhong.github.io/3x3Basketball/lang/hy/">
+  <link rel="alternate" hreflang="is" href="https://kuonanhong.github.io/3x3Basketball/lang/is/">
+  <link rel="alternate" hreflang="lt" href="https://kuonanhong.github.io/3x3Basketball/lang/lt/">
+  <link rel="alternate" hreflang="lv" href="https://kuonanhong.github.io/3x3Basketball/lang/lv/">
+  <link rel="alternate" hreflang="et" href="https://kuonanhong.github.io/3x3Basketball/lang/et/">
+  <link rel="alternate" hreflang="sl" href="https://kuonanhong.github.io/3x3Basketball/lang/sl/">
+  <link rel="alternate" hreflang="sq" href="https://kuonanhong.github.io/3x3Basketball/lang/sq/">
+  <link rel="alternate" hreflang="mk" href="https://kuonanhong.github.io/3x3Basketball/lang/mk/">
+  <link rel="alternate" hreflang="so" href="https://kuonanhong.github.io/3x3Basketball/lang/so/">
+  <link rel="alternate" hreflang="ha" href="https://kuonanhong.github.io/3x3Basketball/lang/ha/">
+  <link rel="alternate" hreflang="yo" href="https://kuonanhong.github.io/3x3Basketball/lang/yo/">
+  <link rel="alternate" hreflang="zu" href="https://kuonanhong.github.io/3x3Basketball/lang/zu/">
+  <link rel="alternate" hreflang="af" href="https://kuonanhong.github.io/3x3Basketball/lang/af/">
   <link rel="alternate" hreflang="x-default" href="https://kuonanhong.github.io/3x3Basketball/">
 </head>
 <body>
@@ -82,7 +102,7 @@
         <label class="hud-field"><span class="sr-only" data-i18n="language">மொழி</span><select id="language" aria-label="Language"></select></label>
         <label class="hud-field"><span class="sr-only" data-i18n="sportPicker">விளையாட்டைத் தேர்ந்தெடு</span><select id="sportQuick" aria-label="Sport"></select></label>
         <label class="hud-field"><span class="sr-only" data-i18n="camera">கேமரா</span><select id="cameraQuick" aria-label="Camera"><option value="wide" data-i18n="wideView">அகலக் கோணம் (முழு அரங்கம்)</option><option value="third" data-i18n="thirdPerson">மூன்றாம் நபர் பார்வை</option><option value="close" data-i18n="closePerson">அருகில் பின்தொடர்</option><option value="first" data-i18n="firstPerson">முதல் நபர் பார்வை</option></select></label>
-        <button id="pause" data-i18n="pause">இடைநிறுத்து</button><button id="replay" data-i18n="replay">சிறப்புக் காட்சி மறுஒளிபரப்பு</button><button id="switchPlayer" data-i18n="switchPlayer">வீரரை மாற்று</button><button id="sound" data-i18n="sound">ஒலி</button><button id="fullscreen" data-i18n="fullscreen">முழுத்திரை</button><button id="help" data-i18n="help">உதவி</button><button id="dockToggle" aria-pressed="true" title="Touch controls">☷</button>
+        <button id="play3d" class="play3d" data-i18n="s3d_inGame" data-i18n-title="s3d_inGameHint" title="觀看目前球員的 3D 招牌動作">3D</button><button id="pause" data-i18n="pause">இடைநிறுத்து</button><button id="replay" data-i18n="replay">சிறப்புக் காட்சி மறுஒளிபரப்பு</button><button id="switchPlayer" data-i18n="switchPlayer">வீரரை மாற்று</button><button id="sound" data-i18n="sound">ஒலி</button><button id="fullscreen" data-i18n="fullscreen">முழுத்திரை</button><button id="help" data-i18n="help">உதவி</button><button id="dockToggle" aria-pressed="true" title="Touch controls">☷</button>
       </div>
       <div class="hud-exit">
         <button id="quitMatch" class="quit-button" data-i18n-title="quitMatchHint" title="結束本場比賽，回到運動選單（網頁不關閉）"><span class="ico" aria-hidden="true">⏹</span><span data-i18n="quitMatch">போட்டியை முடி</span></button>
@@ -97,6 +117,7 @@
     <div class="scene-caption"><span id="sceneName"></span><a id="sceneCredit" target="_blank" rel="noopener noreferrer"></a></div>
     <div id="highlightBanner" class="highlight-banner" hidden><span class="replay-live">REPLAY · 0.45×</span><strong id="highlightTitle"></strong><span data-i18n="replayFocus">மெதுவான இயக்கம் · நட்சத்திரத்தின் நெருக்கக் காட்சி · 360° சுழற்சி</span><button id="skipReplay" data-i18n="skipReplay">மறுஒளிபரப்பைத் தவிர்</button></div>
     <div id="starCard" class="star-card" hidden><img id="starPhoto" alt=""><div><p class="eyebrow" data-i18n="replayStar">நட்சத்திரத் தருணம்</p><strong id="starName"></strong><span id="starMeta"></span></div></div>
+    <div id="star3d" class="star3d" hidden><canvas aria-label="3D"></canvas><div class="star3d-cap"><span class="star3d-tag" data-i18n="s3d_starMove">3D நட்சத்திர அசைவு</span><strong class="star3d-title"></strong><span class="star3d-sub"></span></div><div class="star3d-progress"><i></i></div><button class="star3d-close" type="button" data-i18n="s3d_close">விளையாட்டுக்குத் திரும்பு</button></div>
     <div class="charge-hud" id="chargeHud" hidden><span id="chargeAction" data-i18n="shootCharge">ஷாட் சக்தி</span><div class="charge-track"><div id="chargeFill"></div><i></i></div><small id="chargeHint" data-i18n="releaseToShoot">ஷூட் செய்ய விடுவிக்கவும்</small></div>
     <div id="pickerOverlay" class="picker-overlay"><div class="picker-card"><p class="eyebrow">SMARTACTION / WORLD BALL SPORTS</p><h2 data-i18n="selectSport">விளையாட்டைத் தேர்ந்தெடு</h2><p class="picker-hint" data-i18n="chooseToStart">ஒரு விளையாட்டைத் தட்டி, உங்கள் அணியை அமைத்துப் பயிற்சியைத் தொடங்குங்கள்.</p><div id="pickerGrid" class="picker-grid" role="list"></div><p class="fine-print" data-i18n="localModeV7">உள்ளூர் பயிற்சி · கணினி எதிரணிகள் · 30 முறைகள்</p></div></div>
     <div id="startOverlay" class="start-overlay" hidden><div class="start-card"><span class="ball-icon" aria-hidden="true">◉</span><p class="eyebrow">MOVE TOGETHER. PLAY ANYWHERE.</p><h2 id="startTitle"></h2><p id="startRule" class="start-rule"></p><div id="startLineup" class="start-lineup"></div><button id="start" class="primary" data-i18n="start">விளையாட்டைத் தொடங்கு</button><div class="start-actions"><button id="changeSport" data-i18n="changeSport">விளையாட்டை மாற்று</button><button id="editLineup" data-i18n="lineup">தொடக்க அணி</button></div><small id="benchmarkStatus" data-i18n="benchmark">சாதனச் செயல்திறன் சரிபார்க்கப்படுகிறது…</small></div></div>
@@ -137,6 +158,7 @@
         <div class="section-top"><span class="eyebrow" data-i18n="practiceRules">பயிற்சி விதிகள்</span><span class="setup-icon" aria-hidden="true">☷</span></div>
         <div class="rule-card"><p id="eventTags" class="event-tags"></p><p id="sportRules"></p><p id="sportMetrics" aria-live="off"></p></div>
         <label class="field"><span data-i18n="difficulty">சிரம நிலை</span><select id="difficulty"><option value="easy" data-i18n="easy">எளிது</option><option value="normal" data-i18n="normal">இயல்பு</option><option value="hard" data-i18n="hard">கடினம்</option></select></label>
+        <label class="field"><span data-i18n="pitchPace">பந்து வேகம்</span><select id="pitchPace"><option value="slow" data-i18n="paceSlow">மெது (பயிற்சி)</option><option value="normal" data-i18n="paceNormal">சாதாரணம்</option><option value="fast" data-i18n="paceFast">வேகம்</option></select></label>
         <label class="field"><span data-i18n="quality">தரம்</span><select id="quality"><option value="auto" data-i18n="auto">தானியங்கி</option><option value="lite" data-i18n="lite">இலகு</option><option value="balanced" data-i18n="balanced">சமநிலை</option><option value="full" data-i18n="full">முழு</option></select></label>
         <div class="device-status"><span id="deviceQuality">AUTO</span><strong id="fps">— FPS</strong><p data-i18n="deviceNote">சில உலாவிகள் முழுமையான நினைவகம் அல்லது CPU தகவலை வெளிப்படுத்துவதில்லை. ஒரு சிறு சோதனை பொருத்தமான தரத்தை மதிப்பிடுகிறது; நீங்கள் கைமுறையாக மாற்றலாம்.</p></div>
       </section>
@@ -179,6 +201,6 @@
   <dialog id="mapDialog"><button class="dialog-close" data-close data-i18n="close">மூடு</button><h2 data-i18n="nearbyCourts">அருகிலுள்ள கூடைப்பந்து மைதானங்கள்</h2><p data-i18n="mapPrivacy">இருப்பிடப் பொத்தானைத் தட்டும்போது மட்டுமே உங்கள் இருப்பிடம் கோரப்படும். வரைபடத்தைத் திறப்பது ஆயத்தொலைவுகளை Google Maps-க்கு அனுப்பும்.</p><button id="locate" class="primary" data-i18n="locate">என் இருப்பிடத்தைக் கண்டறி</button><p id="mapStatus" role="status"></p><p id="coordinates"></p><div id="mapActions" hidden><a id="currentMap" class="button" target="_blank" rel="noopener noreferrer" data-i18n="latLon">ஆயத்தொலைவுகள்</a><a id="nearbyMap" class="button primary" target="_blank" rel="noopener noreferrer" data-i18n="openMaps">Google Maps-ஐத் திற</a></div><iframe id="embeddedMap" title="Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" hidden></iframe></dialog>
   <div id="toast" class="toast" role="status" hidden></div>
   <noscript><p>請啟用 JavaScript 以執行本機運動遊戲。Enable JavaScript to play.</p></noscript>
-  <script src="locales.js?v=7.3.0"></script><script src="data/catalog.js?v=7.3.0"></script><script src="game-core.js?v=7.3.0"></script><script src="sports-engine.js?v=7.3.0"></script><script src="renderer.js?v=7.3.0"></script><script src="coach.js?v=7.3.0"></script><script src="app.js?v=7.3.0"></script><script src="sports-ui.js?v=7.3.0"></script>
+  <script src="locales.js?v=7.4.0"></script><script src="data/catalog.js?v=7.4.0"></script><script src="game-core.js?v=7.4.0"></script><script src="sports-engine.js?v=7.4.0"></script><script src="renderer.js?v=7.4.0"></script><script src="coach.js?v=7.4.0"></script><script src="app.js?v=7.4.0"></script><script src="sports-ui.js?v=7.4.0"></script>
 </body>
 </html>

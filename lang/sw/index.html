@@ -10,9 +10,9 @@
   <link rel="canonical" href="https://kuonanhong.github.io/3x3Basketball/lang/sw/">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css?v=7.3.0"><link rel="stylesheet" href="sports.css?v=7.3.0"><link rel="stylesheet" href="stage.css?v=7.3.0">
+  <link rel="stylesheet" href="styles.css?v=7.4.0"><link rel="stylesheet" href="sports.css?v=7.4.0"><link rel="stylesheet" href="stage.css?v=7.4.0">
   <title>SmartAction Michezo ya Mpira ya Dunia · SmartAction Sports</title>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"SmartAction Sports","description":"Free local practice for 30 Olympic / Asian Games ball sports with one-screen two-hand controls, 54 interface languages, licensed scene photos, athlete-based rosters, replays and an optional on-device generative coach.","url":"https://kuonanhong.github.io/3x3Basketball/","gamePlatform":["Web browser"],"playMode":"SinglePlayer","isAccessibleForFree":true,"genre":["Sports","Training"],"author":{"@type":"Organization","name":"SmartAction"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"SmartAction Sports","description":"Free local practice for 30 Olympic / Asian Games ball sports with one-screen two-hand controls, 74 interface languages, 3D signature moves for 241 stars, licensed scene photos, athlete-based rosters, replays and an optional on-device generative coach.","url":"https://kuonanhong.github.io/3x3Basketball/","gamePlatform":["Web browser"],"playMode":"SinglePlayer","isAccessibleForFree":true,"genre":["Sports","Training"],"author":{"@type":"Organization","name":"SmartAction"}}</script>
   <link rel="alternate" hreflang="zh-Hant" href="https://kuonanhong.github.io/3x3Basketball/lang/zh-Hant/">
   <link rel="alternate" hreflang="zh-Hans" href="https://kuonanhong.github.io/3x3Basketball/lang/zh-Hans/">
   <link rel="alternate" hreflang="en" href="https://kuonanhong.github.io/3x3Basketball/lang/en/">
@@ -67,6 +67,26 @@
   <link rel="alternate" hreflang="sr" href="https://kuonanhong.github.io/3x3Basketball/lang/sr/">
   <link rel="alternate" hreflang="sk" href="https://kuonanhong.github.io/3x3Basketball/lang/sk/">
   <link rel="alternate" hreflang="ca" href="https://kuonanhong.github.io/3x3Basketball/lang/ca/">
+  <link rel="alternate" hreflang="gu" href="https://kuonanhong.github.io/3x3Basketball/lang/gu/">
+  <link rel="alternate" hreflang="kn" href="https://kuonanhong.github.io/3x3Basketball/lang/kn/">
+  <link rel="alternate" hreflang="ml" href="https://kuonanhong.github.io/3x3Basketball/lang/ml/">
+  <link rel="alternate" hreflang="ps" href="https://kuonanhong.github.io/3x3Basketball/lang/ps/">
+  <link rel="alternate" hreflang="tg" href="https://kuonanhong.github.io/3x3Basketball/lang/tg/">
+  <link rel="alternate" hreflang="ky" href="https://kuonanhong.github.io/3x3Basketball/lang/ky/">
+  <link rel="alternate" hreflang="ka" href="https://kuonanhong.github.io/3x3Basketball/lang/ka/">
+  <link rel="alternate" hreflang="hy" href="https://kuonanhong.github.io/3x3Basketball/lang/hy/">
+  <link rel="alternate" hreflang="is" href="https://kuonanhong.github.io/3x3Basketball/lang/is/">
+  <link rel="alternate" hreflang="lt" href="https://kuonanhong.github.io/3x3Basketball/lang/lt/">
+  <link rel="alternate" hreflang="lv" href="https://kuonanhong.github.io/3x3Basketball/lang/lv/">
+  <link rel="alternate" hreflang="et" href="https://kuonanhong.github.io/3x3Basketball/lang/et/">
+  <link rel="alternate" hreflang="sl" href="https://kuonanhong.github.io/3x3Basketball/lang/sl/">
+  <link rel="alternate" hreflang="sq" href="https://kuonanhong.github.io/3x3Basketball/lang/sq/">
+  <link rel="alternate" hreflang="mk" href="https://kuonanhong.github.io/3x3Basketball/lang/mk/">
+  <link rel="alternate" hreflang="so" href="https://kuonanhong.github.io/3x3Basketball/lang/so/">
+  <link rel="alternate" hreflang="ha" href="https://kuonanhong.github.io/3x3Basketball/lang/ha/">
+  <link rel="alternate" hreflang="yo" href="https://kuonanhong.github.io/3x3Basketball/lang/yo/">
+  <link rel="alternate" hreflang="zu" href="https://kuonanhong.github.io/3x3Basketball/lang/zu/">
+  <link rel="alternate" hreflang="af" href="https://kuonanhong.github.io/3x3Basketball/lang/af/">
   <link rel="alternate" hreflang="x-default" href="https://kuonanhong.github.io/3x3Basketball/">
 </head>
 <body>
@@ -82,7 +102,7 @@
         <label class="hud-field"><span class="sr-only" data-i18n="language">Lugha</span><select id="language" aria-label="Language"></select></label>
         <label class="hud-field"><span class="sr-only" data-i18n="sportPicker">Chagua mchezo</span><select id="sportQuick" aria-label="Sport"></select></label>
         <label class="hud-field"><span class="sr-only" data-i18n="camera">Kamera</span><select id="cameraQuick" aria-label="Camera"><option value="wide" data-i18n="wideView">Pembe pana (uwanja mzima)</option><option value="third" data-i18n="thirdPerson">Mtazamo wa tatu</option><option value="close" data-i18n="closePerson">Ufuatiliaji wa karibu</option><option value="first" data-i18n="firstPerson">Mtazamo wa kwanza</option></select></label>
-        <button id="pause" data-i18n="pause">Simamisha</button><button id="replay" data-i18n="replay">Marudio ya matukio bora</button><button id="switchPlayer" data-i18n="switchPlayer">Badilisha mchezaji</button><button id="sound" data-i18n="sound">Sauti</button><button id="fullscreen" data-i18n="fullscreen">Skrini nzima</button><button id="help" data-i18n="help">Msaada</button><button id="dockToggle" aria-pressed="true" title="Touch controls">☷</button>
+        <button id="play3d" class="play3d" data-i18n="s3d_inGame" data-i18n-title="s3d_inGameHint" title="觀看目前球員的 3D 招牌動作">3D</button><button id="pause" data-i18n="pause">Simamisha</button><button id="replay" data-i18n="replay">Marudio ya matukio bora</button><button id="switchPlayer" data-i18n="switchPlayer">Badilisha mchezaji</button><button id="sound" data-i18n="sound">Sauti</button><button id="fullscreen" data-i18n="fullscreen">Skrini nzima</button><button id="help" data-i18n="help">Msaada</button><button id="dockToggle" aria-pressed="true" title="Touch controls">☷</button>
       </div>
       <div class="hud-exit">
         <button id="quitMatch" class="quit-button" data-i18n-title="quitMatchHint" title="結束本場比賽，回到運動選單（網頁不關閉）"><span class="ico" aria-hidden="true">⏹</span><span data-i18n="quitMatch">Maliza mechi</span></button>
@@ -97,6 +117,7 @@
     <div class="scene-caption"><span id="sceneName"></span><a id="sceneCredit" target="_blank" rel="noopener noreferrer"></a></div>
     <div id="highlightBanner" class="highlight-banner" hidden><span class="replay-live">REPLAY · 0.45×</span><strong id="highlightTitle"></strong><span data-i18n="replayFocus">Mwendo wa polepole · Picha ya karibu ya nyota · Mzunguko wa 360°</span><button id="skipReplay" data-i18n="skipReplay">Ruka marudio</button></div>
     <div id="starCard" class="star-card" hidden><img id="starPhoto" alt=""><div><p class="eyebrow" data-i18n="replayStar">Tukio la nyota</p><strong id="starName"></strong><span id="starMeta"></span></div></div>
+    <div id="star3d" class="star3d" hidden><canvas aria-label="3D"></canvas><div class="star3d-cap"><span class="star3d-tag" data-i18n="s3d_starMove">Mbinu ya nyota 3D</span><strong class="star3d-title"></strong><span class="star3d-sub"></span></div><div class="star3d-progress"><i></i></div><button class="star3d-close" type="button" data-i18n="s3d_close">Rudi kwenye mchezo</button></div>
     <div class="charge-hud" id="chargeHud" hidden><span id="chargeAction" data-i18n="shootCharge">Nguvu ya shuti</span><div class="charge-track"><div id="chargeFill"></div><i></i></div><small id="chargeHint" data-i18n="releaseToShoot">Achia kupiga shuti</small></div>
     <div id="pickerOverlay" class="picker-overlay"><div class="picker-card"><p class="eyebrow">SMARTACTION / WORLD BALL SPORTS</p><h2 data-i18n="selectSport">Chagua mchezo</h2><p class="picker-hint" data-i18n="chooseToStart">Gusa mchezo ili upange kikosi chako na uanze mazoezi.</p><div id="pickerGrid" class="picker-grid" role="list"></div><p class="fine-print" data-i18n="localModeV7">Mazoezi ndani ya kifaa · wapinzani wa kompyuta · hali 30</p></div></div>
     <div id="startOverlay" class="start-overlay" hidden><div class="start-card"><span class="ball-icon" aria-hidden="true">◉</span><p class="eyebrow">MOVE TOGETHER. PLAY ANYWHERE.</p><h2 id="startTitle"></h2><p id="startRule" class="start-rule"></p><div id="startLineup" class="start-lineup"></div><button id="start" class="primary" data-i18n="start">Anza mchezo</button><div class="start-actions"><button id="changeSport" data-i18n="changeSport">Badilisha mchezo</button><button id="editLineup" data-i18n="lineup">Kikosi cha kuanza</button></div><small id="benchmarkStatus" data-i18n="benchmark">Inakagua utendaji wa kifaa…</small></div></div>
@@ -137,6 +158,7 @@
         <div class="section-top"><span class="eyebrow" data-i18n="practiceRules">Sheria za mazoezi</span><span class="setup-icon" aria-hidden="true">☷</span></div>
         <div class="rule-card"><p id="eventTags" class="event-tags"></p><p id="sportRules"></p><p id="sportMetrics" aria-live="off"></p></div>
         <label class="field"><span data-i18n="difficulty">Ugumu</span><select id="difficulty"><option value="easy" data-i18n="easy">Rahisi</option><option value="normal" data-i18n="normal">Kawaida</option><option value="hard" data-i18n="hard">Ngumu</option></select></label>
+        <label class="field"><span data-i18n="pitchPace">Kasi ya kurusha</span><select id="pitchPace"><option value="slow" data-i18n="paceSlow">Polepole (mazoezi)</option><option value="normal" data-i18n="paceNormal">Kawaida</option><option value="fast" data-i18n="paceFast">Haraka</option></select></label>
         <label class="field"><span data-i18n="quality">Ubora</span><select id="quality"><option value="auto" data-i18n="auto">Otomatiki</option><option value="lite" data-i18n="lite">Hafifu</option><option value="balanced" data-i18n="balanced">Wastani</option><option value="full" data-i18n="full">Kamili</option></select></label>
         <div class="device-status"><span id="deviceQuality">AUTO</span><strong id="fps">— FPS</strong><p data-i18n="deviceNote">Baadhi ya vivinjari havitoi taarifa kamili za kumbukumbu au CPU. Jaribio fupi hukadiria ubora unaofaa; unaweza kuubadilisha mwenyewe.</p></div>
       </section>
@@ -179,6 +201,6 @@
   <dialog id="mapDialog"><button class="dialog-close" data-close data-i18n="close">Funga</button><h2 data-i18n="nearbyCourts">Viwanja vya mpira wa kikapu vilivyo karibu</h2><p data-i18n="mapPrivacy">Mahali ulipo huombwa tu unapogusa kitufe cha mahali. Kufungua ramani hutuma koordineti kwa Google Maps.</p><button id="locate" class="primary" data-i18n="locate">Tafuta mahali nilipo</button><p id="mapStatus" role="status"></p><p id="coordinates"></p><div id="mapActions" hidden><a id="currentMap" class="button" target="_blank" rel="noopener noreferrer" data-i18n="latLon">Koordineti</a><a id="nearbyMap" class="button primary" target="_blank" rel="noopener noreferrer" data-i18n="openMaps">Fungua Google Maps</a></div><iframe id="embeddedMap" title="Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" hidden></iframe></dialog>
   <div id="toast" class="toast" role="status" hidden></div>
   <noscript><p>請啟用 JavaScript 以執行本機運動遊戲。Enable JavaScript to play.</p></noscript>
-  <script src="locales.js?v=7.3.0"></script><script src="data/catalog.js?v=7.3.0"></script><script src="game-core.js?v=7.3.0"></script><script src="sports-engine.js?v=7.3.0"></script><script src="renderer.js?v=7.3.0"></script><script src="coach.js?v=7.3.0"></script><script src="app.js?v=7.3.0"></script><script src="sports-ui.js?v=7.3.0"></script>
+  <script src="locales.js?v=7.4.0"></script><script src="data/catalog.js?v=7.4.0"></script><script src="game-core.js?v=7.4.0"></script><script src="sports-engine.js?v=7.4.0"></script><script src="renderer.js?v=7.4.0"></script><script src="coach.js?v=7.4.0"></script><script src="app.js?v=7.4.0"></script><script src="sports-ui.js?v=7.4.0"></script>
 </body>
 </html>

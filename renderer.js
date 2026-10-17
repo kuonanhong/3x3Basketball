@@ -129,8 +129,8 @@
         const span = Math.max(width * (portrait ? 0.95 : 0.72), depth * (portrait ? 0.7 : 0.95));
         const centreZ = (b.minZ + b.maxZ) / 2;
         target = options.target || { x: (b.minX + b.maxX) / 2, y: 0.6, z: centreZ + depth * 0.02 };
-        const tight = snapshot.fieldType === 'table' ? 0.5 : snapshot.fieldType === 'target' ? 0.62 : 0.78;
-        const radius = Math.max(snapshot.fieldType === 'table' ? 4.5 : 9, span * tight) / zoom;
+        const tight = snapshot.fieldType === 'table' ? 0.5 : snapshot.table ? 0.62 : snapshot.fieldType === 'target' ? 0.62 : 0.78;
+        const radius = Math.max(snapshot.fieldType === 'table' ? 4.5 : snapshot.table ? 6 : 9, span * tight) / zoom;
         eye = { x: target.x + Math.sin(angle) * radius * 0.35, y: target.y + radius * (portrait ? 0.95 : 0.68), z: target.z + Math.cos(angle) * radius * (portrait ? 0.8 : 0.92) };
         wide = true;
       } else {
@@ -157,7 +157,7 @@
       this._camera = { eye, target, view, focusId: focus && focus.id, fx, fy, fz, rx, rz, ux, uy, uz, focal, wide,
         cx: this.cssWidth / 2, cy: this.cssHeight * cy,
         // portrait phones fit the whole arena into a narrow frame, so the athletes get a little extra size there
-        playerScale: Math.max(0.8, Math.min(1.7, (Number(options.playerScale) || 1.18) * (aspect < 0.8 ? 1.16 : 1))) };
+        playerScale: Math.max(0.4, Math.min(1.7, (Number(options.playerScale) || 0.59) * (aspect < 0.8 ? 1.16 : 1))) };
     }
 
     _depth(p) {
@@ -474,6 +474,7 @@
       if (type === 'lane') { this._laneField(snapshot); return; }
       if (type === 'table') { this._tableField(snapshot); return; }
       if (type === 'squash') { this._squashField(snapshot); return; }
+      if (snapshot.table) { this._ttField(snapshot); return; }
       const surface = type === 'ice' ? '#dbeff2' : type === 'pool' ? '#3f8ec4' : type === 'beach' ? '#e9d7ad' : type === 'hockey' ? '#3d7fc0' : type === 'lacrosse' ? '#5f9a63' :
         sport === 'sprint' ? '#c57561' : netSport ? (sport.includes('table') ? '#557fa3' : type === 'takraw' ? '#8f5f45' : '#6496a0') : '#619368';
       this._polygon([[b.minX - 1, 0, b.minZ - 1], [b.maxX + 1, 0, b.minZ - 1], [b.maxX + 1, 0, b.maxZ + 1], [b.minX - 1, 0, b.maxZ + 1]], type === 'pool' ? '#cfd8dc' : type === 'beach' ? '#d9c398' : '#c4c8b4');
@@ -667,7 +668,31 @@
       for (const side of [-1, 1]) this._line([[x + side * width / 2, h, z], [x + side * width / 2, h, back], [x + side * width / 2, 0, back]], '#e7edf0', 2);
     }
 
+    /* table tennis: a hall floor with barriers, and a real 2.74 × 1.525 m table at 0.76 m (net drawn by _net) */
+    _ttField(snapshot) {
+      const b = this._bounds(snapshot), T = snapshot.table, H = T.h, white = '#f4f1e8';
+      this._polygon([[b.minX - 1.6, 0, b.minZ - 1.6], [b.maxX + 1.6, 0, b.minZ - 1.6], [b.maxX + 1.6, 0, b.maxZ + 1.6], [b.minX - 1.6, 0, b.maxZ + 1.6]], '#b8473f');
+      this._polygon([[b.minX - 0.4, 0.004, b.minZ - 0.4], [b.maxX + 0.4, 0.004, b.minZ - 0.4], [b.maxX + 0.4, 0.004, b.maxZ + 0.4], [b.minX - 0.4, 0.004, b.maxZ + 0.4]], '#c9564a');
+      for (const [x0, z0, x1, z1] of [[b.minX - 0.4, b.minZ - 0.4, b.maxX + 0.4, b.minZ - 0.4], [b.minX - 0.4, b.maxZ + 0.4, b.maxX + 0.4, b.maxZ + 0.4], [b.minX - 0.4, b.minZ - 0.4, b.minX - 0.4, b.maxZ + 0.4], [b.maxX + 0.4, b.minZ - 0.4, b.maxX + 0.4, b.maxZ + 0.4]])
+        this._polygon([[x0, 0, z0], [x1, 0, z1], [x1, 0.5, z1], [x0, 0.5, z0]], 'rgba(38,62,110,.6)');           // low surround barriers
+      // legs and undercarriage
+      for (const [x, z] of [[-T.hw + 0.12, -T.hl + 0.25], [T.hw - 0.12, -T.hl + 0.25], [-T.hw + 0.12, T.hl - 0.25], [T.hw - 0.12, T.hl - 0.25]]) this._line([[x, 0, z], [x, H - 0.03, z]], '#30363c', 3);
+      this._polygon([[-T.hw, H - 0.03, -T.hl], [T.hw, H - 0.03, -T.hl], [T.hw, H - 0.03, T.hl], [-T.hw, H - 0.03, T.hl]], '#16253f');
+      // blue top with white edge lines and centre line
+      this._polygon([[-T.hw, H, -T.hl], [T.hw, H, -T.hl], [T.hw, H, T.hl], [-T.hw, H, T.hl]], '#1f4f8a');
+      this._line([[-T.hw, H + .002, -T.hl], [T.hw, H + .002, -T.hl], [T.hw, H + .002, T.hl], [-T.hw, H + .002, T.hl], [-T.hw, H + .002, -T.hl]], white, 2);
+      this._line([[0, H + .002, -T.hl], [0, H + .002, T.hl]], white, 1);
+      for (const z of [-T.hl, T.hl]) this._polygon([[-T.hw, H, z], [T.hw, H, z], [T.hw, H - 0.03, z], [-T.hw, H - 0.03, z]], '#e9e6dc');
+    }
+
     _net(net, snapshot) {
+      if (net.table) {   // table-tennis net across the table
+        const T = net.table, top = T.h + net.height, w = T.hw + 0.15;
+        this._polygon([[-w, T.h, 0], [w, T.h, 0], [w, top, 0], [-w, top, 0]], 'rgba(20,24,30,.55)');
+        this._line([[-w, top, 0], [w, top, 0]], '#f7f4ea', 2.2);
+        for (const x of [-w, w]) this._line([[x, T.h - 0.02, 0], [x, top + 0.01, 0]], '#2a2f35', 3);
+        return;
+      }
       const b = this._bounds(snapshot), z = net.z || 0, h = net.height || 1;
       const tall = snapshot.sport === 'volleyball' || snapshot.sport === 'beach-volleyball' || snapshot.sport === 'sepak-takraw';
       const low = tall ? Math.max(.7, h - .95) : .15;
@@ -700,9 +725,9 @@
       this._circle(x, y, z, 0.23, null, '#ea5d37', 3);
     }
 
-    _shadow(x, z, height, radius) {
+    _shadow(x, z, height, radius, floor = 0) {
       if (!PRESETS[this.quality].shadows) return;
-      this._circle(x, 0.042, z, radius || 0.38, `rgba(42,58,59,${Math.max(0.07, 0.22 - (height || 0) * 0.04)})`);
+      this._circle(x, floor + 0.042, z, radius || 0.38, `rgba(42,58,59,${Math.max(0.07, 0.22 - (height - floor || 0) * 0.04)})`);
     }
 
     /* ------------------------------------------------------------- players */
@@ -811,7 +836,8 @@
         } else { ctx.fillStyle = look.hair; ctx.beginPath(); ctx.arc(head.x, head.y - r * .08, r * 1.02, Math.PI * .85, Math.PI * 2.15); ctx.closePath(); ctx.fill(); }
       } else if (head) {
         const portrait = options.portraits && options.portraits[p.athleteId];
-        const r = Math.min(76, Math.max(2.3, head.scale * (portrait ? .17 : .155) * size));
+        const headBoost = 1 + Math.max(0, 1 - ps) * 0.6;   // half-size players keep a readable head / portrait
+        const r = Math.min(76, Math.max(2.3, head.scale * (portrait ? .17 : .155) * size * headBoost));
         // hair behind the head first (long/afro/braids)
         this._hairBack(head, r, look, frontX);
         ctx.fillStyle = skin; ctx.beginPath(); ctx.arc(head.x, head.y, r, 0, TAU); ctx.fill();
@@ -833,6 +859,8 @@
           }
         }
         this._accessory(head, r, look, color);
+        const em = options.emotes && options.emotes[p.id];
+        if (em && this.quality !== 'lite') this._emote(head, r, em);
       }
       if (equipmentHand) this._equipment(equipmentHand, armAngle, snapshot.sport, action, shoulderAngle, otherHand, snapshot, p);
       if (options.labels !== false && this.quality !== 'lite' && !numbered) {
@@ -841,7 +869,7 @@
       }
       if (options.names && p.displayName && this.quality !== 'lite') {
         const tag = this.project(x, y + headY + .62, z);
-        if (tag && tag.scale * size > 40) {
+        if (tag && tag.scale * size > 18) {
           const full = snapshot.family === 'batting' || !snapshot.sport || /basketball/.test(snapshot.sport) || tag.scale * size > 110;
           const parts = String(p.displayName).split(' '), last = /^(jr\.?|sr\.?|ii|iii|iv)$/i.test(parts[parts.length - 1] || '') && parts.length > 2 ? parts.slice(-2).join(' ') : parts.slice(-1)[0], text = full ? String(p.displayName) : last;
           ctx.font = `700 ${Math.max(9, Math.min(16, tag.scale * .085))}px system-ui, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
@@ -851,6 +879,24 @@
         }
       }
       if (translucent) ctx.globalAlpha = 1;
+    }
+
+    /* stylized emotion bubble above the head (joy / focus / sad) — an icon, not a modified face */
+    _emote(head, r, em) {
+      const ctx = this.ctx, R = Math.max(7, Math.min(22, r * 1.15)), x = head.x + r * 1.1, y = head.y - r * 1.9, k = em.kind;
+      ctx.save(); ctx.globalAlpha = Math.max(0, Math.min(1, em.alpha === undefined ? 1 : em.alpha));
+      ctx.fillStyle = k === 'joy' ? '#ffd66b' : k === 'sad' ? '#9fc3ff' : '#f2f5ee'; ctx.strokeStyle = 'rgba(20,30,34,.85)'; ctx.lineWidth = Math.max(1, R * 0.12);
+      ctx.beginPath(); ctx.arc(x, y, R, 0, TAU); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x - R * 0.45, y + R * 0.75); ctx.lineTo(x - R * 0.9, y + R * 1.25); ctx.lineTo(x - R * 0.05, y + R * 0.92); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#1b2428'; ctx.strokeStyle = '#1b2428'; ctx.lineWidth = Math.max(1, R * 0.13); ctx.lineCap = 'round';
+      if (k === 'focus') { ctx.beginPath(); ctx.moveTo(x - R * 0.55, y - R * 0.38); ctx.lineTo(x - R * 0.15, y - R * 0.22); ctx.moveTo(x + R * 0.55, y - R * 0.38); ctx.lineTo(x + R * 0.15, y - R * 0.22); ctx.stroke(); }
+      if (k === 'sad') { ctx.beginPath(); ctx.moveTo(x - R * 0.55, y - R * 0.25); ctx.lineTo(x - R * 0.15, y - R * 0.42); ctx.moveTo(x + R * 0.55, y - R * 0.25); ctx.lineTo(x + R * 0.15, y - R * 0.42); ctx.stroke(); }
+      for (const sx of [-1, 1]) { ctx.beginPath(); ctx.arc(x + sx * R * 0.33, y - R * 0.05, R * 0.11, 0, TAU); ctx.fill(); }
+      ctx.beginPath();
+      if (k === 'joy') ctx.arc(x, y + R * 0.12, R * 0.42, 0.15 * Math.PI, 0.85 * Math.PI);
+      else if (k === 'sad') ctx.arc(x, y + R * 0.62, R * 0.36, 1.2 * Math.PI, 1.8 * Math.PI);
+      else { ctx.moveTo(x - R * 0.28, y + R * 0.4); ctx.lineTo(x + R * 0.28, y + R * 0.4); }
+      ctx.stroke(); ctx.restore();
     }
 
     _hairBack(head, r, look) {
@@ -916,7 +962,7 @@
       } else if (/tennis|badminton|squash/.test(sport || '')) {
         const end = [hand[0] + dx * .55, hand[1] + .16, hand[2] + dz * .55];
         this._line([hand, end], '#293b51', 2);
-        const points = [], r = sport.includes('table') ? .17 : sport === 'squash' ? .2 : .27;
+        const points = [], r = sport.includes('table') ? .085 : sport === 'squash' ? .2 : .27;
         for (let i = 0; i <= 16; i++) { const a = i * TAU / 16; points.push([end[0] + Math.cos(angle) * Math.cos(a) * r, end[1] + Math.sin(a) * r * 1.25, end[2] - Math.sin(angle) * Math.cos(a) * r]); }
         this._polygon(points, sport.includes('table') ? '#c64a48' : 'rgba(239,246,241,.25)', '#e9f1eb', 1.7);
       } else if (sport === 'ice-hockey') {
@@ -1022,7 +1068,10 @@
       const players = snapshot.players || [];
       const swim = snapshot.fieldType === 'pool', table = snapshot.fieldType === 'table';
       if (!swim && !table) players.forEach(p => this._shadow(p.x, p.z, p.y || 0, 0.36));
-      if (snapshot.ball && !table && !['marker', 'scored', 'holed'].includes(snapshot.ball.state)) this._shadow(snapshot.ball.x, snapshot.ball.z, snapshot.ball.y, 0.15);
+      if (snapshot.ball && !table && !['marker', 'scored', 'holed'].includes(snapshot.ball.state)) {
+        const T = snapshot.table, onTable = T && Math.abs(snapshot.ball.x) <= T.hw && Math.abs(snapshot.ball.z) <= T.hl && snapshot.ball.y >= T.h;
+        this._shadow(snapshot.ball.x, snapshot.ball.z, snapshot.ball.y, T ? 0.05 : 0.15, onTable ? T.h + 0.003 : 0);
+      }
       const objects = players.map(p => ({ type: 'player', value: p, depth: this.project(p.x, p.y || 0, p.z)?.depth || 0 }));
       if (basketball) {
         const hoops = snapshot.hoops || [snapshot.hoop || { x: 0, z: -6, y: 3.05 }];

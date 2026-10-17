@@ -2,7 +2,7 @@
 <script src="../locales.js"></script><script src="../data/catalog.js"></script>
 <script type="module">
 /* Offline renderer for the per-athlete MP4 clips (driven by tools/render_athlete_videos.cjs). */
-import { Stage3D, signatureMove } from './stage3d.js';
+import { Stage3D, signatureMove, hasLibrary } from './stage3d.js';
 import { drawOverlay } from './overlay.js';
 import { bodyProfile } from './rig.js';
 const q = new URLSearchParams(location.search), W = +(q.get('w') || 1280), H = +(q.get('h') || 720), lang = q.get('lang') || 'zh-Hant';
@@ -11,6 +11,7 @@ const c3 = document.createElement('canvas'), comp = document.createElement('canv
 const st = new Stage3D(c3, { capture: true, pixelRatio: 1 }); st.resize(W, H);
 let a = null, mv = null, total = 0, hold = 0.8;
 window.cap = {
+  list() { return SASportsData.athletes.filter(x => hasLibrary(x.sport)).map(x => ({ id: x.id, sport: x.sport })); },
   load(id, move) {
     a = SASportsData.athletes.find(x => x.id === id); mv = move || signatureMove(a); st.load(a, mv, q.get('uni') || 'teal'); mv = st.moveId;
     hold = (st.move.hold || 0.6) + 0.5; total = st.duration + hold + 0.4; window.cap.frame(0, 30); window.cap.frame(1, 30); return { dur: st.duration, total, move: mv };   // warm-up frames, discarded
@@ -22,7 +23,7 @@ window.cap = {
     st.placeCamera(ang, 1.12); st.render();
     cx.clearRect(0, 0, W, H); cx.drawImage(c3, 0, 0, W, H);
     const p = bodyProfile(a, a.sport), zh = lang.startsWith('zh') && a.nameZh;
-    const pos = a.position ? t('pos_' + a.position) : '';
+    const pos = [t('sport_' + a.sport), a.position && M['pos_' + a.position] ? t('pos_' + a.position) : ''].filter(Boolean).join(' · ');
     const sub = [pos, a.heightCm ? a.heightCm + ' cm' : '', a.weightKg ? a.weightKg + ' kg' : '', a.sport === 'baseball' ? t('bats') + ' ' + p.bats + ' / ' + t('throws') + ' ' + p.throws : ''].filter(Boolean).join(' · ');
     drawOverlay(cx, W, H, { title: (zh ? a.nameZh + '  ' : '') + a.name, number: a.appearance && a.appearance.jerseyNumber != null ? String(a.appearance.jerseyNumber) : '', sub, move: t('s3d_move') + '：' + t('mv_' + mv), note: t('s3d_videoNote') }, Math.min(1, tt / 0.4));
     // fade in/out

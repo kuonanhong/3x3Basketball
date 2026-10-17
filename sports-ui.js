@@ -112,7 +112,12 @@ function playerCard(team, i, pos, pool) {
   ratingRows(card, a);
   if (a.traits?.length) card.append(node('p', a.traits.join(' · '), 'fine-note'));
   if (a.credit) { const credits = node('p', undefined, 'photo-credit'); creditNodes(credits, a.credit); card.append(credits); }
-  if (a.sport === 'basketball' || a.sport === 'baseball') { const l = node('a', '🎬 ' + t('s3d_open'), 's3d-link'); l.href = url('athletes3d.html') + '?id=' + encodeURIComponent(a.id) + '&lang=' + encodeURIComponent(app.getLanguage()); card.append(l); }
+  if (a.id && a.id !== 'original') {
+    const b3 = node('button', '▶ ' + t('s3d_open'), 's3d-play'); b3.type = 'button';
+    b3.addEventListener('click', () => { $('stage').scrollIntoView({ behavior: 'smooth', block: 'start' }); window.dispatchEvent(new CustomEvent('sa-show3d', { detail: { athleteId: a.id, team: team === 'away' ? 1 : 0, mode: 'full' } })); });
+    const l = node('a', '🎬 ' + t('s3d_title') + ' ↗', 's3d-link'); l.href = url('athletes3d.html') + '?id=' + encodeURIComponent(a.id) + '&lang=' + encodeURIComponent(app.getLanguage());
+    card.append(b3, l);
+  }
   if (a.sources?.length) { const refs = node('div', undefined, 'source-links'); a.sources.slice(0, 2).forEach((source, k) => { const href = typeof source === 'string' ? source : source.url || source.href; if (href) refs.append(link('↗ ' + (k + 1), href)); }); card.append(refs); }
   return card;
 }
@@ -188,10 +193,10 @@ function scheme() {
   if (f === 'cue') return { q: null, e: null, j: 'aimLine', k: 'actionCue', move: 'move', aim: 'aim', keyboard: 'keyboardTarget', touch: 'touchGeneric', charge: 'powerMeter', release: 'releaseToShoot' };
   if (f === 'target') return { q: null, e: null, j: 'aimLine', k: 'actionTarget', move: 'move', aim: 'aim', keyboard: 'keyboardTarget', touch: 'touchGeneric', charge: 'powerMeter', release: 'releaseToShoot' };
   if (f === 'race') return { q: null, e: null, j: 'actionRun', k: 'actionRun', move: 'move', aim: 'aim', keyboard: 'keyboardGeneric', touch: 'touchGeneric', charge: 'powerMeter', release: 'releaseToShoot' };
-  if (f === 'wall') return { q: 'jump', e: 'crouch', j: 'pass', k: 'actionWallHit', move: 'move', aim: 'aim', keyboard: 'keyboardGeneric', touch: 'touchGeneric', charge: 'powerMeter', release: 'releaseToShoot' };
-  if (f === 'net') return { q: 'jump', e: 'crouch', j: 'pass', k: d.kick ? 'actionKick' : 'actionRacket', move: 'move', aim: 'aim', keyboard: 'keyboardGeneric', touch: 'touchGeneric', charge: 'powerMeter', release: 'releaseToShoot' };
-  if (f === 'carry') return { q: 'jump', e: 'actionDefend', j: 'pass', k: 'actionThrow', move: 'move', aim: 'aim', keyboard: 'keyboardGeneric', touch: 'touchGeneric', charge: 'powerMeter', release: 'releaseToShoot' };
-  return { q: 'jump', e: 'actionDefend', j: 'pass', k: id === 'water-polo' ? 'actionSwimThrow' : d.stick ? 'actionStick' : id === 'soccer5' ? 'actionKick' : 'actionGoal', move: 'move', aim: 'aim', keyboard: 'keyboardGeneric', touch: 'touchGeneric', charge: 'powerMeter', release: 'releaseToShoot' };
+  if (f === 'wall') return { q: 'shotSmash', e: 'shotDrop', j: 'shotLob', k: 'actionWallHit', move: 'move', aim: 'aim', keyboard: 'keyboardRacket', touch: 'touchRacket', charge: 'powerMeter', release: 'releaseToShoot' };
+  if (f === 'net') return { q: 'shotSmash', e: 'shotDrop', j: 'shotLob', k: d.kick ? 'actionKick' : 'actionRacket', move: 'move', aim: 'aim', keyboard: 'keyboardRacket', touch: 'touchRacket', charge: 'powerMeter', release: 'releaseToShoot' };
+  if (f === 'carry') return { q: 'jump', e: 'actionDefend', j: 'passOrSwitch', k: 'actionThrow', move: 'move', aim: 'aim', keyboard: 'keyboardTeam', touch: 'touchGeneric', charge: 'powerMeter', release: 'releaseToShoot' };
+  return { q: 'jump', e: 'actionDefend', j: 'passOrSwitch', k: id === 'water-polo' ? 'actionSwimThrow' : d.stick ? 'actionStick' : id === 'soccer5' ? 'actionKick' : 'actionGoal', move: 'move', aim: 'aim', keyboard: 'keyboardTeam', touch: 'touchGeneric', charge: 'powerMeter', release: 'releaseToShoot' };
 }
 function eventTags(def) { return (def.events || []).map(tag => t('tag_' + tag)).join(' · '); }
 function refreshText() {
@@ -268,7 +273,7 @@ function updateMetrics(core) {
   $('sportMetrics').textContent = parts.join(' · '); $('metricsHud').textContent = hud.join('  ·  ');
 }
 window.SASportsUI = {
-  renderOptions: () => ({ view: $('camera').value, zoom: Number($('zoom').value), cameraAngle: 0, playerScale: 1.18, names: true, environment: { time: $('timeOfDay').value, weather: $('weather').value, season: $('season').value, climate: $('climate').value, venue: $('venueMode').value, photo: sceneImage }, portraits }),
+  renderOptions: () => ({ view: $('camera').value, zoom: Number($('zoom').value), cameraAngle: 0, playerScale: 0.59, names: true, environment: { time: $('timeOfDay').value, weather: $('weather').value, season: $('season').value, climate: $('climate').value, venue: $('venueMode').value, photo: sceneImage }, portraits }),
   updateMetrics,
   getContext: () => ({ sport: currentSport, venue: selectedVenue?.id, language: app.getLanguage(), home: lineup.home[0], away: lineup.away[0], lineup }), applyRoster, selectVenue: chooseVenue, definitions: sportDefinitions, pools, athleteFor, localeName, setSlot, getLineup: () => lineup
 };

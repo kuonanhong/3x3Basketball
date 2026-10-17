@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>3D 明星招牌動作 · SmartAction Sports</title>
-  <meta name="description" content="Stylized 3D basketball and baseball stars performing their signature moves — 360° view, slow motion and video recording, in 54 languages.">
+  <meta name="description" content="Stylized 3D stars of 30 sports performing their signature moves — 360° view, slow motion and video recording, in 74 languages.">
   <meta name="theme-color" content="#0b1418">
   <link rel="icon" href="icon.svg">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="athletes3d/studio.css?v=7.3.0">
+  <link rel="stylesheet" href="athletes3d/studio.css?v=7.4.0">
 </head>
 <body>
   <header class="s3d-top">
@@ -32,10 +32,7 @@
       </div>
     </section>
     <aside class="panel">
-      <div class="tabs" role="tablist">
-        <button id="tabBasketball" role="tab" data-i18n="sport_basketball">3×3 籃球</button>
-        <button id="tabBaseball" role="tab" data-i18n="sport_baseball">棒球打擊</button>
-      </div>
+      <label class="field"><span data-i18n="sports">運動</span><select id="sportSel"></select></label>
       <div id="list" class="list"></div>
       <label class="field"><span data-i18n="s3d_move">招牌動作</span><select id="move"></select></label>
       <label class="field"><span data-i18n="s3d_uniform">球衣顏色</span><select id="uniform"><option value="teal">teal</option><option value="coral">coral</option><option value="navy">navy</option><option value="white">white</option></select></label>
@@ -45,8 +42,8 @@
   </main>
   <div id="toast" class="toast" role="status" hidden></div>
   <noscript><p>請啟用 JavaScript。Enable JavaScript to view the 3D studio.</p></noscript>
-  <script src="locales.js?v=7.3.0"></script>
-  <script src="data/catalog.js?v=7.3.0"></script>
-  <script type="module" src="athletes3d/studio.js?v=7.3.0"></script>
+  <script src="locales.js?v=7.4.0"></script>
+  <script src="data/catalog.js?v=7.4.0"></script>
+  <script type="module" src="athletes3d/studio.js?v=7.4.0"></script>
 </body>
 </html>
